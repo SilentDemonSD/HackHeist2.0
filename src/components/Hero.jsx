@@ -92,11 +92,13 @@ export default function Hero() {
       }
 
       const offset = Math.round(window.innerWidth - rect.right);
-      const clamped = Math.min(Math.max(offset, 0), 140);
+      const clamped = Math.min(Math.max(offset, 20), 100);
       setMaskRightOffset(clamped);
     }
 
-    update();
+    document.fonts.ready.then(() => {
+      update();
+    });
     window.addEventListener("resize", update);
     setTimeout(update, 50);
 
@@ -112,7 +114,8 @@ export default function Hero() {
           className="absolute top-1/2 -translate-y-1/2 hidden md:block pointer-events-none"
           style={{
             zIndex: 30,
-            width: "min(48vw, 700px)",
+            width: "46vw",
+            maxWidth: "700px",
             height: "68vh",
             right: maskRightOffset,
             overflow: "visible",
