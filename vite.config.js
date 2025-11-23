@@ -18,7 +18,7 @@ export default defineConfig({
             const data = JSON.parse(body || '{}')
             res.setHeader('Content-Type', 'application/json')
             res.end(JSON.stringify({ ok: true, id: Date.now(), data }))
-          } catch (e) {
+          } catch {
             res.statusCode = 400
             res.end(JSON.stringify({ ok: false }))
           }

@@ -2,9 +2,12 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { usePerformance } from '../hooks/usePerformance'
 
-export default function ParticlesCanvas() {
+export default function VideoCanvas() {
   const ref = useRef(null)
   const raf = useRef(0)
+  const sceneRef = useRef(null)
+  const rendererRef = useRef(null)
+  const videoRef = useRef(null)
   const { settings } = usePerformance()
 
   useEffect(() => {
@@ -12,6 +15,8 @@ export default function ParticlesCanvas() {
     if (!container) return
 
     const scene = new THREE.Scene()
+    sceneRef.current = scene
+    
     const camera = new THREE.PerspectiveCamera(
       55,
       container.clientWidth / container.clientHeight,
@@ -22,23 +27,43 @@ export default function ParticlesCanvas() {
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: settings.antialias,
+      antialias: settings.antialias ?? false,
+      powerPreference: 'high-performance',
+      stencil: false,
+      depth: true,
     })
-    renderer.setPixelRatio(settings.pixelRatio)
+    rendererRef.current = renderer
+    renderer.setPixelRatio(settings.pixelRatio ?? window.devicePixelRatio)
     renderer.setSize(container.clientWidth, container.clientHeight)
-    renderer.setClearColor(0x000000, 0) 
+    renderer.setClearColor(0x000000, 0)
+    renderer.outputColorSpace = THREE.SRGBColorSpace
     container.appendChild(renderer.domElement)
 
     // === SMOKE VIDEO TEXTURE ===
     const video = document.createElement('video')
+    videoRef.current = video
     video.src = '/videos/smoke-bg-slow.mp4'
     video.loop = true
     video.muted = true
     video.playbackRate = 0.6
     video.autoplay = true
     video.playsInline = true
+    video.preload = 'auto'
+    video.setAttribute('playsinline', '')
+    video.setAttribute('webkit-playsinline', '')
     video.load()
-    video.play().catch(() => console.warn('Autoplay blocked'))
+    
+    const playPromise = video.play()
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        console.warn('Autoplay blocked, attempting to play on user interaction')
+        const handleInteraction = () => {
+          video.play().catch(() => {})
+          document.removeEventListener('click', handleInteraction)
+        }
+        document.addEventListener('click', handleInteraction, { once: true })
+      })
+    }
 
     const texture = new THREE.VideoTexture(video)
     texture.minFilter = THREE.LinearFilter
@@ -51,7 +76,7 @@ export default function ParticlesCanvas() {
     const planeMaterial = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
-      opacity: 0.90, // stronger smoke
+      opacity: 0.90,
     })
     const plane = new THREE.Mesh(planeGeometry, planeMaterial)
     plane.position.z = -8
@@ -109,7 +134,6 @@ export default function ParticlesCanvas() {
     const animate = () => {
       const t = clock.getElapsedTime()
 
-      // slight left-right drift for natural smoke flow
       plane.position.x = Math.sin(t * 0.05) * 0.5
 
       renderer.render(scene, camera)
@@ -120,12 +144,36 @@ export default function ParticlesCanvas() {
     return () => {
       cancelAnimationFrame(raf.current)
       window.removeEventListener('resize', onResize)
+      
+      if (videoRef.current) {
+        videoRef.current.pause()
+        videoRef.current.src = ''
+        videoRef.current = null
+      }
+      
+      if (texture) {
+        texture.dispose()
+      }
+      
       planeMaterial.dispose()
       planeGeometry.dispose()
+      gradientGeometry.dispose()
       gradientMaterial.dispose()
-      renderer.dispose()
-      video.pause()
-      container.removeChild(renderer.domElement)
+      
+      if (rendererRef.current) {
+        rendererRef.current.dispose()
+        rendererRef.current.forceContextLoss()
+        rendererRef.current = null
+      }
+      
+      if (sceneRef.current) {
+        sceneRef.current.clear()
+        sceneRef.current = null
+      }
+      
+      if (container && renderer.domElement && container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement)
+      }
     }
   }, [settings])
 

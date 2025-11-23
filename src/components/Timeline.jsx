@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useSpring } from "framer-motion";
 import clsx from "clsx";
 import "./timeline.css";
@@ -13,7 +13,7 @@ const timelineEvents = [
   { id: "submit", time: "09:00+1", title: "Submission", detail: "Code freeze & demos", t: 0.9 },
 ];
 
-const noop = () => {};
+const noop = () => { };
 
 export default function Timeline({
   onHoverFlag = noop,
@@ -151,7 +151,7 @@ export default function Timeline({
     pointerY.set((start.y / VIEWBOX.height) * stageSize.height);
   }, [stageSize, pointerX, pointerY]);
 
-  const eventMarkers = useMemo(() => {
+  const eventMarkers = (() => {
     if (!pathLengthRef.current || !pathRef.current) {
       return timelineEvents.map((event) => ({ event, x: 0, y: 0 }));
     }
@@ -159,7 +159,7 @@ export default function Timeline({
       const point = pathRef.current.getPointAtLength(pathLengthRef.current * event.t);
       return { event, x: point.x, y: point.y };
     });
-  }, [stageSize.width, stageSize.height]);
+  })();
 
   return (
     <section className="timeline-section" aria-label="Heist timeline">
@@ -244,7 +244,7 @@ export default function Timeline({
               }}
             />
           ))}
-          </motion.div>
+        </motion.div>
 
         <div className="timeline-events">
           {eventMarkers.map(({ event, x, y }) => {

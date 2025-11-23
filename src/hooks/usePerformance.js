@@ -9,7 +9,7 @@ export function usePerformance() {
     // Detect device performance capabilities
     const canvas = document.createElement('canvas')
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-    
+
     if (!gl) {
       setPerformanceLevel('low')
       return
@@ -17,11 +17,10 @@ export function usePerformance() {
 
     // Check WebGL capabilities
     const renderer = gl.getParameter(gl.RENDERER)
-    const vendor = gl.getParameter(gl.VENDOR)
-    
+
     // Detect mobile devices
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    
+
     // Check for low-power devices
     if (isMobile || renderer.includes('Intel') || navigator.hardwareConcurrency < 4) {
       setPerformanceLevel('medium')
@@ -31,28 +30,28 @@ export function usePerformance() {
     // Monitor performance
     let frameCount = 0
     let lastTime = performance.now()
-    
+
     const checkPerformance = () => {
       frameCount++
       const currentTime = performance.now()
-      
+
       if (currentTime - lastTime > 1000) { // Check every second
         const fps = frameCount * 1000 / (currentTime - lastTime)
-        
+
         if (fps < 30) {
           setPerformanceLevel('low')
           setIsLowPowerMode(true)
         } else if (fps < 50) {
           setPerformanceLevel('medium')
         }
-        
+
         frameCount = 0
         lastTime = currentTime
       }
-      
+
       requestAnimationFrame(checkPerformance)
     }
-    
+
     requestAnimationFrame(checkPerformance)
   }, [])
 
@@ -123,7 +122,7 @@ export function useMousePosition(throttleMs = 16) {
     }
 
     window.addEventListener('mousemove', throttledMouseMove, { passive: true })
-    
+
     return () => {
       window.removeEventListener('mousemove', throttledMouseMove)
       if (animationFrame) {

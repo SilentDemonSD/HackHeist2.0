@@ -1,17 +1,37 @@
 import { useRef, useEffect, useState, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, Environment, useTexture } from '@react-three/drei'
+import { useGLTF, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import { usePerformance, useMousePosition } from '../hooks/usePerformance'
 
 function MaskModel({ mousePosition, animationSpeed = 1, ...props }) {
   const meshRef = useRef()
   const { scene } = useGLTF('/models/mask.glb')
+  const [isReady, setIsReady] = useState(false)
+
+  useEffect(() => {
+    if (!scene) return;
+
+    const box = new THREE.Box3().setFromObject(scene);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    scene.position.sub(center);
+
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const desiredSize = 2.2;
+    const scale = desiredSize / maxDim;
+    scene.scale.setScalar(scale);
+
+    scene.position.y += 0.2;
+
+    setIsReady(true);
+  }, [scene]);
 
   useFrame((state) => {
-    if (!meshRef.current || !mousePosition) return
+    if (!meshRef.current || !mousePosition || !isReady) return
 
-    const bias = -0.2
+    const bias = -0.3
     const targetY = THREE.MathUtils.lerp(
       meshRef.current.rotation.y,
       bias + (mousePosition.x - 0.5) * 0.8,
@@ -28,6 +48,7 @@ function MaskModel({ mousePosition, animationSpeed = 1, ...props }) {
     meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 1.2) * 0.15
   })
 
+  if (!isReady) return null
 
   return (
     <group ref={meshRef} {...props} dispose={null}>
@@ -117,78 +138,51 @@ function Loader() {
   )
 }
 
-function MaskGlow() {
-  const glowMap = useTexture('/textures/radial-red-glow.png', undefined, (err) => {
-    console.error("Glow texture failed to load:", err)
-  })
-
-  return glowMap ? (
-    <mesh position={[0, 1.2, -1.2]} scale={[5, 5, 1]}>
-      <planeGeometry args={[1, 1]} />
-      <meshBasicMaterial
-        map={glowMap}
-        transparent
-        opacity={0.3}
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </mesh>
-  ) : null
-}
-
 export default function Mask() {
   const mousePosition = useMousePosition(16)
-  const { settings, isLowPowerMode } = usePerformance()
+  const { settings } = usePerformance()
+  const [canvasReady, setCanvasReady] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setCanvasReady(true), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
-    <div className="w-full h-full">
-      <div className="absolute inset-0">
-        <Canvas
-          shadows
-          gl={{ alpha: true, antialias: true }}
-          camera={{
-            position: [0, 0, 11], // move back to reveal full top
-            fov: 50,
-            near: 0.1,
-            far: 100
-          }}
-          style={{ background: 'transparent' }}
-        >
-          <Suspense fallback={null}>
-            <Environment preset="city" />
-            <Lights />
-            <SmokeBackground />
-            <mesh position={[0, -1.5, -2]} rotation={[-Math.PI/2, 0, 0]}>
-              <planeGeometry args={[10, 10]} />
-              <shadowMaterial opacity={0.25} />
-            </mesh>
+    <div className="w-full h-full overflow-hidden relative">
+      <div className="absolute inset-0 overflow-hidden">
 
-            <MaskGlow />
+        {canvasReady && (
+          <Canvas
+            shadows
+            gl={{ 
+              alpha: true, 
+              antialias: settings.antialias ?? true,
+              powerPreference: 'high-performance',
+              preserveDrawingBuffer: false
+            }}
+            camera={{
+              position: [0, 0, 11],
+              fov: 45,
+              near: 0.1,
+              far: 100
+            }}
+            dpr={settings.pixelRatio ?? [1, 2]}
+            style={{ background: 'transparent', width: '100%', height: '100%' }}
+          >
+            <Suspense fallback={null}>
+              <Environment preset="city" />
+              <Lights />
 
-            {/* Contact shadow beneath mask */}
-            <mesh position={[0, 0.8, -0.5]} rotation={[-0.2, 0, 0]}>
-              <circleGeometry args={[2.5, 32]} />
-              <meshBasicMaterial 
-                color="#000000" 
-                transparent 
-                opacity={0.3}
-                depthWrite={false}
+              <MaskModel
+                mousePosition={mousePosition}
+                animationSpeed={settings.animationSpeed ?? 1}
+                scale={2.5}
+                position={[3.3, 1.0, 0]}
               />
-            </mesh>
-
-            <MaskModel
-              mousePosition={mousePosition}
-              animationSpeed={settings.animationSpeed}
-              scale={2.5}
-              position={[0, 1.2, 0]}
-            />
-          </Suspense>
-        </Canvas>
-      </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-transparent pointer-events-none">
-        <Suspense fallback={<Loader />}>
-          <div />
-        </Suspense>
+            </Suspense>
+          </Canvas>
+        )}
       </div>
     </div>
   )
