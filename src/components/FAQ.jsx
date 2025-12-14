@@ -24,22 +24,6 @@ const faqs = [
   },
 ]
 
-/* ───────────────── animations ───────────────── */
-
-const listVariants = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
-}
-
-const questionVariants = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
-}
-
 export default function FAQ() {
   const [openSet, setOpenSet] = useState(new Set())
   const faqEndRef = useRef(null)
@@ -71,11 +55,11 @@ export default function FAQ() {
       className="relative py-16 md:py-24 overflow-hidden"
       aria-label="FAQ"
     >
-      {/* Background */}
+      {/* Base background */}
       <div className="absolute inset-0 bg-[#0d0d0d]" />
       <div className="absolute inset-0 -z-10 blur-[140px] opacity-40 bg-heist-red/30" />
 
-      {/* Grid */}
+      {/* Blueprint grid */}
       <div
         className="absolute inset-0 opacity-15 pointer-events-none"
         style={{
@@ -88,65 +72,59 @@ export default function FAQ() {
       <div className="relative container">
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.45 }}
-          className="text-center mb-10"
+          transition={{ duration: 0.4 }}
+          className="mb-10"
         >
           <h2
             className="text-3xl md:text-4xl font-bold tracking-[0.18em] uppercase"
             style={{ fontFamily: 'Oxanium, sans-serif' }}
           >
-            FAQ
+            FAQ's
           </h2>
-          <p className="mt-3 text-gray-400">
+          <p className="mt-3 text-gray-400 max-w-xl">
             Laser-scanned intel for your heist questions.
           </p>
         </motion.div>
 
-        {/* Toggle All */}
-        <div className="flex justify-center mb-10">
+        {/* Show / Collapse button (LEFT, ABOVE QUESTIONS) */}
+        <div className="mb-8">
           <button
             onClick={toggleAll}
             className="px-6 py-2 rounded-full text-xs uppercase tracking-widest
                        border border-heist-red/40 text-heist-red
                        hover:bg-heist-red/10 transition"
           >
-            {allOpen ? 'Collapse All' : 'Show All'}
+            {allOpen ? 'Collapse All' : 'expand All'}
           </button>
         </div>
 
         {/* FAQ Chat */}
-        <motion.div
-          variants={listVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="relative max-w-3xl mx-auto space-y-6"
-        >
+        <div className="relative max-w-3xl space-y-8">
           {faqs.map((item, idx) => {
             const open = openSet.has(idx)
 
             return (
-              <motion.div
-                key={item.q}
-                variants={questionVariants}
-                className="space-y-3"
-              >
-                {/* QUESTION */}
+              <div key={item.q} className="space-y-3">
+                {/* QUESTION CLOUD */}
                 <motion.button
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => toggleFAQ(idx)}
-                  className="max-w-[90%] sm:max-w-[85%] rounded-2xl px-5 py-4 text-left
+                  className="relative max-w-[90%] sm:max-w-[85%]
+                             px-6 py-4 text-left text-gray-100
                              bg-white/5 border border-white/10
-                             text-gray-100 hover:border-heist-red/40 transition-colors"
+                             transition-colors hover:border-heist-red/40
+                             [border-radius:28px_28px_28px_8px]"
                 >
+                  {/* soft cloud glow */}
+                  <span className="absolute inset-0 -z-10 blur-lg bg-white/5 rounded-[inherit]" />
                   {item.q}
                 </motion.button>
 
-                {/* ANSWER */}
+                {/* ANSWER CLOUD */}
                 <motion.div
                   initial={false}
                   animate={{
@@ -154,26 +132,24 @@ export default function FAQ() {
                     opacity: open ? 1 : 0,
                   }}
                   transition={{ duration: 0.35, ease: 'easeInOut' }}
-                  className="ml-auto max-w-[90%] sm:max-w-[85%] overflow-hidden rounded-2xl
+                  className="ml-auto max-w-[90%] sm:max-w-[85%]
+                             overflow-hidden
                              bg-gradient-to-br from-heist-red/20 to-black
                              border border-heist-red/40
-                             shadow-[0_0_32px_rgba(255,0,0,0.35)]"
+                             shadow-[0_0_36px_rgba(255,0,0,0.35)]
+                             [border-radius:28px_28px_8px_28px]"
                 >
-                  <motion.div
-                    animate={open ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: open ? 0.12 : 0, duration: 0.25 }}
-                    className="px-5 py-4 text-gray-200"
-                  >
+                  <div className="px-6 py-4 text-gray-200">
                     <p className="whitespace-pre-line leading-relaxed">
                       {item.a}
                     </p>
-                  </motion.div>
+                  </div>
                 </motion.div>
-              </motion.div>
+              </div>
             )
           })}
           <div ref={faqEndRef} />
-        </motion.div>
+        </div>
       </div>
     </section>
   )
