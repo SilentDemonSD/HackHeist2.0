@@ -6,15 +6,19 @@ import blueprintStatic from '../assets/svg/vault-blueprint.svg'
 import useParallax from '../hooks/useParallax'
 
 const metadata = [
-  { id: 'date', label: 'Date', value: 'Mar 29 – 30, 2025' },
+  { id: 'date', label: 'Date', value: 'Mar 14, 2026' },
   { id: 'location', label: 'Location', value: 'MIET Meerut' },
-  { id: 'tracks', label: 'Tracks', value: 'Defense · AI · FinOps' },
+  // { id: 'tracks', label: 'Tracks', value: 'Defense · AI · FinOps' },
 ]
 
 const missionCopy = [
-  'GDG On Campus MIET presents Hack Heist — a high-energy 36-hour hackathon where developers, innovators, and tech enthusiasts team up to crack real-world challenges with creativity and code.',
-  'Hack Heist isn’t just another competition — it’s your mission to build meaningful solutions, sharpen your skills, and collaborate with brilliant minds. With expert mentors, interactive sessions, and an immersive build sprint, this is your opportunity to level up, showcase your talent, and make your mark.',
-]
+  'Hack Heist 2.0 – The Vault Opens Again!',
+  'Presented by GDG On Campus MIET',
+
+  'Hack Heist 2.0 is a 36-hour high-intensity hackathon that brings together developers, designers, and innovators to build impactful solutions for real-world problems. Designed to challenge both creativity and technical depth, the event offers a complete end-to-end hackathon experience—from ideation and team collaboration to building and showcasing working prototypes.',
+  'Participants will work on industry-relevant problem statements with continuous mentorship, expert guidance, and hands-on exposure to modern technologies. The hackathon environment encourages rapid learning, experimentation, and teamwork through nonstop coding, exciting challenges, and collaborative problem-solving.',
+  'Hack Heist 2.0 welcomes beginners eager to learn as well as experienced hackers ready to compete, offering opportunities for networking, skill development, and recognition through exciting rewards. More than just a competition, Hack Heist 2.0 is an immersive experience focused on turning bold ideas into real impact.',
+];
 
 const blueprintNodes = [
   { id: 'vault-core', label: 'Vault Core', top: '18%', left: '64%' },
@@ -111,10 +115,10 @@ export default function AboutHeist() {
       <div className={styles.radialGlow} aria-hidden="true" />
       <div className={styles.gridOverlay} aria-hidden="true" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 md:grid md:grid-cols-2 md:gap-12">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 md:grid md:grid-cols-3 md:gap-12">
         <motion.div
           className={clsx(
-            'rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-8',
+            'col-span-2 rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-6 md:p-7',
             styles.missionCard,
           )}
           variants={cardVariants}
@@ -143,7 +147,7 @@ export default function AboutHeist() {
           <motion.div
             variants={cardVariants}
             custom={0.4}
-            className="mt-6 flex flex-col gap-4 text-sm leading-relaxed text-[#B9B9B9]"
+            className="mt-4 flex flex-col gap-3 text-sm leading-[1.55] text-[#B9B9B9]"
           >
             {missionText.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>

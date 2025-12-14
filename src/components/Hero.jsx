@@ -9,7 +9,7 @@ function HeistButton() {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link to="/register">
+    // <Link to="/register">
       <motion.div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -50,7 +50,7 @@ function HeistButton() {
           )}
         </span>
       </motion.div>
-    </Link>
+    // </Link>
   );
 }
 
@@ -191,22 +191,22 @@ export default function Hero() {
                       {word === " "
                         ? "\u00A0"
                         : word.split("").map((letter, letterIndex) => (
-                            <motion.span
-                              key={letterIndex}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{
-                                delay:
-                                  wordIndex * 0.1 + letterIndex * 0.02,
-                                duration: 0.4,
-                                ease: "easeOut",
-                              }}
-                              whileHover={{ scale: 1.1, color: "#ff4444" }}
-                              style={{ display: "inline-block" }}
-                            >
-                              {letter}
-                            </motion.span>
-                          ))}
+                          <motion.span
+                            key={letterIndex}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{
+                              delay:
+                                wordIndex * 0.1 + letterIndex * 0.02,
+                              duration: 0.4,
+                              ease: "easeOut",
+                            }}
+                            whileHover={{ scale: 1.1, color: "#ff4444" }}
+                            style={{ display: "inline-block" }}
+                          >
+                            {letter}
+                          </motion.span>
+                        ))}
                     </motion.span>
                   )
                 )}
@@ -216,10 +216,15 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="mt-6 text-lg md:text-xl text-gray-300 leading-relaxed"
+                className="mt-4 text-lg md:text-xl text-gray-300 leading-relaxed"
                 style={{ fontFamily: "'Oxanium', sans-serif" }}
               >
-                Assemble your crew, crack the toughest challenges, and pull off the perfect build in 24 hours.
+                <span className="font-semibold" style={{ color: "#ff4444" }}>
+                  14
+                  <sup className="text-[0.6em] align-super tracking-tight">th</sup>
+                  {' '}March, 2026
+                </span><br />
+                Assemble your crew, crack the toughest challenges, and pull off the perfect build in 36 hours.
               </motion.p>
 
               <motion.div

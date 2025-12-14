@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 const faqs = [
   {
@@ -24,21 +24,58 @@ const faqs = [
   },
 ]
 
+/* ───────────────── animations ───────────────── */
+
+const listVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+}
+
+const questionVariants = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+}
+
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState(null)
+  const [openSet, setOpenSet] = useState(new Set())
+  const faqEndRef = useRef(null)
+
+  const toggleFAQ = (idx) => {
+    setOpenSet((prev) => {
+      const next = new Set(prev)
+      next.has(idx) ? next.delete(idx) : next.add(idx)
+      return next
+    })
+  }
+
+  const allOpen = openSet.size === faqs.length
+
+  const toggleAll = () => {
+    setOpenSet(allOpen ? new Set() : new Set(faqs.map((_, i) => i)))
+  }
+
+  useEffect(() => {
+    faqEndRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    })
+  }, [openSet])
 
   return (
-    <section id="faq" className="relative py-20 md:py-24" aria-label="FAQ">
+    <section
+      id="faq"
+      className="relative py-16 md:py-24 overflow-hidden"
+      aria-label="FAQ"
+    >
       {/* Background */}
       <div className="absolute inset-0 bg-[#0d0d0d]" />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(circle at top, rgba(179,0,0,0.3) 0%, transparent 55%), radial-gradient(circle at bottom, rgba(179,0,0,0.3) 0%, transparent 55%)',
-        }}
-      />
-      {/* Faint blueprint grid */}
+      <div className="absolute inset-0 -z-10 blur-[140px] opacity-40 bg-heist-red/30" />
+
+      {/* Grid */}
       <div
         className="absolute inset-0 opacity-15 pointer-events-none"
         style={{
@@ -49,11 +86,12 @@ export default function FAQ() {
       />
 
       <div className="relative container">
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.45 }}
           className="text-center mb-10"
         >
           <h2
@@ -62,93 +100,81 @@ export default function FAQ() {
           >
             FAQ
           </h2>
-          <p className="mt-3 text-sm md:text-base text-gray-400">
+          <p className="mt-3 text-gray-400">
             Laser-scanned intel for your heist questions.
           </p>
         </motion.div>
 
-        <div className="relative max-w-3xl mx-auto space-y-4">
+        {/* Toggle All */}
+        <div className="flex justify-center mb-10">
+          <button
+            onClick={toggleAll}
+            className="px-6 py-2 rounded-full text-xs uppercase tracking-widest
+                       border border-heist-red/40 text-heist-red
+                       hover:bg-heist-red/10 transition"
+          >
+            {allOpen ? 'Collapse All' : 'Show All'}
+          </button>
+        </div>
+
+        {/* FAQ Chat */}
+        <motion.div
+          variants={listVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="relative max-w-3xl mx-auto space-y-6"
+        >
           {faqs.map((item, idx) => {
-            const open = openIndex === idx
+            const open = openSet.has(idx)
+
             return (
-              <div
+              <motion.div
                 key={item.q}
-                className={`relative rounded-2xl bg-white/5 border overflow-hidden group transition-colors duration-150 ease-out ${
-                  open ? 'border-heist-red/70 shadow-[0_0_18px_rgba(255,0,0,0.4)]' : 'border-white/10'
-                }`}
+                variants={questionVariants}
+                className="space-y-3"
               >
-                {/* Glass highlight */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 opacity-40 pointer-events-none" />
-
-                {/* Blueprint dotted overlay */}
-                <div
-                  className="absolute inset-0 opacity-20 mix-blend-screen pointer-events-none"
-                  style={{
-                    backgroundImage:
-                      'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)',
-                    backgroundSize: '10px 10px',
-                  }}
-                />
-
-                <button
-                  type="button"
-                  className="relative z-10 w-full flex items-center justify-between text-left px-5 py-4 md:px-6 md:py-5 focus:outline-none"
-                  aria-expanded={open}
-                  onClick={() => setOpenIndex(open ? null : idx)}
+                {/* QUESTION */}
+                <motion.button
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => toggleFAQ(idx)}
+                  className="max-w-[90%] sm:max-w-[85%] rounded-2xl px-5 py-4 text-left
+                             bg-white/5 border border-white/10
+                             text-gray-100 hover:border-heist-red/40 transition-colors"
                 >
-                  <span className="text-sm md:text-base font-semibold text-gray-100">
-                    {item.q}
-                  </span>
+                  {item.q}
+                </motion.button>
 
-                  {/* Icon: plus -> rotating lock-open */}
-                  <motion.span
-                    className="ml-4 flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-black/40 text-xs"
-                    aria-hidden
-                    animate={open ? { rotate: 180 } : { rotate: 0 }}
-                    transition={{ duration: 0.3 }}
+                {/* ANSWER */}
+                <motion.div
+                  initial={false}
+                  animate={{
+                    maxHeight: open ? 500 : 0,
+                    opacity: open ? 1 : 0,
+                  }}
+                  transition={{ duration: 0.35, ease: 'easeInOut' }}
+                  className="ml-auto max-w-[90%] sm:max-w-[85%] overflow-hidden rounded-2xl
+                             bg-gradient-to-br from-heist-red/20 to-black
+                             border border-heist-red/40
+                             shadow-[0_0_32px_rgba(255,0,0,0.35)]"
+                >
+                  <motion.div
+                    animate={open ? { opacity: 1 } : { opacity: 0 }}
+                    transition={{ delay: open ? 0.12 : 0, duration: 0.25 }}
+                    className="px-5 py-4 text-gray-200"
                   >
-                    {open ? (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        className="h-4 w-4 text-heist-red"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.6"
-                      >
-                        <path d="M7 11V8a5 5 0 0 1 10 0v3" />
-                        <rect x="5" y="11" width="14" height="10" rx="2" />
-                        <circle cx="12" cy="16" r="1.5" />
-                      </svg>
-                    ) : (
-                      <span className="text-lg leading-none text-gray-200">+</span>
-                    )}
-                  </motion.span>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {open && (
-                    <motion.div
-                      key="content"
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                      transition={{ duration: 0.18, ease: 'easeOut' }}
-                      className="relative z-10 px-5 md:px-6 pb-4 md:pb-5 text-sm text-gray-300"
-                    >
-                      {/* Static laser bar for subtle effect */}
-                      <div className="mb-3 h-[2px] w-full bg-gradient-to-r from-transparent via-heist-red to-transparent opacity-80" />
-                      <p className="whitespace-pre-line leading-relaxed">{item.a}</p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                    <p className="whitespace-pre-line leading-relaxed">
+                      {item.a}
+                    </p>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
             )
           })}
-        </div>
+          <div ref={faqEndRef} />
+        </motion.div>
       </div>
     </section>
   )
 }
-
-

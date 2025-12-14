@@ -130,6 +130,9 @@ export default function Landing(){
         </section>
 
         <AboutHeist />
+        <section id="timeline">
+        <Timeline />
+        </section>
 
         {/* The Loot Section */}
         <motion.section
@@ -830,9 +833,7 @@ export default function Landing(){
           </div>
         </SectionShell>
 
-        <section id="timeline">
-        <Timeline />
-        </section>
+        
         <FAQ />
       </main>
       <Footer />
