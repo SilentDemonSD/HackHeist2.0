@@ -6,8 +6,11 @@ import Footer from '../components/Footer'
 import Mask from '../components/Mask'
 import Countdown from '../components/Countdown'
 import AboutHeist from '../components/AboutHeist'
-
+import TeamSection from '../components/TeamSection'
+import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
+
+
 
 const gallerySources = [
   new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.47 PM.jpeg', import.meta.url).href,
@@ -24,52 +27,52 @@ const gallerySources = [
 
 const pastGallery = [
   {
-    
+
     caption: 'Registration desk crew keeping the queue efficient.',
     src: gallerySources[0],
   },
   {
-   
+
     caption: 'Product mentors giving teams live feedback.',
     src: gallerySources[1],
   },
   {
-    
+
     caption: 'Opening talk that set the pulse for 36 hours.',
     src: gallerySources[2],
   },
   {
-    
+
     caption: 'Hardware + swag handoff to the winning squad.',
     src: gallerySources[3],
   },
   {
-    
+
     caption: 'Teams heading into the arena with MIET kits.',
     src: gallerySources[4],
   },
   {
-    
+
     caption: 'Builders showing their dashboards on-device.',
     src: gallerySources[5],
   },
   {
-    
+
     caption: 'Organizing team synced before the rush.',
     src: gallerySources[6],
   },
   {
-    
+
     caption: 'Community partners and crew outside the arena.',
     src: gallerySources[9],
   },
   {
-    
+
     caption: 'Judges awarding the precision trophy.',
     src: gallerySources[7],
   },
   {
-    
+
     caption: 'Tradition + tech to open the build floor.',
     src: gallerySources[8],
   },
@@ -77,7 +80,7 @@ const pastGallery = [
 
 const gallerySpan = ['md:col-span-2 md:row-span-2', 'md:row-span-1', 'md:row-span-2', 'md:row-span-1', 'md:row-span-2', '', 'md:row-span-2', 'md:row-span-2', 'md:col-span-2', 'md:row-span-1']
 
-function SectionShell({ id, title, subtitle, children, centeredHeading = false }){
+function SectionShell({ id, title, subtitle, children, centeredHeading = false }) {
   const headingClasses = centeredHeading
     ? 'text-3xl font-bold text-center uppercase tracking-[0.18em]'
     : 'text-3xl font-bold'
@@ -85,6 +88,9 @@ function SectionShell({ id, title, subtitle, children, centeredHeading = false }
     ? 'text-gray-300 mt-2 text-center max-w-2xl mx-auto'
     : 'text-gray-300 mt-2'
   const headingStyle = centeredHeading ? { fontSize: 'clamp(2rem, 4vw, 3.4rem)' } : undefined
+  
+
+
 
   return (
     <section id={id} className="container my-16">
@@ -116,14 +122,14 @@ function SectionShell({ id, title, subtitle, children, centeredHeading = false }
   )
 }
 
-export default function Landing(){
+export default function Landing() {
   return (
     <div className="bg-black text-white relative">
       <Navbar />
       <Mask />
       <main>
         <Hero />
-        
+
         {/* Countdown Section - Moved below Hero */}
         <section className="container my-16">
           <Countdown target={new Date('2025-03-29T09:00:00+05:30').getTime()} />
@@ -131,7 +137,7 @@ export default function Landing(){
 
         <AboutHeist />
         <section id="timeline">
-        <Timeline />
+          <Timeline />
         </section>
 
         {/* The Loot Section */}
@@ -144,9 +150,9 @@ export default function Landing(){
         >
           {/* Dark Red to Black Gradient Background */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#1a0000] via-[#0d0000] to-black" />
-          
+
           {/* Faint Grid Overlay */}
-          <div 
+          <div
             className="absolute inset-0 opacity-20"
             style={{
               backgroundImage: `
@@ -156,15 +162,15 @@ export default function Landing(){
               backgroundSize: '50px 50px',
             }}
           />
-          
+
           {/* Vignette Effect */}
-          <div 
+          <div
             className="absolute inset-0"
             style={{
               background: 'radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%)',
             }}
           />
-          
+
           {/* Vertical Laser Scan */}
           <motion.div
             className="absolute top-0 bottom-0 left-0 w-1 bg-gradient-to-b from-transparent via-heist-red to-transparent opacity-60 blur-sm z-10"
@@ -276,8 +282,8 @@ export default function Landing(){
                     initial={{ opacity: 0, y: 50, scale: 0.9 }}
                     whileInView={{ opacity: 1, y: 0, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ 
-                      duration: 0.8, 
+                    transition={{
+                      duration: 0.8,
                       delay: i * 0.2,
                       ease: 'easeOut'
                     }}
@@ -495,7 +501,7 @@ export default function Landing(){
                           <div className="w-24 h-24 md:w-28 md:h-28 rounded-full border border-[#861c1c] bg-gradient-to-br from-[#7b1010] via-[#380404] to-black shadow-[0_0_40px_rgba(120,0,0,0.9)]" />
                           <div className="absolute w-16 h-16 md:w-18 md:h-18 rounded-full border border-[#ffb3b3]/60" />
 
-                          {/* Center knob/lock */} 
+                          {/* Center knob/lock */}
                           <div className="absolute w-6 h-6 md:w-7 md:h-7 rounded-full border border-[#ffcccc]/80 bg-gradient-to-br from-[#ffe6e6] via-[#bf4a4a] to-[#3b0505] shadow-[0_0_18px_rgba(255,77,79,0.6)]" />
 
                           {/* Subtle handle lines */}
@@ -508,9 +514,8 @@ export default function Landing(){
                     {/* Stair / Pedestal under each tier */}
                     <div className="mt-4 w-10/12">
                       <div
-                        className={`mx-auto rounded-t-2xl bg-gradient-to-t from-black/80 via-heist-red/40 to-heist-red/10 border border-heist-red/40 ${
-                          isTier1 ? 'h-10' : tier === 2 ? 'h-7' : 'h-5'
-                        }`}
+                        className={`mx-auto rounded-t-2xl bg-gradient-to-t from-black/80 via-heist-red/40 to-heist-red/10 border border-heist-red/40 ${isTier1 ? 'h-10' : tier === 2 ? 'h-7' : 'h-5'
+                          }`}
                         style={{
                           boxShadow: isTier1
                             ? '0 -10px 30px rgba(179,0,0,0.6)'
@@ -573,12 +578,12 @@ export default function Landing(){
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   whileInView={{ opacity: 1, scale: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ 
-                    duration: 0.5, 
+                  transition={{
+                    duration: 0.5,
                     delay: i * 0.1,
                     ease: 'easeOut'
                   }}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
                     y: -5,
                     transition: { duration: 0.3 }
@@ -663,15 +668,15 @@ export default function Landing(){
                         }}
                       />
                     </motion.div>
-              </div>
+                  </div>
 
                   {/* Hover Glow */}
                   <motion.div
                     className="absolute inset-0 rounded-2xl bg-heist-red/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   />
                 </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
           </div>
         </SectionShell>
 
@@ -692,12 +697,12 @@ export default function Landing(){
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   whileInView={{ opacity: 1, scale: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ 
-                    duration: 0.5, 
+                  transition={{
+                    duration: 0.5,
                     delay: i * 0.1,
                     ease: 'easeOut'
                   }}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
                     y: -5,
                     transition: { duration: 0.3 }
@@ -822,18 +827,13 @@ export default function Landing(){
           </div>
         </SectionShell>
 
-        <SectionShell id="team" title="Our Team" centeredHeading>
-          <div className="grid md:grid-cols-4 gap-6">
-            {Array.from({length:8}).map((_,i)=>(
-              <div key={i} className="text-center">
-                <div className="mx-auto h-24 w-24 rounded-full bg-white/5 border border-white/10" />
-                <div className="mt-2 text-sm text-gray-300">Name</div>
-              </div>
-            ))}
-          </div>
+        <SectionShell id="team" title="Meet Our Team" centeredHeading>
+          <TeamSection />
         </SectionShell>
 
-        
+
+
+              
         <FAQ />
       </main>
       <Footer />

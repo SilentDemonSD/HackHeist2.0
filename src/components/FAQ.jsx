@@ -27,6 +27,7 @@ const faqs = [
 export default function FAQ() {
   const [openSet, setOpenSet] = useState(new Set())
   const faqEndRef = useRef(null)
+  const prevSize = useRef(0)
 
   const toggleFAQ = (idx) => {
     setOpenSet((prev) => {
@@ -42,11 +43,15 @@ export default function FAQ() {
     setOpenSet(allOpen ? new Set() : new Set(faqs.map((_, i) => i)))
   }
 
+  /* ✅ Scroll ONLY when something is opened */
   useEffect(() => {
-    faqEndRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-    })
+    if (openSet.size > prevSize.current) {
+      faqEndRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      })
+    }
+    prevSize.current = openSet.size
   }, [openSet])
 
   return (
@@ -55,11 +60,11 @@ export default function FAQ() {
       className="relative py-16 md:py-24 overflow-hidden"
       aria-label="FAQ"
     >
-      {/* Base background */}
+      {/* Background */}
       <div className="absolute inset-0 bg-[#0d0d0d]" />
       <div className="absolute inset-0 -z-10 blur-[140px] opacity-40 bg-heist-red/30" />
 
-      {/* Blueprint grid */}
+      {/* Grid */}
       <div
         className="absolute inset-0 opacity-15 pointer-events-none"
         style={{
@@ -82,14 +87,14 @@ export default function FAQ() {
             className="text-3xl md:text-4xl font-bold tracking-[0.18em] uppercase"
             style={{ fontFamily: 'Oxanium, sans-serif' }}
           >
-            FAQ's
+            FAQ&apos;s
           </h2>
           <p className="mt-3 text-gray-400 max-w-xl">
             Laser-scanned intel for your heist questions.
           </p>
         </motion.div>
 
-        {/* Show / Collapse button (LEFT, ABOVE QUESTIONS) */}
+        {/* Toggle All */}
         <div className="mb-8">
           <button
             onClick={toggleAll}
@@ -97,18 +102,18 @@ export default function FAQ() {
                        border border-heist-red/40 text-heist-red
                        hover:bg-heist-red/10 transition"
           >
-            {allOpen ? 'Collapse All' : 'expand All'}
+            {allOpen ? 'Collapse All' : 'Expand All'}
           </button>
         </div>
 
-        {/* FAQ Chat */}
+        {/* FAQ List */}
         <div className="relative max-w-3xl space-y-8">
           {faqs.map((item, idx) => {
             const open = openSet.has(idx)
 
             return (
               <div key={item.q} className="space-y-3">
-                {/* QUESTION CLOUD */}
+                {/* Question */}
                 <motion.button
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
@@ -119,12 +124,11 @@ export default function FAQ() {
                              transition-colors hover:border-heist-red/40
                              [border-radius:28px_28px_28px_8px]"
                 >
-                  {/* soft cloud glow */}
                   <span className="absolute inset-0 -z-10 blur-lg bg-white/5 rounded-[inherit]" />
                   {item.q}
                 </motion.button>
 
-                {/* ANSWER CLOUD */}
+                {/* Answer */}
                 <motion.div
                   initial={false}
                   animate={{
