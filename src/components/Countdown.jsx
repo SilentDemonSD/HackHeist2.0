@@ -204,8 +204,8 @@ function ParticlesTiny(){
 }
 
 export default function Countdown(){
-  // Set target date to March 14, 2026
-  const targetDate = useMemo(() => new Date('2026-03-14T00:00:00').getTime(), [])
+  // Set target date to March 28, 2026
+  const targetDate = useMemo(() => new Date('2026-03-28T00:00:00').getTime(), [])
   const { days, hours, minutes, seconds } = useCountdown(targetDate)
   
   return (

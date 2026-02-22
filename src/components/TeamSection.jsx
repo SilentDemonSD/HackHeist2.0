@@ -1,29 +1,29 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { motion, useMotionValue } from 'framer-motion'
 
-/* ===== TEAM DATA (20 MEMBERS) ===== */
+/* ===== ORGANIZERS DATA ===== */
 const teamMembers = [
-  { name: 'Akshit Sharma', role: 'Lead Organizer', img: '/team/1.jpg', link: '#' },
-  { name: 'Riya Verma', role: 'Operations Head', img: '/team/2.jpg', link: '#' },
-  { name: 'Aman Gupta', role: 'Tech Lead', img: '/team/3.jpg', link: '#' },
-  { name: 'Neha Singh', role: 'Design Lead', img: '/team/4.jpg', link: '#' },
-  { name: 'Harsh Patel', role: 'Backend Lead', img: '/team/5.jpg', link: '#' },
-  { name: 'Simran Kaur', role: 'Frontend Lead', img: '/team/6.jpg', link: '#' },
-  { name: 'Rohit Jain', role: 'Sponsorships', img: '/team/7.jpg', link: '#' },
-  { name: 'Ananya Roy', role: 'PR & Media', img: '/team/8.jpg', link: '#' },
-  { name: 'Siddharth', role: 'Logistics', img: '/team/9.jpg', link: '#' },
-  { name: 'Pooja Mehta', role: 'Community', img: '/team/10.jpg', link: '#' },
-
-  { name: 'Yash', role: 'DevOps', img: '/team/11.jpg', link: '#' },
-  { name: 'Kritika', role: 'Content', img: '/team/12.jpg', link: '#' },
-  { name: 'Aditya', role: 'AI Lead', img: '/team/13.jpg', link: '#' },
-  { name: 'Nikhil', role: 'Security', img: '/team/14.jpg', link: '#' },
-  { name: 'Isha', role: 'UI Engineer', img: '/team/15.jpg', link: '#' },
-  { name: 'Aryan', role: 'Infra', img: '/team/16.jpg', link: '#' },
-  { name: 'Muskan', role: 'Design', img: '/team/17.jpg', link: '#' },
-  { name: 'Kunal', role: 'Mentorship', img: '/team/18.jpg', link: '#' },
-  { name: 'Tanya', role: 'Outreach', img: '/team/19.jpg', link: '#' },
-  { name: 'Dev', role: 'Core Team', img: '/team/20.jpg', link: '#' },
+  { name: 'Himanshu', img: 'https://iili.io/qFRTD3N.jpg', link: '#' },
+  { name: 'Palak', img: '', link: '#' },
+  { name: 'Tanishq', img: 'https://iili.io/qFRTeCx.jpg', link: '#' },
+  { name: 'Akshit', img: 'https://iili.io/qFRAyLG.jpg', link: '#' },
+  { name: 'Ayush', img: '/team/5.jpg', link: '#' },
+  { name: 'Aryan', img: 'https://iili.io/qFRuGoJ.jpg', link: '#' },
+  { name: 'Nirdesh', img: 'https://iili.io/qFRz6S1.jpg', link: '#' },
+  { name: 'Gaura', img: 'https://iili.io/qFRuc91.jpg', link: '#' },
+  { name: 'Itika', img: '/team/9.jpg', link: '#' },
+  { name: 'Manan', img: 'https://iili.io/qFRuuMx.jpg', link: '#' },
+  { name: 'Shubhadeep', img: 'https://iili.io/qFRzF6B.png', link: '#' },
+  { name: 'Srishti', img: 'https://iili.io/qFR5QDX.jpg', link: '#' },
+  { name: 'Anshika', img: '/team/13.jpg', link: '#' },
+  { name: 'Abheer', img: '/team/14.jpg', link: '#' },
+  { name: 'Sumit', img: '/team/15.jpg', link: '#' },
+  { name: 'Aishwarya', img: '/team/16.jpg', link: '#' },
+  { name: 'Ansh', img: '/team/17.jpg', link: '#' },
+  { name: 'Abhishikt', img: '/team/18.jpg', link: '#' },
+  { name: 'Harsh', img: 'https://iili.io/qFRuOAX.jpg', link: '#' },
+  { name: 'Khushbu', img: '/team/20.jpg', link: '#' },
+  { name: 'Rajveer', img: 'https://iili.io/qFRAQdN.jpg', link: '#' },
 ]
 
 // duplicate for seamless loop
@@ -33,20 +33,24 @@ export default function TeamSection() {
   const x = useMotionValue(0)
   const [paused, setPaused] = useState(false)
   const [active, setActive] = useState(null)
+  const beltRef = useRef(null)
+  const [singleWidth, setSingleWidth] = useState(0)
 
   /* ===== HACKVILLE-STYLE CONTINUOUS MOTION ===== */
-  const SPEED = 1.1 // px per frame (0.5–0.6 feels premium)
+  const SPEED = 1.122 // px per frame (0.5–0.6 feels premium)
 
   useEffect(() => {
     let rafId
 
     const loop = () => {
       if (!paused) {
-        x.set(x.get() - SPEED)
+        const next = x.get() - SPEED
+        x.set(next)
 
-        // seamless wrap (tune if avatars change size)
-        if (x.get() < -2000) {
-          x.set(0)
+        // seamless wrap using measured single belt width
+        if (singleWidth > 0 && next <= -singleWidth) {
+          // add singleWidth so motion continues seamlessly
+          x.set(next + singleWidth)
         }
       }
       rafId = requestAnimationFrame(loop)
@@ -54,7 +58,20 @@ export default function TeamSection() {
 
     rafId = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafId)
-  }, [paused, x])
+  }, [paused, x, singleWidth])
+
+  // measure single belt width (one copy) for seamless looping
+  useLayoutEffect(() => {
+    function updateWidth() {
+      if (!beltRef.current) return
+      const total = beltRef.current.scrollWidth || 0
+      setSingleWidth(total / 2)
+    }
+
+    updateWidth()
+    window.addEventListener('resize', updateWidth)
+    return () => window.removeEventListener('resize', updateWidth)
+  }, [beltRef])
 
   return (
     <section className="relative overflow-hidden py-14">
@@ -63,10 +80,11 @@ export default function TeamSection() {
 
       {/* ===== BELT ===== */}
       <motion.div
+        ref={beltRef}
         className="flex w-max gap-10 px-6 cursor-grab active:cursor-grabbing"
         style={{ x }}
         drag="x"
-        dragConstraints={{ left: -2000, right: 0 }}
+        dragConstraints={{ left: singleWidth ? -singleWidth : -2000, right: 0 }}
         dragElastic={0.04}
         onDragStart={() => setPaused(true)}
         onDragEnd={() => setPaused(false)}
@@ -104,7 +122,7 @@ export default function TeamSection() {
                 shadow-[0_0_30px_rgba(0,0,0,0.8)]
               "
             >
-              {/* <img
+              <img
                 src={member.img}
                 alt={member.name}
                 className="
@@ -114,7 +132,7 @@ export default function TeamSection() {
                   group-hover:grayscale-0
                 "
                 draggable={false}
-              /> */}
+              />
             </div>
           </a>
         ))}
@@ -126,8 +144,8 @@ export default function TeamSection() {
           animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{ duration: 0.25 }}
           className="
-            min-h-[64px]
-            px-8 py-3
+            min-h-[40px]
+            px-8 py-2
             rounded-full
             bg-black/60 backdrop-blur
             border border-heist-red/40
@@ -136,14 +154,9 @@ export default function TeamSection() {
           "
         >
           {active && (
-            <>
-              <div className="text-gray-100 font-semibold text-sm">
-                {active.name}
-              </div>
-              <div className="text-heist-red text-xs tracking-widest uppercase">
-                {active.role}
-              </div>
-            </>
+            <div className="text-gray-100 font-semibold text-sm">
+              {active.name}
+            </div>
           )}
         </motion.div>
       </div>

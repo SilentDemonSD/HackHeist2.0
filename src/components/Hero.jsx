@@ -1,16 +1,18 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import React, { lazy, Suspense, useState, useRef, useLayoutEffect } from "react";
+import Modal from "./Modal";
 
 const VideoCanvas = lazy(() => import("./VideoCanvas"));
 const Mask = lazy(() => import("./Mask"));
 
-function HeistButton() {
+function HeistButton({ onClick }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     // <Link to="/register">
       <motion.div
+        onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         whileHover={{ scale: 1.05 }}
@@ -80,6 +82,7 @@ export default function Hero() {
   const size = useSize(maskRef);
 
   const [maskRightOffset, setMaskRightOffset] = useState(16);
+  const [showModal, setShowModal] = useState(false);
 
   useLayoutEffect(() => {
     function update() {
@@ -220,9 +223,7 @@ export default function Hero() {
                 style={{ fontFamily: "'Oxanium', sans-serif" }}
               >
                 <span className="font-semibold" style={{ color: "#ff4444" }}>
-                  14
-                  <sup className="text-[0.6em] align-super tracking-tight">th</sup>
-                  {' '}March, 2026
+                  28–29 March, 2026
                 </span><br />
                 Assemble your crew, crack the toughest challenges, and pull off the perfect build in 36 hours.
               </motion.p>
@@ -233,7 +234,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.9 }}
                 className="mt-8 flex items-center gap-3"
               >
-                <HeistButton />
+                <HeistButton onClick={() => setShowModal(true)} />
               </motion.div>
             </div>
           </div>
@@ -249,6 +250,21 @@ export default function Hero() {
       <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10 pointer-events-none" />
 
       <div className="pointer-events-none absolute inset-0 mix-blend-screen opacity-[0.08] animate-scanline" />
+
+      <Modal 
+        open={showModal} 
+        onClose={() => setShowModal(false)} 
+        title="Registrations"
+      >
+        <div className="text-center">
+          <p className="text-lg" style={{ fontFamily: "'Oxanium', sans-serif" }}>
+            Registrations will open soon!
+          </p>
+          <p className="text-gray-400 mt-2" style={{ fontFamily: "'Oxanium', sans-serif" }}>
+            Stay tuned for updates.
+          </p>
+        </div>
+      </Modal>
     </section>
   );
 }

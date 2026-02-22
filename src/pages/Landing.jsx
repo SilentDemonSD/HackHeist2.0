@@ -827,7 +827,7 @@ export default function Landing() {
           </div>
         </SectionShell>
 
-        <SectionShell id="team" title="Meet Our Team" centeredHeading>
+        <SectionShell id="team" title="Meet Our Organizers" centeredHeading>
           <TeamSection />
         </SectionShell>
 
