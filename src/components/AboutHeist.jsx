@@ -6,7 +6,7 @@ import blueprintStatic from '../assets/svg/vault-blueprint.svg'
 import useParallax from '../hooks/useParallax'
 
 const metadata = [
-  { id: 'date', label: 'Date', value: 'Mar 14, 2026' },
+  { id: 'date', label: 'Date', value: 'Mar 28-29, 2026' },
   { id: 'location', label: 'Location', value: 'MIET Meerut' },
   // { id: 'tracks', label: 'Tracks', value: 'Defense · AI · FinOps' },
 ]
