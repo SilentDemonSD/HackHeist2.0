@@ -4,7 +4,7 @@ import { motion, useMotionValue } from 'framer-motion'
 /* ===== ORGANIZERS DATA ===== */
 const teamMembers = [
   { name: 'Himanshu', img: 'https://iili.io/qFRTD3N.jpg', link: '#' },
-  { name: 'Palak', img: '', link: '#' },
+  { name: 'Palak', img: 'https://iili.io/qFRYVYQ.jpg', link: '#' },
   { name: 'Tanishq', img: 'https://iili.io/qFRTeCx.jpg', link: '#' },
   { name: 'Akshit', img: 'https://iili.io/qFRAyLG.jpg', link: '#' },
   { name: 'Ayush', img: '/team/5.jpg', link: '#' },
