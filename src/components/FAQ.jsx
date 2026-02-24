@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: 'Do I need a team?',
-    a: 'Teams of 1–4 members are allowed.\nYou can register solo and we’ll help you form a team at the venue if needed.',
+    a: 'Teams of 2–4 members are allowed.\nYou can register solo and we’ll help you form a team at the venue if needed.',
   },
   {
     q: 'What should I bring?',
