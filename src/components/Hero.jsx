@@ -126,20 +126,14 @@ export default function Hero() {
               </motion.p>
 
               {/* DEVFOLIO APPLY BUTTON */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="mt-8"
-              >
-                <div
-                  className="apply-button"
-                  data-hackathon-slug="hack-heist-2"
-                  data-button-theme="dark"
-                  style={{ height: "44px", width: "312px" }}
-                />
-              </motion.div>
-
+             <div className="mt-8">
+  <div
+    className="apply-button"
+    data-hackathon-slug="hack-heist-2"
+    data-button-theme="dark"
+    style={{ height: "44px", width: "312px" }}
+  />
+</div>
             </div>
           </div>
         </div>
