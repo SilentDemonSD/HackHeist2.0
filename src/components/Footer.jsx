@@ -206,7 +206,28 @@ export default function Footer() {
             </div>
           </div>
         </motion.div>
+              {/* Devfolio Branding */}
+<motion.div
+  variants={itemVariants}
+  className="mt-8 flex flex-col items-center gap-4 border-t border-white/10 pt-6"
+>
+  <p className="text-xs uppercase tracking-wider text-gray-400">
+    Applications Powered By
+  </p>
 
+  <a
+    href="https://devfolio.co"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="opacity-80 transition hover:opacity-100"
+  >
+    <img
+      src="/devfolio-logo-light.svg"
+      alt="DEVFOLIO LOGO"
+      className="h-7 object-contain"
+    />
+  </a>
+</motion.div>
         {/* Copyright */}
         <motion.div
           variants={itemVariants}
