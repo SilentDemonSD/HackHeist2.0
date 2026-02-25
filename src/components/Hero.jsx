@@ -134,7 +134,7 @@ export default function Hero() {
               >
                 <div
                   className="apply-button"
-                  data-hackathon-slug="your-hackathon-slug"
+                  data-hackathon-slug="hack-heist-2"
                   data-button-theme="dark"
                   style={{ height: "44px", width: "312px" }}
                 />
