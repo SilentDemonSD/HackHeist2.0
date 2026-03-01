@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { lazy, Suspense, useRef, useLayoutEffect, useState } from "react";
+import DevfolioApply from './DevfolioApply';
 
 const VideoCanvas = lazy(() => import("./VideoCanvas"));
 const Mask = lazy(() => import("./Mask"));
@@ -125,15 +126,8 @@ export default function Hero() {
                 the perfect build in 36 hours.
               </motion.p>
 
-              {/* DEVFOLIO APPLY BUTTON */}
-             <div className="mt-8">
-  <div
-    className="apply-button"
-    data-hackathon-slug="hack-heist-2"
-    data-button-theme="dark"
-    style={{ height: "44px", width: "312px" }}
-  />
-</div>
+                {/* DEVFOLIO APPLY BUTTON */}
+                <DevfolioApply slug="hack-heist-2" theme="dark" />
             </div>
           </div>
         </div>
