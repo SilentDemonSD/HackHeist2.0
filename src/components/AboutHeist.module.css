@@ -1,12 +1,16 @@
+/* ══════════════════════════════════════════════
+   ABOUT HACK HEIST — module styles
+   ══════════════════════════════════════════════ */
+
 .missionSection {
-  background-color: #0b0a0b;
+  background-color: #080707;
 }
 
 .radialGlow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 20%, #2a0c0c 0%, #120708 45%, #000000 100%);
-  opacity: 0.96;
+  background: radial-gradient(ellipse 80% 60% at 20% 50%, rgba(100, 0, 0, 0.18) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 40% at 80% 80%, rgba(60, 0, 0, 0.12) 0%, transparent 55%);
   pointer-events: none;
 }
 
@@ -14,43 +18,247 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 120px 120px;
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
   mix-blend-mode: screen;
-  opacity: 0.18;
+  opacity: 0.2;
   pointer-events: none;
 }
 
-.missionCard {
-  position: relative;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
-}
-
-.missionCard::before {
-  content: '';
+.topBorder {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border-left: 2px solid rgba(255, 77, 79, 0.7);
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 77, 79, 0.4) 30%, rgba(255, 77, 79, 0.4) 70%, transparent);
   pointer-events: none;
 }
 
-.missionCard:hover,
-.missionCard:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+/* ── Typography ── */
+
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.45em;
+  color: rgba(255, 77, 79, 0.75);
+  margin-bottom: 0.75rem;
 }
 
-.missionCard:hover::before,
-.missionCard:focus-within::before {
-  opacity: 1;
-  transform: translateX(0);
+.headingRow {
+  margin-bottom: 3rem;
 }
+
+.heading {
+  font-family: '3rdMan', sans-serif !important;
+  font-weight: normal !important;
+  font-size: clamp(2.2rem, 5vw, 3.8rem) !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  line-height: 1.1 !important;
+  text-shadow: 0 0 60px rgba(255, 77, 79, 0.12) !important;
+  margin: 0 0 0.75rem !important;
+}
+
+.headingRule {
+  display: block;
+  height: 2px;
+  width: 3.5rem;
+  background: linear-gradient(90deg, #ff4d4f, rgba(255, 77, 79, 0.2));
+  border-radius: 2px;
+}
+
+/* ── Layout ── */
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .mainGrid {
+    grid-template-columns: 1.6fr 1fr;
+    gap: 3rem;
+    align-items: stretch;
+  }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── Copy block ── */
+
+.copyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  color: rgba(185, 185, 185, 0.9);
+  font-size: 0.93rem;
+  line-height: 1.75;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.leadLine {
+  color: rgba(235, 235, 235, 0.95);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.leadLine strong {
+  color: #ffffff;
+}
+
+.dot {
+  margin: 0 0.4em;
+  color: rgba(255, 77, 79, 0.5);
+}
+
+/* ── Stats ── */
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 77, 79, 0.14);
+  border-radius: 0.875rem;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+.statCard:hover {
+  border-color: rgba(255, 77, 79, 0.35);
+  background: rgba(255, 77, 79, 0.05);
+  transform: translateY(-3px);
+}
+
+.statValue {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+.statUnit {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 77, 79, 0.8);
+  margin-left: 0.15em;
+  vertical-align: super;
+}
+
+.statLabel {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(185, 185, 185, 0.6);
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── Highlight cards ── */
+
+.highlightsRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.highlightCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.75rem;
+  padding: 0.875rem 1rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.highlightCard:hover {
+  border-color: rgba(255, 77, 79, 0.25);
+  background: rgba(255, 77, 79, 0.04);
+}
+
+.highlightIcon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+.highlightTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e8e8e8;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.2rem;
+}
+
+.highlightDesc {
+  font-size: 0.8rem;
+  color: rgba(170, 170, 170, 0.75);
+  line-height: 1.55;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── Meta chips ── */
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.metaChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(255, 77, 79, 0.28);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  background: rgba(255, 77, 79, 0.05);
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.metaChip:hover {
+  border-color: rgba(255, 77, 79, 0.55);
+  background: rgba(255, 77, 79, 0.1);
+}
+
+.metaLabel {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: rgba(185, 185, 185, 0.55);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.metaValue {
+  font-size: 0.78rem;
+  color: #e8e8e8;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ══════════════════════════════════════════════
+   BLUEPRINT PANEL — unchanged
+   ══════════════════════════════════════════════ */
 
 .blueprintShell {
   position: relative;
@@ -59,14 +267,24 @@
   border: 1px solid rgba(167, 209, 255, 0.2);
   overflow: hidden;
   backdrop-filter: blur(6px);
-  min-height: 320px;
+  min-height: 280px;
   box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .blueprintShell {
+    min-height: unset;
+    height: 100%;
+  }
 }
 
 .blueprintSvg {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   display: block;
 }
 
@@ -178,7 +396,6 @@
   transform: translateX(-50%);
   border: 5px solid transparent;
   border-top-color: rgba(11, 10, 11, 0.98);
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
 }
 
 .blueprintNode:hover,
@@ -201,7 +418,6 @@
   width: 8px;
   height: 8px;
   box-shadow: 0 0 12px rgba(255, 77, 79, 1);
-  background: radial-gradient(circle, #FF4D4F 0%, rgba(255, 77, 79, 0.6) 100%);
 }
 
 .blueprintNode:hover span,
@@ -210,18 +426,8 @@
   transform: translateX(-50%) translateY(-2px);
 }
 
-.blueprintNode:focus-visible::before {
-  outline: 2px solid rgba(255, 77, 79, 0.6);
-  outline-offset: 2px;
-}
-
-.blueprintNode:nth-child(odd) {
-  animation-delay: 0.4s;
-}
-
-.blueprintNode:nth-child(even) {
-  animation-delay: 0.8s;
-}
+.blueprintNode:nth-child(odd) { animation-delay: 0.4s; }
+.blueprintNode:nth-child(even) { animation-delay: 0.8s; }
 
 @keyframes laserSweep {
   0% { transform: translateX(0); opacity: 0; }
@@ -232,14 +438,8 @@
 }
 
 @keyframes nodePulse {
-  0%, 100% { 
-    transform: translate(-50%, -50%) scale(1);
-    filter: brightness(1);
-  }
-  50% { 
-    transform: translate(-50%, -50%) scale(1.08);
-    filter: brightness(1.2);
-  }
+  0%, 100% { transform: translate(-50%, -50%) scale(1); filter: brightness(1); }
+  50% { transform: translate(-50%, -50%) scale(1.08); filter: brightness(1.2); }
 }
 
 @keyframes gridPulse {
@@ -253,16 +453,41 @@
   100% { stroke-dashoffset: 160; }
 }
 
+.routeFlow {
+  stroke-dashoffset: 0;
+  animation: routeAnimate 2.8s linear infinite;
+}
+
+@keyframes routeAnimate {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -130; }
+}
+
+@media (max-width: 479px) {
+  .heading {
+    font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
+  }
+
+  .statValue {
+    font-size: 1.35rem;
+  }
+
+  .copyBlock {
+    font-size: 0.88rem;
+  }
+
+  .highlightCard {
+    padding: 0.7rem 0.85rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .gridAnimate,
   .ringDash,
   .laser,
+  .routeFlow,
   .blueprintNode {
     animation: none !important;
   }
-
-  .laser {
-    display: none;
-  }
+  .laser { display: none; }
 }
-

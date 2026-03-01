@@ -17,9 +17,10 @@
   }
   
   .timeline-heading-group h2 {
-    font-size: clamp(2rem, 4vw, 3.4rem);
-    color: #f5f5f5;
-    letter-spacing: 0.02em;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    color: #ffffff;
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
     margin: 0;
   }
   

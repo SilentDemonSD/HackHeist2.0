@@ -1,92 +1,86 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import clsx from 'clsx'
 import styles from './AboutHeist.module.css'
 import blueprintStatic from '../assets/svg/vault-blueprint.svg'
 import useParallax from '../hooks/useParallax'
 
-const metadata = [
-  { id: 'date', label: 'Date', value: 'Mar 28-29, 2026' },
-  { id: 'location', label: 'Location', value: 'MIET Meerut' },
-  // { id: 'tracks', label: 'Tracks', value: 'Defense · AI · FinOps' },
+const stats = [
+  { value: '36', unit: 'HRS', label: 'Non-stop hackathon' },
+  { value: '50+', unit: '', label: 'Projects showcased' },
+  { value: '6', unit: 'TRACKS', label: 'Problem domains' },
 ]
 
-const missionCopy = [
-  'Hack Heist 2.0 – The Vault Opens Again!',
-  'Presented by GDG On Campus MIET',
+const metadata = [
+  { id: 'date', label: 'Date', value: 'Mar 28–29, 2026' },
+  { id: 'location', label: 'Location', value: 'MIET Meerut' },
+]
 
-  'Hack Heist 2.0 is a 36-hour high-intensity hackathon that brings together developers, designers, and innovators to build impactful solutions for real-world problems. Designed to challenge both creativity and technical depth, the event offers a complete end-to-end hackathon experience—from ideation and team collaboration to building and showcasing working prototypes.',
-  'Participants will work on industry-relevant problem statements with continuous mentorship, expert guidance, and hands-on exposure to modern technologies. The hackathon environment encourages rapid learning, experimentation, and teamwork through nonstop coding, exciting challenges, and collaborative problem-solving.',
-  'Hack Heist 2.0 welcomes beginners eager to learn as well as experienced hackers ready to compete, offering opportunities for networking, skill development, and recognition through exciting rewards. More than just a competition, Hack Heist 2.0 is an immersive experience focused on turning bold ideas into real impact.',
-];
+const highlights = [
+  { icon: '⚡', title: 'High Intensity', desc: '36 hours of non-stop building, learning, and competing.' },
+  { icon: '🧠', title: 'Expert Mentors', desc: 'Continuous guidance from industry professionals throughout.' },
+  { icon: '🌐', title: 'Open to All', desc: 'Beginners to veterans — everyone has a place at the heist.' },
+]
 
 const blueprintNodes = [
-  { id: 'vault-core', label: 'Vault Core', top: '18%', left: '64%' },
-  { id: 'access-handshake', label: 'Access Handshake', top: '42%', left: '78%' },
-  { id: 'lock-sequence', label: 'Lock Sequence', top: '66%', left: '58%' },
-  { id: 'supply-line', label: 'Supply Line', top: '35%', left: '32%' },
-  { id: 'signal-relay', label: 'Signal Relay', top: '62%', left: '24%' },
+  { id: 'vault-core',   label: 'Vault Core',       top: '28%', left: '82%' },
+  { id: 'server-room',  label: 'Server Room',       top: '19%', left: '18%' },
+  { id: 'entry-point',  label: 'Access Shaft',      top: '71%', left: '83%' },
+  { id: 'security',     label: 'Security',          top: '71%', left: '20%' },
+  { id: 'corridor',     label: 'Main Corridor',     top: '52%', left: '50%' },
 ]
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: 'easeOut',
-      when: 'beforeChildren',
-      staggerChildren: 0.08,
-    },
-  },
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 24 },
+const fadeUp = {
+  hidden: { opacity: 0, y: 22 },
   show: (i = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, delay: i * 0.08, ease: 'easeOut' },
+    transition: { duration: 0.5, delay: i * 0.1, ease: 'easeOut' },
   }),
 }
 
-const blueprintVariants = {
-  hidden: { opacity: 0, scale: 0.96 },
-  show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } },
-}
-
-function MetaChip({ label, value, icon }) {
-  return (
-    <div className="flex items-center gap-2 rounded-full border border-[rgba(255,77,79,0.35)] px-3 py-1 text-xs text-gray-200/90">
-      <span aria-hidden="true">{icon}</span>
-      <span className="uppercase tracking-[0.2em] text-[0.55rem] text-gray-400">{label}</span>
-      <span className="text-gray-100 font-medium">{value}</span>
-    </div>
-  )
+const sectionVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
 }
 
 const iconPaths = {
   date: (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
       <rect x="3" y="4" width="18" height="17" rx="2" stroke="#FF4D4F" strokeWidth="1.5" />
       <path d="M8 2V6M16 2V6" stroke="#FF4D4F" strokeWidth="1.5" strokeLinecap="round" />
       <path d="M3 10H21" stroke="#FF4D4F" strokeWidth="1.5" />
     </svg>
   ),
   location: (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
       <path d="M12 21.5C12 21.5 5 13.985 5 9.5C5 5.91 7.91 3 11.5 3C15.09 3 18 5.91 18 9.5C18 13.985 11 21.5 11 21.5H12Z" stroke="#FF4D4F" strokeWidth="1.5" />
       <circle cx="11.5" cy="9.5" r="2.5" stroke="#FF4D4F" strokeWidth="1.5" />
     </svg>
   ),
-  tracks: (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-      <path d="M6 6H18V18H6V6Z" stroke="#FF4D4F" strokeWidth="1.5" />
-      <path d="M6 12H10.5L13.5 8.5H18" stroke="#FF4D4F" strokeWidth="1.5" />
-      <path d="M6 16H12L15 12.5H18" stroke="#FF4D4F" strokeWidth="1.5" />
-    </svg>
-  ),
+}
+
+function StatCard({ value, unit, label, index }) {
+  return (
+    <motion.div className={styles.statCard} variants={fadeUp} custom={index}>
+      <div className={styles.statValue}>
+        {value}<span className={styles.statUnit}>{unit}</span>
+      </div>
+      <div className={styles.statLabel}>{label}</div>
+    </motion.div>
+  )
+}
+
+function HighlightCard({ icon, title, desc, index }) {
+  return (
+    <motion.div className={styles.highlightCard} variants={fadeUp} custom={index}>
+      <span className={styles.highlightIcon}>{icon}</span>
+      <div>
+        <div className={styles.highlightTitle}>{title}</div>
+        <div className={styles.highlightDesc}>{desc}</div>
+      </div>
+    </motion.div>
+  )
 }
 
 export default function AboutHeist() {
@@ -97,159 +91,380 @@ export default function AboutHeist() {
     disabled: prefersReducedMotion,
   })
 
-  const missionText = useMemo(() => missionCopy, [])
-
   return (
     <motion.section
       id="about"
       aria-labelledby="mission-brief-heading"
-      className={clsx(
-        'relative overflow-hidden py-12 md:py-20',
-        styles.missionSection,
-      )}
+      className={clsx('relative overflow-hidden', styles.missionSection)}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.15 }}
       variants={sectionVariants}
     >
       <div className={styles.radialGlow} aria-hidden="true" />
       <div className={styles.gridOverlay} aria-hidden="true" />
+      <div className={styles.topBorder} aria-hidden="true" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 md:grid md:grid-cols-3 md:gap-12">
-        <motion.div
-          className={clsx(
-            'col-span-2 rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] p-6 md:p-7',
-            styles.missionCard,
-          )}
-          variants={cardVariants}
-          custom={0}
-        >
-          <motion.div
-            variants={cardVariants}
-            custom={0.2}
-            className="flex flex-col gap-3"
-          >
-            <span className="text-xs uppercase tracking-[0.4em] text-heist-red/80">
-              Mission Brief
-            </span>
-            <div>
-              <h2
-                id="mission-brief-heading"
-                className="text-3xl font-semibold text-[#EAEAEA] md:text-4xl"
-                style={{ textShadow: '0 8px 30px rgba(255,77,79,0.08)' }}
-              >
-                ABOUT HACK HEIST
-              </h2>
-              <span className="mt-3 block h-[2px] w-20 rounded-full bg-[#FF4D4F]" />
-            </div>
-          </motion.div>
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 py-16 md:py-24">
 
-          <motion.div
-            variants={cardVariants}
-            custom={0.4}
-            className="mt-4 flex flex-col gap-3 text-sm leading-[1.55] text-[#B9B9B9]"
-          >
-            {missionText.map((paragraph, index) => (
-              <p key={index}>{paragraph}</p>
-            ))}
-          </motion.div>
+        {/* ── Eyebrow ── */}
+        <motion.p className={styles.eyebrow} variants={fadeUp} custom={0}>
+          Mission Brief
+        </motion.p>
 
-          <motion.div
-            variants={cardVariants}
-            custom={0.6}
-            className="mt-8 flex flex-wrap gap-3"
-          >
-            {metadata.map((item) => (
-              <MetaChip
-                key={item.id}
-                label={item.label}
-                value={item.value}
-                icon={iconPaths[item.id]}
-              />
-            ))}
-          </motion.div>
+        {/* ── Heading ── */}
+        <motion.div className={styles.headingRow} variants={fadeUp} custom={0.5}>
+          <h2 id="mission-brief-heading" className={styles.heading}>
+            About Hack Heist
+          </h2>
+          <span className={styles.headingRule} />
         </motion.div>
 
-        <motion.div
-          className={clsx(styles.blueprintShell, 'aspect-[4/3] w-full')}
-          variants={blueprintVariants}
-          ref={prefersReducedMotion ? null : blueprintRef}
-          style={parallaxStyle}
-          onPointerEnter={() => setLaserFast(true)}
-          onPointerLeave={() => setLaserFast(false)}
-        >
-          {prefersReducedMotion ? (
-            <img
-              src={blueprintStatic}
-              alt="Vault blueprint schematic"
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
-          ) : (
-            <>
-              <svg
-                className={clsx(styles.blueprintSvg, 'absolute inset-0')}
-                viewBox="0 0 500 400"
-                role="img"
-                aria-label="Animated vault blueprint"
-              >
-                <defs>
-                  <linearGradient id="gridGlow" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="rgba(167,209,255,0.3)" />
-                    <stop offset="100%" stopColor="rgba(10,18,30,0)" />
-                  </linearGradient>
-                </defs>
-                <rect width="500" height="400" fill="rgba(5,10,18,0.6)" />
+        {/* ── Main grid ── */}
+        <div className={styles.mainGrid}>
 
-                <g className={styles.gridAnimate} stroke="rgba(167,209,255,0.2)" strokeWidth="0.6">
-                  {Array.from({ length: 20 }).map((_, index) => (
-                    <line key={`h-${index}`} x1="0" x2="500" y1={(index + 1) * 20} y2={(index + 1) * 20} />
-                  ))}
-                  {Array.from({ length: 25 }).map((_, index) => (
-                    <line key={`v-${index}`} y1="0" y2="400" x1={(index + 1) * 20} x2={(index + 1) * 20} />
-                  ))}
-                </g>
+          {/* LEFT — copy + stats + highlights */}
+          <div className={styles.leftCol}>
 
-                <g stroke="#A7D1FF" strokeWidth="1.4" opacity="0.6">
-                  <circle cx="250" cy="200" r="120" fill="none" />
-                  <circle cx="250" cy="200" r="90" fill="none" className={styles.ringDash} />
-                  <circle cx="250" cy="200" r="50" fill="none" opacity="0.4" />
-                  <circle cx="250" cy="200" r="5" fill="#FF4D4F" stroke="none" />
-                </g>
+            <motion.div className={styles.copyBlock} variants={fadeUp} custom={1}>
+              <p className={styles.leadLine}>
+                <strong>Hack Heist 2.0 – The Vault Opens Again</strong>
+                <span className={styles.dot}>·</span>
+                Presented by GDG On Campus MIET
+              </p>
+              <p>
+                Hack Heist 2.0 is a 36-hour high-intensity hackathon that brings together
+                developers, designers, and innovators to build impactful solutions for
+                real-world problems. From ideation and team formation to building and
+                showcasing working prototypes — it&apos;s a complete end-to-end experience.
+              </p>
+              <p>
+                Collaborate with peers, work on industry-relevant problem statements, get
+                continuous mentorship, and push your limits with nonstop coding and
+                exciting challenges.
+              </p>
+              <p>
+                Whether you&apos;re a beginner eager to learn or an experienced hacker ready
+                to compete, Hack Heist 2.0 is the arena where bold ideas become real impact.
+              </p>
+            </motion.div>
 
-                <g stroke="#A7D1FF" strokeWidth="0.8" opacity="0.4">
-                  <line x1="250" y1="60" x2="250" y2="340" strokeDasharray="6 8" />
-                  <line x1="110" y1="200" x2="390" y2="200" strokeDasharray="6 8" />
-                  <line x1="150" y1="90" x2="350" y2="310" strokeDasharray="8 10" />
-                  <line x1="150" y1="310" x2="350" y2="90" strokeDasharray="8 10" />
-                </g>
-
-                <g stroke="#FF4D4F" strokeWidth="0.8" opacity="0.6">
-                  <path d="M160 260L240 140L330 170L360 260" strokeDasharray="4 8" />
-                  <path d="M170 150L210 190L290 120L340 150" strokeDasharray="6 12" />
-                </g>
-              </svg>
-
-              <div
-                className={clsx(styles.laser, laserFast && styles.laserFast)}
-              />
-
-              {blueprintNodes.map((node) => (
-                <button
-                  key={node.id}
-                  className={styles.blueprintNode}
-                  style={{ top: node.top, left: node.left }}
-                  type="button"
-                  aria-label={node.label}
-                >
-                  <span>{node.label}</span>
-                </button>
+            {/* Stats */}
+            <motion.div className={styles.statsRow} variants={sectionVariants}>
+              {stats.map((s, i) => (
+                <StatCard key={s.label} {...s} index={i} />
               ))}
-            </>
-          )}
-        </motion.div>
+            </motion.div>
+
+            {/* Highlights */}
+            <motion.div className={styles.highlightsRow} variants={sectionVariants}>
+              {highlights.map((h, i) => (
+                <HighlightCard key={h.title} {...h} index={i} />
+              ))}
+            </motion.div>
+
+            {/* Meta chips */}
+            <motion.div className={styles.metaRow} variants={fadeUp} custom={2}>
+              {metadata.map((item) => (
+                <div key={item.id} className={styles.metaChip}>
+                  <span aria-hidden="true">{iconPaths[item.id]}</span>
+                  <span className={styles.metaLabel}>{item.label}</span>
+                  <span className={styles.metaValue}>{item.value}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* RIGHT — blueprint panel */}
+          <motion.div
+            className={styles.blueprintShell}
+            variants={{ hidden: { opacity: 0, scale: 0.96 }, show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } } }}
+            ref={prefersReducedMotion ? null : blueprintRef}
+            style={parallaxStyle}
+            onPointerEnter={() => setLaserFast(true)}
+            onPointerLeave={() => setLaserFast(false)}
+          >
+            {prefersReducedMotion ? (
+              <img src={blueprintStatic} alt="Vault blueprint schematic" className="h-full w-full object-cover" loading="lazy" />
+            ) : (
+              <>
+                <svg
+                  className={styles.blueprintSvg}
+                  viewBox="0 0 460 500"
+                  role="img"
+                  aria-label="Hack Heist vault floor plan"
+                >
+                  <defs>
+                    <filter id="vaultGlow">
+                      <feGaussianBlur stdDeviation="3" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    <filter id="redGlow">
+                      <feGaussianBlur stdDeviation="2.5" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                    <radialGradient id="vaultFill" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="rgba(255,77,79,0.12)" />
+                      <stop offset="100%" stopColor="rgba(255,77,79,0.03)" />
+                    </radialGradient>
+                    <radialGradient id="roomFill" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="rgba(167,209,255,0.07)" />
+                      <stop offset="100%" stopColor="rgba(167,209,255,0.02)" />
+                    </radialGradient>
+                    <marker id="arrow" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M0,0 L8,4 L0,8 Z" fill="rgba(255,77,79,0.85)" />
+                    </marker>
+                  </defs>
+
+                  {/* ── dark background ── */}
+                  <rect width="460" height="500" fill="#050c13" />
+
+                  {/* ── blueprint grid ── */}
+                  <g className={styles.gridAnimate} stroke="rgba(167,209,255,0.1)" strokeWidth="0.5">
+                    {Array.from({ length: 25 }).map((_, i) => (
+                      <line key={`h${i}`} x1="0" x2="460" y1={(i + 1) * 20} y2={(i + 1) * 20} />
+                    ))}
+                    {Array.from({ length: 23 }).map((_, i) => (
+                      <line key={`v${i}`} x1={(i + 1) * 20} x2={(i + 1) * 20} y1="0" y2="500" />
+                    ))}
+                  </g>
+
+                  {/* ── outer frame with tick marks ── */}
+                  <rect x="18" y="32" width="424" height="444" fill="none" stroke="rgba(167,209,255,0.28)" strokeWidth="1" />
+                  {[60,100,140,180,220,260,300,340,380,420].map(x => (
+                    <g key={`xt${x}`}>
+                      <line x1={x} y1="28" x2={x} y2="32" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
+                      <line x1={x} y1="476" x2={x} y2="480" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
+                    </g>
+                  ))}
+                  {[60,100,140,180,220,260,300,340,380,420,460].map(y => (
+                    <g key={`yt${y}`}>
+                      <line x1="14" y1={y} x2="18" y2={y} stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
+                      <line x1="442" y1={y} x2="446" y2={y} stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
+                    </g>
+                  ))}
+
+                  {/* ══════════ HEADER STRIP ══════════ */}
+                  <rect x="18" y="10" width="424" height="22" fill="rgba(167,209,255,0.04)" stroke="rgba(167,209,255,0.25)" strokeWidth="0.8" />
+                  <text x="30" y="24" fill="rgba(167,209,255,0.5)" fontSize="6" fontFamily="monospace" letterSpacing="2">CLASSIFIED</text>
+                  <text x="230" y="24" textAnchor="middle" fill="rgba(167,209,255,0.6)" fontSize="6.5" fontFamily="monospace" letterSpacing="3">VAULT-B2 FLOOR PLAN</text>
+                  <text x="432" y="24" textAnchor="end" fill="rgba(255,77,79,0.55)" fontSize="6" fontFamily="monospace" letterSpacing="1.5">HH-2.0</text>
+
+                  {/* ══════════ NORTH ROW ══════════ */}
+
+                  {/* SERVER ROOM: x=30,y=50 w=102 h=92 */}
+                  <rect x="30" y="50" width="102" height="92" fill="url(#roomFill)" stroke="rgba(167,209,255,0.5)" strokeWidth="1.2" />
+                  {/* server racks */}
+                  <rect x="42" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
+                  <rect x="62" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
+                  <rect x="82" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
+                  {/* rack LEDs */}
+                  {[0,1,2,3,4,5].map(r => <circle key={r} cx="46" cy={68 + r*8} r="1" fill="rgba(167,209,255,0.7)" />)}
+                  {[0,1,2,3,4,5].map(r => <circle key={r} cx="66" cy={68 + r*8} r="1" fill="rgba(255,77,79,0.7)" />)}
+                  {[0,1,2,3,4,5].map(r => <circle key={r} cx="86" cy={68 + r*8} r="1" fill="rgba(167,209,255,0.7)" />)}
+                  <text x="81" y="152" textAnchor="middle" fill="rgba(167,209,255,0.55)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">SERVER</text>
+                  {/* door gap bottom-center */}
+                  <line x1="62" y1="142" x2="100" y2="142" stroke="#050c13" strokeWidth="2.5" />
+                  <path d="M62,142 Q62,155 100,142" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
+
+                  {/* HACK LAB: x=155,y=50 w=140 h=192 (full tall, spans to corridor) */}
+                  <rect x="155" y="50" width="140" height="192" fill="url(#roomFill)" stroke="rgba(167,209,255,0.45)" strokeWidth="1.2" />
+                  {/* desks 2×2 grid */}
+                  <rect x="167" y="62" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
+                  <rect x="207" y="62" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
+                  <rect x="247" y="62" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
+                  <rect x="167" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
+                  <rect x="207" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
+                  <rect x="247" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
+                  {/* laptop icons on desks */}
+                  {[[167,62],[207,62],[247,62],[167,92],[207,92],[247,92]].map(([dx,dy],i) => (
+                    <rect key={i} x={dx+9} y={dy+5} width="12" height="9" fill="none" stroke="rgba(167,209,255,0.6)" strokeWidth="0.6" rx="0.5" />
+                  ))}
+                  <text x="225" y="138" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="7" fontFamily="monospace" letterSpacing="2">HACK LAB</text>
+                  <text x="225" y="149" textAnchor="middle" fill="rgba(167,209,255,0.3)" fontSize="5.5" fontFamily="monospace">RM-02</text>
+                  {/* security cam on ceiling of hack lab */}
+                  <circle cx="225" cy="162" r="4" fill="none" stroke="rgba(255,200,0,0.5)" strokeWidth="0.8" />
+                  <path d="M225,162 L218,172 L232,172 Z" fill="none" stroke="rgba(255,200,0,0.35)" strokeWidth="0.7" />
+                  <text x="225" y="183" textAnchor="middle" fill="rgba(255,200,0,0.35)" fontSize="5" fontFamily="monospace">CAM-A</text>
+                  {/* door gap right side — into vault antechamber */}
+                  <line x1="295" y1="108" x2="295" y2="136" stroke="#050c13" strokeWidth="2.5" />
+                  <path d="M295,108 Q308,122 295,136" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
+
+                  {/* VAULT: x=320,y=50 w=112 h=192 */}
+                  {/* outer double-border glow */}
+                  <rect x="320" y="50" width="112" height="192" fill="url(#vaultFill)" stroke="rgba(255,77,79,0.65)" strokeWidth="1.8" filter="url(#redGlow)" />
+                  <rect x="325" y="55" width="102" height="182" fill="none" stroke="rgba(255,77,79,0.2)" strokeWidth="3" />
+                  {/* vault circular door */}
+                  <circle cx="376" cy="140" r="52" fill="none" stroke="rgba(255,77,79,0.18)" strokeWidth="1" />
+                  <circle cx="376" cy="140" r="38" fill="rgba(255,77,79,0.06)" stroke="rgba(255,77,79,0.5)" strokeWidth="1.4" className={styles.ringDash} />
+                  <circle cx="376" cy="140" r="26" fill="none" stroke="rgba(255,77,79,0.4)" strokeWidth="1" />
+                  <circle cx="376" cy="140" r="10" fill="rgba(255,77,79,0.15)" stroke="rgba(255,77,79,0.7)" strokeWidth="1" />
+                  <circle cx="376" cy="140" r="3" fill="#ff4d4f" />
+                  {/* locking bolts */}
+                  {[0,60,120,180,240,300].map(deg => {
+                    const rad = (deg * Math.PI) / 180
+                    const bx = 376 + 33 * Math.cos(rad)
+                    const by = 140 + 33 * Math.sin(rad)
+                    return <circle key={deg} cx={bx} cy={by} r="2.5" fill="rgba(255,77,79,0.5)" stroke="rgba(255,77,79,0.8)" strokeWidth="0.6" />
+                  })}
+                  {/* spoke lines */}
+                  {[0,90,180,270].map(deg => {
+                    const rad = (deg * Math.PI) / 180
+                    return <line key={deg} x1={376 + 10*Math.cos(rad)} y1={140 + 10*Math.sin(rad)} x2={376 + 24*Math.cos(rad)} y2={140 + 24*Math.sin(rad)} stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" />
+                  })}
+                  <text x="376" y="76" textAnchor="middle" fill="rgba(255,77,79,0.8)" fontSize="7.5" fontFamily="monospace" letterSpacing="2.5">VAULT</text>
+                  <text x="376" y="87" textAnchor="middle" fill="rgba(255,77,79,0.45)" fontSize="5.5" fontFamily="monospace" letterSpacing="1">B2-CORE</text>
+                  <text x="376" y="218" textAnchor="middle" fill="rgba(255,77,79,0.35)" fontSize="5" fontFamily="monospace">RESTRICTED ACCESS</text>
+                  {/* door gap on left side */}
+                  <line x1="320" y1="108" x2="320" y2="136" stroke="#050c13" strokeWidth="2.5" />
+                  <path d="M320,108 Q307,122 320,136" fill="none" stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" strokeDasharray="2 3" />
+
+                  {/* COMMS ROOM: x=30,y=162 w=102 h=80 */}
+                  <rect x="30" y="162" width="102" height="80" fill="url(#roomFill)" stroke="rgba(167,209,255,0.45)" strokeWidth="1.2" />
+                  {/* antenna */}
+                  <line x1="81" y1="205" x2="81" y2="180" stroke="rgba(167,209,255,0.55)" strokeWidth="1" />
+                  <line x1="68" y1="185" x2="94" y2="185" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
+                  <line x1="72" y1="192" x2="90" y2="192" stroke="rgba(167,209,255,0.35)" strokeWidth="0.7" />
+                  {/* signal arcs */}
+                  <path d="M63,175 Q81,165 99,175" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.8" strokeDasharray="2 2" />
+                  <path d="M58,170 Q81,157 104,170" fill="none" stroke="rgba(167,209,255,0.2)" strokeWidth="0.7" strokeDasharray="2 3" />
+                  <text x="81" y="233" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">COMMS</text>
+                  {/* door gap on right */}
+                  <line x1="132" y1="192" x2="132" y2="218" stroke="#050c13" strokeWidth="2.5" />
+                  <path d="M132,192 Q145,205 132,218" fill="none" stroke="rgba(167,209,255,0.35)" strokeWidth="0.7" strokeDasharray="2 3" />
+
+                  {/* ══ VERTICAL CONNECTORS (shafts) ══ */}
+                  {/* Server → Comms (door gap bridging) already via hack lab side */}
+                  {/* Server room door bottom → top of comms: gap marked already */}
+                  {/* Left shaft: server bottom->comms area */}
+                  <rect x="30" y="142" width="102" height="20" fill="rgba(167,209,255,0.015)" stroke="rgba(167,209,255,0.2)" strokeWidth="0.7" />
+
+                  {/* ══ MAIN CORRIDOR ══ */}
+                  <rect x="30" y="242" width="402" height="40" fill="rgba(167,209,255,0.03)" stroke="rgba(167,209,255,0.4)" strokeWidth="1.2" />
+                  {/* corridor direction arrows */}
+                  <line x1="80" y1="262" x2="380" y2="262" stroke="rgba(167,209,255,0.2)" strokeWidth="0.7" strokeDasharray="6 8" />
+                  <text x="230" y="267" textAnchor="middle" fill="rgba(167,209,255,0.4)" fontSize="6" fontFamily="monospace" letterSpacing="3.5">MAIN CORRIDOR</text>
+                  {/* cam in corridor */}
+                  <circle cx="150" cy="249" r="3" fill="none" stroke="rgba(255,200,0,0.45)" strokeWidth="0.8" />
+                  <path d="M150,249 L143,255 L157,255 Z" fill="none" stroke="rgba(255,200,0,0.3)" strokeWidth="0.7" />
+                  <circle cx="320" cy="249" r="3" fill="none" stroke="rgba(255,200,0,0.45)" strokeWidth="0.8" />
+                  <path d="M320,249 L313,255 L327,255 Z" fill="none" stroke="rgba(255,200,0,0.3)" strokeWidth="0.7" />
+
+                  {/* ══ SOUTH ROW ══ */}
+
+                  {/* SECURITY: x=30,y=302 w=120 h=108 */}
+                  <rect x="30" y="302" width="120" height="108" fill="url(#roomFill)" stroke="rgba(167,209,255,0.45)" strokeWidth="1.2" />
+                  {/* large camera cone */}
+                  <circle cx="90" cy="330" r="6" fill="rgba(255,200,0,0.15)" stroke="rgba(255,200,0,0.7)" strokeWidth="1" />
+                  <path d="M90,330 L66,360 L114,360 Z" fill="rgba(255,200,0,0.06)" stroke="rgba(255,200,0,0.4)" strokeWidth="0.8" />
+                  {/* scan lines inside cone */}
+                  <line x1="76" y1="342" x2="104" y2="342" stroke="rgba(255,200,0,0.25)" strokeWidth="0.5" />
+                  <line x1="72" y1="350" x2="108" y2="350" stroke="rgba(255,200,0,0.2)" strokeWidth="0.5" />
+                  {/* cross/X deny symbol */}
+                  <line x1="70" y1="372" x2="82" y2="384" stroke="rgba(255,77,79,0.55)" strokeWidth="1" />
+                  <line x1="82" y1="372" x2="70" y2="384" stroke="rgba(255,77,79,0.55)" strokeWidth="1" />
+                  <text x="90" y="400" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">SECURITY</text>
+                  {/* door top */}
+                  <line x1="64" y1="302" x2="116" y2="302" stroke="#050c13" strokeWidth="2.5" />
+                  <path d="M64,302 Q64,291 116,302" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
+
+                  {/* BRIEFING RM: x=170,y=302 w=140 h=108 */}
+                  <rect x="170" y="302" width="140" height="108" fill="url(#roomFill)" stroke="rgba(167,209,255,0.4)" strokeWidth="1.2" />
+                  {/* table top-view */}
+                  <rect x="200" y="322" width="80" height="42" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="2" />
+                  {/* chairs around table */}
+                  {[0,1,2,3].map(i => <rect key={i} x={206 + i*18} y="318" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
+                  {[0,1,2,3].map(i => <rect key={i} x={206 + i*18} y="364" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
+                  <text x="240" y="386" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">BRIEFING</text>
+                  {/* door top */}
+                  <line x1="210" y1="302" x2="270" y2="302" stroke="#050c13" strokeWidth="2.5" />
+                  <path d="M210,302 Q210,291 270,302" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
+
+                  {/* ACCESS SHAFT: x=330,y=302 w=102 h=108 */}
+                  <rect x="330" y="302" width="102" height="108" fill="rgba(255,77,79,0.04)" stroke="rgba(167,209,255,0.5)" strokeWidth="1.2" />
+                  {/* hatch pattern — ventilation */}
+                  {[0,1,2,3,4,5].map(i => (
+                    <line key={i} x1={330 + i*17} y1="302" x2={330} y2={302 + i*17} stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
+                  ))}
+                  {[1,2,3,4,5,6].map(i => (
+                    <line key={i} x1={432} y1={302 + i*17} x2={432 - i*17 + (i>6?0:0)} y2="302" stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
+                  ))}
+                  {/* ladder symbol */}
+                  <line x1="370" y1="316" x2="370" y2="396" stroke="rgba(167,209,255,0.5)" strokeWidth="1" />
+                  <line x1="385" y1="316" x2="385" y2="396" stroke="rgba(167,209,255,0.5)" strokeWidth="1" />
+                  {[0,1,2,3,4,5,6].map(i => <line key={i} x1="370" y1={320+i*12} x2="385" y2={320+i*12} stroke="rgba(167,209,255,0.45)" strokeWidth="0.8" />)}
+                  <text x="381" y="408" textAnchor="middle" fill="rgba(167,209,255,0.55)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">ACCESS</text>
+                  {/* door top */}
+                  <line x1="356" y1="302" x2="406" y2="302" stroke="#050c13" strokeWidth="2.5" />
+                  <path d="M356,302 Q356,291 406,302" fill="none" stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" strokeDasharray="2 3" />
+
+                  {/* ══ VERTICAL CONNECTORS (shafts between corridor + rooms) ══ */}
+                  {/* Not needed for hack lab (full height) / vault (full height) */}
+                  {/* Left col connector (server/comms → corridor) done via rooms */}
+
+                  {/* ══ HEIST ROUTE ══ (Entry → Corridor → Vault) */}
+                  <path
+                    d="M381 410 L381 302 L381 262 L335 262 L335 242"
+                    fill="none"
+                    stroke="rgba(255,77,79,0.8)"
+                    strokeWidth="2"
+                    strokeDasharray="7 6"
+                    markerEnd="url(#arrow)"
+                    className={styles.routeFlow}
+                    filter="url(#redGlow)"
+                  />
+
+                  {/* ══ ROOM CODE LABELS bottom-right of each room ══ */}
+                  <text x="128" y="148" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-01</text>
+                  <text x="291" y="238" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-02</text>
+                  <text x="428" y="238" textAnchor="end" fill="rgba(255,77,79,0.35)" fontSize="5" fontFamily="monospace">SEC-B2</text>
+                  <text x="128" y="238" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-03</text>
+                  <text x="148" y="406" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-04</text>
+                  <text x="308" y="406" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-05</text>
+                  <text x="430" y="406" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">ACC-01</text>
+
+                  {/* ══ SCALE BAR ══ */}
+                  <line x1="30" y1="488" x2="110" y2="488" stroke="rgba(167,209,255,0.35)" strokeWidth="0.8" />
+                  <line x1="30" y1="484" x2="30" y2="492" stroke="rgba(167,209,255,0.35)" strokeWidth="0.8" />
+                  <line x1="110" y1="484" x2="110" y2="492" stroke="rgba(167,209,255,0.35)" strokeWidth="0.8" />
+                  <text x="70" y="496" textAnchor="middle" fill="rgba(167,209,255,0.3)" fontSize="5" fontFamily="monospace">10m</text>
+
+                  {/* ══ NORTH ARROW ══ */}
+                  <line x1="430" y1="492" x2="430" y2="476" stroke="rgba(167,209,255,0.4)" strokeWidth="1" />
+                  <polygon points="426,480 430,470 434,480" fill="rgba(167,209,255,0.5)" />
+                  <text x="430" y="498" textAnchor="middle" fill="rgba(167,209,255,0.4)" fontSize="6" fontFamily="monospace">N</text>
+
+                  {/* ══ CORNER CROSSHAIRS ══ */}
+                  <g stroke="rgba(255,77,79,0.4)" strokeWidth="0.8">
+                    <line x1="14" y1="38" x2="24" y2="38" /><line x1="19" y1="33" x2="19" y2="43" />
+                    <line x1="436" y1="38" x2="446" y2="38" /><line x1="441" y1="33" x2="441" y2="43" />
+                    <line x1="14" y1="470" x2="24" y2="470" /><line x1="19" y1="465" x2="19" y2="475" />
+                    <line x1="436" y1="470" x2="446" y2="470" /><line x1="441" y1="465" x2="441" y2="475" />
+                  </g>
+
+                  {/* ══ FOOTER ══ */}
+                  <text x="230" y="495" textAnchor="middle" fill="rgba(255,77,79,0.28)" fontSize="5" fontFamily="monospace" letterSpacing="1.5">HACKHEIST 2.0 · GDG ON CAMPUS MIET · CLASSIFIED</text>
+                </svg>
+
+                <div className={clsx(styles.laser, laserFast && styles.laserFast)} />
+
+                {blueprintNodes.map((node) => (
+                  <button
+                    key={node.id}
+                    className={styles.blueprintNode}
+                    style={{ top: node.top, left: node.left }}
+                    type="button"
+                    aria-label={node.label}
+                  >
+                    <span>{node.label}</span>
+                  </button>
+                ))}
+              </>
+            )}
+          </motion.div>
+        </div>
+
       </div>
     </motion.section>
   )
 }
-

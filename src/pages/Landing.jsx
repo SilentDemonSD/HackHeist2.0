@@ -507,7 +507,7 @@ export default function Landing() {
                       <div
                         className="absolute inset-0 rounded-2xl border border-[#661616]/80 bg-gradient-to-b from-[#5e0505] via-[#2a0303] to-black/95 shadow-[0_18px_45px_rgba(120,0,0,0.9)]
                                    flex items-center justify-center overflow-hidden
-                                   transition-transform transition-opacity duration-500 ease-out
+                                   transition-all duration-500 ease-out
                                    origin-bottom transform group-hover:-translate-y-full group-hover:opacity-0"
                       >
                         {/* Door details */}
