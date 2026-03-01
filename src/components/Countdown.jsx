@@ -23,7 +23,7 @@ export default function Countdown() {
         <div className="absolute w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[120px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
       </div>
 
-      <div className="flex flex-col items-center z-10 w-full px-0">
+      <div className="container mx-auto flex flex-col items-center z-10 px-4 md:px-8 w-full">
         {/* Header Section */}
         <motion.div
           className="flex items-center gap-4 mb-10 md:mb-16"
@@ -44,7 +44,7 @@ export default function Countdown() {
 
         {/* Timer Grid */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 w-[100vw] 2xl:w-full"
+          className="grid grid-cols-2 md:grid-cols-4 w-full gap-4 md:gap-6"
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -83,11 +83,11 @@ function CountdownItem({ unit, label }) {
 
   return (
     <motion.div
-      className="group flex flex-col items-center justify-center py-6 md:py-8 bg-black/80 backdrop-blur-md border border-red-900/40 border-l-0 shadow-[0_8px_32px_rgba(0,0,0,0.8)] relative overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-red-600/60 hover:shadow-[0_10px_40px_rgba(139,0,0,0.4)] cursor-default last:border-r-0"
+      className="group flex flex-col items-center justify-center p-6 md:p-8 bg-black/80 backdrop-blur-md rounded-xl border border-red-900/40 shadow-[0_8px_32px_rgba(0,0,0,0.8)] relative overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-red-600/60 hover:shadow-[0_10px_40px_rgba(139,0,0,0.4)] cursor-default"
       whileHover={{ scale: 1.02 }}
     >
       {/* Animated Red Border Glow */}
-      <div className="absolute inset-0 border border-red-600/0 group-hover:border-red-500/50 transition-all duration-700 shadow-[inset_0_0_20px_rgba(255,26,26,0)] group-hover:shadow-[inset_0_0_30px_rgba(255,26,26,0.2)]" />
+      <div className="absolute inset-0 border border-red-600/0 group-hover:border-red-500/50 rounded-xl transition-all duration-700 shadow-[inset_0_0_20px_rgba(255,26,26,0)] group-hover:shadow-[inset_0_0_30px_rgba(255,26,26,0.2)]" />
 
       {/* Container for slide animation to prevent layout shifts */}
       <div className="relative w-full h-[80px] sm:h-[100px] md:h-[130px] lg:h-[160px] overflow-hidden flex items-center justify-center">
