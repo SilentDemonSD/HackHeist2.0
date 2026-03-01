@@ -8,7 +8,7 @@ const teamMembers = [
   { name: 'Tanishq', img: 'https://iili.io/qFRTeCx.jpg', link: '#' },
   { name: 'Akshit', img: 'https://iili.io/qFRAyLG.jpg', link: '#' },
   { name: 'Ayush', img: 'https://iili.io/qqRsdrX.png', link: '#' },
-  { name: 'Aryan', img: 'https://iili.io/qqRLYSn.png', link: '#' },
+  { name: 'Aryan', img: 'https://iili.io/qqRQTOb.png', link: '#' },
   { name: 'Nirdesh', img: 'https://iili.io/qFRz6S1.jpg', link: '#' },
   { name: 'Gaura', img: 'https://iili.io/qFRuc91.jpg', link: '#' },
   { name: 'Itika', img: 'https://iili.io/qqRkj8N.jpg', link: '#' },
