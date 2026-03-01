@@ -72,7 +72,7 @@ export default function DevfolioApply({ slug = 'hack-heist-2', theme = 'dark' })
           // noop
         }
       })
-      .catch(() => {})
+      .catch(() => { })
 
     return () => {
       mounted = false
@@ -81,10 +81,10 @@ export default function DevfolioApply({ slug = 'hack-heist-2', theme = 'dark' })
 
   return (
     <div className="mt-8">
-      <div className="flex justify-center">
+      <div className="flex justify-start">
         <div
           ref={hostRef}
-          className="relative z-40 h-11 w-[312px] flex items-center justify-center"
+          className="relative z-40 h-11 w-[312px] flex items-center justify-start"
         />
       </div>
     </div>
