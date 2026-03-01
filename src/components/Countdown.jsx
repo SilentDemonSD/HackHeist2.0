@@ -23,7 +23,7 @@ export default function Countdown() {
         <div className="absolute w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[120px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-pulse" style={{ animationDuration: '4s' }} />
       </div>
 
-      <div className="flex flex-col items-center z-10 w-full max-w-5xl">
+      <div className="flex flex-col items-center z-10 w-full px-4 md:px-8">
         {/* Header Section */}
         <motion.div
           className="flex items-center gap-4 mb-10 md:mb-16"
