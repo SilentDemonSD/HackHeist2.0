@@ -2,57 +2,47 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing'
 import Register from './pages/Register'
 import BasicPage from './pages/BasicPage'
-import Preloader from './components/PreloaderGSAP'
-import { useState } from "react";
-
 export default function App() {
-  const [showPreloader, setShowPreloader] = useState(true);
-
   return (
     <>
-      {showPreloader && <Preloader onFinish={() => setShowPreloader(false)} />}   {/* 👈 show preloader */}
-
-      {/* hide site until loaded */}
-      <div style={{ opacity: showPreloader ? 0 : 1, transition: "opacity 0.4s ease" }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/about"
-              element={
-                <BasicPage title="About">
-                  We bring hackers together for a cinematic 24h build.
-                </BasicPage>
-              }
-            />
-            <Route
-              path="/schedule"
-              element={
-                <BasicPage title="Schedule">
-                  See the timeline on the home page.
-                </BasicPage>
-              }
-            />
-            <Route
-              path="/sponsors"
-              element={
-                <BasicPage title="Sponsors">
-                  Become a partner — contact us.
-                </BasicPage>
-              }
-            />
-            <Route
-              path="/contact"
-              element={
-                <BasicPage title="Contact">
-                  Email us: crew@hackheist.dev
-                </BasicPage>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/about"
+            element={
+              <BasicPage title="About">
+                We bring hackers together for a cinematic 24h build.
+              </BasicPage>
+            }
+          />
+          <Route
+            path="/schedule"
+            element={
+              <BasicPage title="Schedule">
+                See the timeline on the home page.
+              </BasicPage>
+            }
+          />
+          <Route
+            path="/sponsors"
+            element={
+              <BasicPage title="Sponsors">
+                Become a partner — contact us.
+              </BasicPage>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <BasicPage title="Contact">
+                Email us: crew@hackheist.dev
+              </BasicPage>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
