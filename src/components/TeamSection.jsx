@@ -16,13 +16,13 @@ const teamMembers = [
   { name: 'Subhadip', img: 'https://iili.io/qFRzF6B.png', link: '#' },
   { name: 'Srishti', img: 'https://iili.io/qFR5QDX.jpg', link: '#' },
   { name: 'Anshika', img: '/team/13.jpg', link: '#' },
-  { name: 'Abheer', img: '/team/14.jpg', link: '#' },
-  { name: 'Sumit', img: '/team/15.jpg', link: '#' },
-  { name: 'Aishwarya', img: '/team/16.jpg', link: '#' },
-  { name: 'Ansh', img: '/team/17.jpg', link: '#' },
+  { name: 'Abheer', img: 'https://iili.io/qqR7wWg.jpg', link: '#' },
+  { name: 'Sumit', img: 'https://iili.io/qqRana4.jpg', link: '#' },
+  // { name: 'Aishwarya', img: '/team/16.jpg', link: '#' },
+  // { name: 'Ansh', img: '/team/17.jpg', link: '#' },
   { name: 'Abhishikt', img: '/team/18.jpg', link: '#' },
   { name: 'Harsh', img: 'https://iili.io/qFRuOAX.jpg', link: '#' },
-  { name: 'Khushbu', img: '/team/20.jpg', link: '#' },
+  { name: 'Khushbu', img: 'https://iili.io/qqRlzQ9.jpg', link: '#' },
   { name: 'Rajveer', img: 'https://iili.io/qFRAQdN.jpg', link: '#' },
 ]
 
