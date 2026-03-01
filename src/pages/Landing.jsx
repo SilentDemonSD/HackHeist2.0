@@ -129,7 +129,7 @@ export default function Landing() {
         <Hero />
 
         {/* Countdown Section - Moved below Hero */}
-        <section className="container my-16">
+        <section className="w-full">
           <Countdown target={new Date('2025-03-29T09:00:00+05:30').getTime()} />
         </section>
 
