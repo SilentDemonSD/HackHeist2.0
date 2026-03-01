@@ -44,7 +44,13 @@ export default function DevfolioApply({ slug = 'hack-heist-2', theme = 'dark' })
     if (!hostRef.current) return
 
     const selector = `.apply-button[data-hackathon-slug="${slug}"]`
-    const existing = document.querySelector(selector)
+    let existing = document.querySelector(selector)
+
+    // Force recreate if the theme doesn't match so the SDK re-renders with light mode
+    if (existing && existing.getAttribute('data-button-theme') !== theme) {
+      existing.remove()
+      existing = null
+    }
 
     if (existing) {
       if (!hostRef.current.contains(existing)) {

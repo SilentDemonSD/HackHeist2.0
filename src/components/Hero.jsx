@@ -49,7 +49,7 @@ export default function Hero() {
 
             {/* DEVFOLIO APPLY BUTTON */}
             {/* Using light theme and inverting it via CSS to achieve a pure black background */}
-            <div className="invert grayscale contrast-125">
+            <div className="invert grayscale contrast-200">
               <DevfolioApply slug="hack-heist-2" theme="light" />
             </div>
           </motion.div>
