@@ -3,7 +3,6 @@ import Hero from '../components/Hero'
 import Timeline from '../components/Timeline'
 import FAQ from '../components/FAQ'
 import Footer from '../components/Footer'
-import Mask from '../components/Mask'
 import Countdown from '../components/Countdown'
 import AboutHeist from '../components/AboutHeist'
 import TeamSection from '../components/TeamSection'
@@ -88,7 +87,7 @@ function SectionShell({ id, title, subtitle, children, centeredHeading = false }
     ? 'text-gray-300 mt-2 text-center max-w-2xl mx-auto'
     : 'text-gray-300 mt-2'
   const headingStyle = centeredHeading ? { fontSize: 'clamp(2rem, 4vw, 3.4rem)' } : undefined
-  
+
 
 
 
@@ -126,7 +125,6 @@ export default function Landing() {
   return (
     <div className="bg-black text-white relative">
       <Navbar />
-      <Mask />
       <main>
         <Hero />
 
@@ -833,7 +831,7 @@ export default function Landing() {
 
 
 
-              
+
         <FAQ />
       </main>
       <Footer />

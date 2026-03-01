@@ -1,8 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=Bruno+Ace+SC&family=Bruno+Ace&family=Oxanium:wght@400;500;600;700;800;900&family=Saira:wght@400;500&family=Chakra+Petch:wght@400;500;600;700&display=swap');
 
+@font-face {
+  font-family: 'Compacta MT Bold';
+  src: url('./assets/fonts/CompactaMTBold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .hero-title {
+    font-family: 'Compacta MT Bold', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+}
 
 @layer base {
   :root {
@@ -10,19 +26,26 @@
     --accent: #b30000;
     --card: #1f1f1f;
   }
+
   html {
     font-family: 'Oxanium', sans-serif;
     background-color: var(--bg);
     color: white;
   }
+
   body {
     @apply min-h-screen antialiased;
-    background: radial-gradient(1200px 600px at 50% -20%, rgba(179,0,0,0.12), transparent 60%), #000;
+    background: radial-gradient(1200px 600px at 50% -20%, rgba(179, 0, 0, 0.12), transparent 60%), #000;
     font-family: 'Oxanium', sans-serif;
   }
-  
+
   /* Oxanium font for all headings */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Oxanium', sans-serif;
     font-weight: 800;
     letter-spacing: -0.03em;
@@ -34,13 +57,10 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.03) 0px,
-    rgba(255,255,255,0.03) 1px,
-    transparent 1px,
-    transparent 2px
-  );
+  background-image: repeating-linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 2px);
   mix-blend-mode: overlay;
 }
-

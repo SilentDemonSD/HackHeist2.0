@@ -1,147 +1,65 @@
 import { motion } from "framer-motion";
 import React, { lazy, Suspense, useRef, useLayoutEffect, useState } from "react";
-import DevfolioApply from './DevfolioApply';
-
-const VideoCanvas = lazy(() => import("./VideoCanvas"));
-const Mask = lazy(() => import("./Mask"));
-
-function useSize(ref) {
-  const [size, setSize] = useState({ width: 0, height: 0 });
-
-  useLayoutEffect(() => {
-    if (!ref.current) return;
-
-    const rect = ref.current.getBoundingClientRect();
-    setSize({ width: rect.width, height: rect.height });
-
-    const obs = new ResizeObserver(([entry]) => {
-      const { width, height } = entry.contentRect;
-      setSize({ width, height });
-    });
-
-    obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [ref]);
-
-  return size;
-}
+import DevfolioApply from "./DevfolioApply";
+import HeroBackground from "./HeroBackground";
 
 export default function Hero() {
-  const maskRef = useRef(null);
-  const wrapperRef = useRef(null);
-  const size = useSize(maskRef);
-
-  const [maskRightOffset, setMaskRightOffset] = useState(16);
-
-  useLayoutEffect(() => {
-    function update() {
-      if (!wrapperRef.current) return;
-
-      const rect = wrapperRef.current.getBoundingClientRect();
-      const offset = Math.round(window.innerWidth - rect.right);
-      const clamped = Math.min(Math.max(offset, 20), 100);
-      setMaskRightOffset(clamped);
-    }
-
-    document.fonts.ready.then(update);
-    window.addEventListener("resize", update);
-    setTimeout(update, 50);
-
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
   return (
-    <section className="relative isolate pt-24 md:pt-28 pb-8 overflow-hidden bg-black">
-      <div ref={wrapperRef} className="mx-auto w-full max-w-7xl px-4 relative">
+    <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden">
+      <HeroBackground />
+      {/* Background elements */}
+      <div className="absolute inset-0 z-0"></div> {/* This div was incomplete in the instruction, closing it here */}
 
-        {/* MASK SECTION */}
-        <div
-          ref={maskRef}
-          className="absolute top-1/2 -translate-y-1/2 hidden md:block pointer-events-none"
-          style={{
-            zIndex: 30,
-            width: "46vw",
-            maxWidth: "700px",
-            height: "68vh",
-            right: maskRightOffset,
-          }}
-        >
-          {size.width > 20 && (
-            <>
-              <div className="absolute inset-0">
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse at right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 25%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.15) 65%, transparent 85%)",
-                    filter: "blur(44px)",
-                  }}
-                />
-              </div>
-
-              <div className="absolute inset-0 z-10">
-                <Suspense fallback={null}>
-                  <Mask wrapperSize={size} />
-                </Suspense>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* CONTENT */}
-        <div className="relative z-20">
-          <div
-            className="grid md:grid-cols-2 gap-8 items-center"
-            style={{ minHeight: "calc(100vh - 200px)" }}
+      {/* Main content grid */}
+      <div className="container relative z-10 w-full">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center min-h-[calc(100vh-10rem)]">
+          {/* Left Column - Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col justify-center"
           >
-            <div className="flex flex-col justify-center">
 
-              {/* TITLE */}
-              <motion.h1
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1 }}
-                className="text-4xl md:text-7xl font-black tracking-tight leading-[0.9]"
-                style={{
-                  fontFamily: "'Bruno Ace SC', sans-serif",
-                  letterSpacing: "-0.03em",
-                }}
-              >
-                HACK HEIST SEASON 2
-              </motion.h1>
+            {/* TITLE */}
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="hero-title text-6xl md:text-8xl lg:text-[7rem] font-black leading-[0.9]"
+            >
+              HACK HEIST <br />
+            </motion.h1>
 
-              {/* SUBTITLE */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="mt-4 text-lg md:text-xl text-gray-300 leading-relaxed"
-                style={{ fontFamily: "'Oxanium', sans-serif" }}
-              >
-                <span className="font-semibold text-red-500">
-                  28–29 March, 2026
-                </span>
-                <br />
-                Assemble your crew, crack the toughest challenges, and pull off
-                the perfect build in 36 hours.
-              </motion.p>
+            {/* SUBTITLE */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="mt-4 text-lg md:text-xl text-gray-300 leading-relaxed"
+              style={{ fontFamily: "'Oxanium', sans-serif" }}
+            >
+              <span className="font-semibold text-red-500">
+                28–29 March, 2026
+              </span>
+              <br />
+              Assemble your crew, crack the toughest challenges, and pull off
+              the perfect build in 36 hours.
+            </motion.p>
 
-                {/* DEVFOLIO APPLY BUTTON */}
-                <DevfolioApply slug="hack-heist-2" theme="dark" />
+            {/* DEVFOLIO APPLY BUTTON */}
+            {/* Using light theme and inverting it via CSS to achieve a pure black background */}
+            <div className="invert grayscale contrast-125">
+              <DevfolioApply slug="hack-heist-2" theme="light" />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* VIDEO BACKGROUND */}
-      <Suspense fallback={<div className="absolute inset-0 -z-10 bg-black" />}>
-        <VideoCanvas />
-      </Suspense>
-
       {/* OVERLAYS */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/90 via-transparent to-transparent" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/90 via-transparent to-transparent pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/80 via-black/30 to-transparent z-10 pointer-events-none" />
-      <div className="pointer-events-none absolute inset-0 mix-blend-screen opacity-[0.08] animate-scanline" />
+      <div className="pointer-events-none absolute inset-0 mix-blend-screen opacity-[0.08] animate-scanline z-10" />
     </section>
   );
 }
