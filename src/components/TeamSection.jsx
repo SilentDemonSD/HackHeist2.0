@@ -15,7 +15,7 @@ const teamMembers = [
   { name: 'Manan', img: 'https://iili.io/qFRuuMx.jpg', link: '#' },
   { name: 'Subhadip', img: 'https://iili.io/qFRzF6B.png', link: '#' },
   { name: 'Srishti', img: 'https://iili.io/qFR5QDX.jpg', link: '#' },
-  { name: 'Anshika', img: 'https://iili.io/qqRMmkG.jpg', link: '#' },
+  { name: 'Anshika', img: 'https://iili.io/qqRNf3B.png', link: '#' },
   { name: 'Abheer', img: 'https://iili.io/qqR7wWg.jpg', link: '#' },
   { name: 'Sumit', img: 'https://iili.io/qqRana4.jpg', link: '#' },
   // { name: 'Aishwarya', img: '/team/16.jpg', link: '#' },
