@@ -37,7 +37,7 @@ export default function TeamSection() {
   const [singleWidth, setSingleWidth] = useState(0)
 
   /* ===== HACKVILLE-STYLE CONTINUOUS MOTION ===== */
-  const SPEED = 1.122 // px per frame (0.5–0.6 feels premium)
+  const SPEED = 2.5 // px per frame (0.5–0.6 feels premium)
 
   useEffect(() => {
     let rafId
