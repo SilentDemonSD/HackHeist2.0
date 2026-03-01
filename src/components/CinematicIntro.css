@@ -1,0 +1,195 @@
+/* ═══════════════════════════════════════════════════════
+   CINEMATIC INTRO — HACK HEIST
+   Dither BEHIND video. Video blends via lighten.
+   Black video areas reveal dither. Building stays clean.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Full-viewport wrapper ── */
+.cinematic-intro {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ── LAYER 0: Dither (BEHIND the video) ── */
+.cinematic-dither-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Mask dims dither over the building footprint to protect dark windows
+     (the lighten blend already protects the bright facade).  Full dither
+     intensity at edges/sky where the black background lives. */
+  -webkit-mask-image:
+    radial-gradient(ellipse 42% 38% at 50% 68%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.85) 55%, black 70%);
+  mask-image:
+    radial-gradient(ellipse 42% 38% at 50% 68%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.85) 55%, black 70%);
+}
+
+/* ── LAYER 1: Video (blends with dither via lighten) ──
+   lighten: result = max(video, dither)
+   → pure black video (0) → dither wins, shows pattern
+   → dark windows (~0.1-0.2) → mask already hides dither here
+   → gray/white facade → building always wins, stays clean     */
+.cinematic-video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  mix-blend-mode: lighten;
+}
+
+.cinematic-video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Vignette (dark edges for cinematic framing) ── */
+.cinematic-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.65) 0%, transparent 22%),
+    linear-gradient(270deg, rgba(0, 0, 0, 0.65) 0%, transparent 22%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, transparent 15%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 10%);
+}
+
+/* ── LAYER 2: Title block ── */
+.cinematic-title-block {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 14vh;
+  pointer-events: none;
+}
+
+.cinematic-title {
+  font-family: '3rdMan', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: clamp(4rem, 12vw, 11rem);
+  font-weight: normal;
+  color: #fff;
+  line-height: 1;
+  text-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.9),
+    0 0 60px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  margin: 0;
+}
+
+.cinematic-tagline {
+  font-family: 'Oxanium', sans-serif;
+  font-size: clamp(0.6rem, 1.4vw, 0.9rem);
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 0.8rem;
+  text-align: center;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.8);
+}
+
+.cinematic-tagline .accent {
+  color: #c53030;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.cinematic-tagline .separator {
+  margin: 0 0.5em;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* ── CTA band (below hero, uses 3rdMan) ── */
+.cinematic-cta {
+  position: relative;
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  background: linear-gradient(180deg, rgba(179, 0, 0, 0.05) 0%, transparent 60%);
+  border-top: 1px solid rgba(179, 0, 0, 0.08);
+}
+
+.cinematic-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(179, 0, 0, 0.4), transparent);
+  box-shadow: 0 0 12px rgba(179, 0, 0, 0.2);
+}
+
+.cinematic-cta-text {
+  font-family: '3rdMan', sans-serif;
+  font-size: clamp(1.8rem, 10vw, 6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  text-shadow: 0 0 15px rgba(179, 0, 0, 0.2);
+  transition: color 0.4s ease, text-shadow 0.4s ease;
+}
+
+.cinematic-cta-text:hover {
+  color: rgba(255, 255, 255, 0.65);
+  text-shadow:
+    0 0 25px rgba(179, 0, 0, 0.4),
+    0 0 50px rgba(179, 0, 0, 0.15);
+}
+
+/* ═══════ MOBILE ═══════ */
+@media (max-width: 768px) {
+  .cinematic-title-block {
+    padding-top: 12vh;
+  }
+
+  .cinematic-title {
+    letter-spacing: 0;
+  }
+
+  .cinematic-tagline {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0 1rem;
+  }
+
+  .cinematic-vignette {
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, transparent 18%),
+      linear-gradient(270deg, rgba(0, 0, 0, 0.55) 0%, transparent 18%),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.65) 0%, transparent 12%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, transparent 8%);
+  }
+}
+
+@media (max-width: 480px) {
+  .cinematic-title-block {
+    padding-top: 10vh;
+  }
+
+  .cinematic-title {
+    font-size: clamp(3rem, 16vw, 5rem);
+  }
+
+  .cinematic-tagline {
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
+  }
+}

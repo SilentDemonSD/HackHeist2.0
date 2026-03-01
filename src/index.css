@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=Bruno+Ace+SC&family=Bruno+Ace&family=Oxanium:wght@400;500;600;700;800;900&family=Saira:wght@400;500&family=Chakra+Petch:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;800;900&family=Bruno+Ace+SC&family=Bruno+Ace&family=3rdMan:wght@400;500;600;700;800;900&family=Saira:wght@400;500&family=Chakra+Petch:wght@400;500;600;700&display=swap');
 
 @font-face {
   font-family: 'Compacta MT Bold';
@@ -47,14 +47,14 @@
     font-family: 'Oxanium', sans-serif;
   }
 
-  /* Oxanium font for all headings */
+  /* 3rdMan font for all headings */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: 'Oxanium', sans-serif;
+    font-family: '3rdMan', sans-serif;
     font-weight: 800;
     letter-spacing: -0.03em;
   }

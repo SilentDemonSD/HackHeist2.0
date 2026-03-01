@@ -1,5 +1,6 @@
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
+import DevfolioApply from '../components/DevfolioApply'
 import Timeline from '../components/Timeline'
 import FAQ from '../components/FAQ'
 import Footer from '../components/Footer'
@@ -128,7 +129,23 @@ export default function Landing() {
       <main>
         <Hero />
 
-        {/* Countdown Section - Moved below Hero */}
+        {/* ── Call-to-action band ── */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="cinematic-cta"
+        >
+          <p className="cinematic-cta-text">
+            Ready to join the heist?
+          </p>
+          <div className="invert grayscale contrast-200">
+            <DevfolioApply slug="hack-heist-2" theme="light" />
+          </div>
+        </motion.section>
+
+        {/* Countdown Section */}
         <section className="container my-16">
           <Countdown target={new Date('2025-03-29T09:00:00+05:30').getTime()} />
         </section>
@@ -835,7 +852,7 @@ export default function Landing() {
         <FAQ />
       </main>
       <Footer />
-    </div>
+    </div >
   )
 }
 
