@@ -1,10 +1,13 @@
 import Navbar from '../components/Navbar'
+<<<<<<< HEAD
 import Hero from '../components/Hero'
 import DevfolioApply from '../components/DevfolioApply'
+=======
+import HeroCountdownTransition from '../components/HeroCountdownTransition'
+>>>>>>> 486ac4f (feat: Add cinematic scroll transition between Hero and Countdown sections)
 import Timeline from '../components/Timeline'
 import FAQ from '../components/FAQ'
 import Footer from '../components/Footer'
-import Countdown from '../components/Countdown'
 import AboutHeist from '../components/AboutHeist'
 import TeamSection from '../components/TeamSection'
 import { useRef, useEffect } from 'react'
@@ -127,7 +130,7 @@ export default function Landing() {
     <div className="bg-black text-white relative">
       <Navbar />
       <main>
-        <Hero />
+        <HeroCountdownTransition />
 
         {/* ── Call-to-action band ── */}
         <motion.section
@@ -135,20 +138,15 @@ export default function Landing() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="cinematic-cta"
+          className="cinematic-cta flex flex-col items-center justify-center py-12"
         >
-          <p className="cinematic-cta-text">
+          <p className="cinematic-cta-text text-2xl md:text-3xl font-bold mb-6 text-white text-center tracking-widest uppercase" style={{ fontFamily: 'Oxanium, sans-serif' }}>
             Ready to join the heist?
           </p>
           <div className="invert grayscale contrast-200">
             <DevfolioApply slug="hack-heist-2" theme="light" />
           </div>
         </motion.section>
-
-        {/* Countdown Section */}
-        <section className="container my-16">
-          <Countdown target={new Date('2025-03-29T09:00:00+05:30').getTime()} />
-        </section>
 
         <AboutHeist />
         <section id="timeline">
