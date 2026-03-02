@@ -1,5 +1,8 @@
+import { lazy, Suspense } from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
+import LazySection from '../components/LazySection'
+import useIsMobile from '../hooks/useIsMobile'
 import DevfolioApply from '../components/DevfolioApply'
 import HeroCountdownTransition from '../components/HeroCountdownTransition'
 import Timeline from '../components/Timeline'
@@ -13,7 +16,22 @@ import ScrollTitleMarquee from '../components/ScrollTitleMarquee'
 import HorizontalTracks, { MobileTracks } from '../components/HorizontalTracks'
 import { motion } from 'framer-motion'
 
+// Lazy-load every below-fold section — only Hero + Navbar are critical-path
+const DevfolioApply = lazy(() => import(/* webpackChunkName: "devfolio" */ '../components/DevfolioApply'))
+const Timeline = lazy(() => import(/* webpackChunkName: "timeline" */ '../components/Timeline'))
+const FAQ = lazy(() => import(/* webpackChunkName: "faq" */ '../components/FAQ'))
+const Countdown = lazy(() => import(/* webpackChunkName: "countdown" */ '../components/Countdown'))
+const Footer = lazy(() => import(/* webpackChunkName: "footer" */ '../components/Footer'))
+const AboutHeist = lazy(() => import(/* webpackChunkName: "about" */ '../components/AboutHeist'))
+const TeamSection = lazy(() => import(/* webpackChunkName: "team" */ '../components/TeamSection'))
+const VaultSection = lazy(() => import(/* webpackChunkName: "vault" */ '../components/VaultSection'))
 
+
+
+// Dark placeholder while lazy chunks load — prevents white flash
+const SectionFallback = () => (
+  <div style={{ minHeight: '40vh', background: '#000' }} />
+)
 
 const gallerySources = [
   new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.47 PM.jpeg', import.meta.url).href,
@@ -83,24 +101,39 @@ const pastGallery = [
 
 const gallerySpan = ['md:col-span-2 md:row-span-2', 'md:row-span-1', 'md:row-span-2', 'md:row-span-1', 'md:row-span-2', '', 'md:row-span-2', 'md:row-span-2', 'md:col-span-2', 'md:row-span-1']
 
-/* ── Per-letter animated heading ── */
-function LetterHeading({ text, centered = false }) {
+/* ── Per-letter animated heading (simplified single-element fade on mobile) ── */
+function LetterHeading({ text, centered = false, isMobile = false }) {
+  const headingStyle = {
+    fontFamily: "'3rdMan', 'Montserrat', sans-serif",
+    fontSize: 'clamp(1.9rem, 4.5vw, 3.6rem)',
+    fontWeight: 'normal',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: '#ffffff',
+    margin: 0,
+    lineHeight: 1.1,
+    textAlign: centered ? 'center' : 'left',
+    cursor: 'default',
+  }
+
+  // Mobile: single motion.h2 instead of N motion.span per letter
+  if (isMobile) {
+    return (
+      <motion.h2
+        style={headingStyle}
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+      >
+        {text}
+      </motion.h2>
+    )
+  }
+
   const chars = text.split('')
   return (
-    <h2
-      style={{
-        fontFamily: "'3rdMan', 'Montserrat', sans-serif",
-        fontSize: 'clamp(1.9rem, 4.5vw, 3.6rem)',
-        fontWeight: 'normal',
-        letterSpacing: '0.06em',
-        textTransform: 'uppercase',
-        color: '#ffffff',
-        margin: 0,
-        lineHeight: 1.1,
-        textAlign: centered ? 'center' : 'left',
-        cursor: 'default',
-      }}
-    >
+    <h2 style={headingStyle}>
       {chars.map((char, i) => (
         <motion.span
           key={i}
@@ -118,7 +151,7 @@ function LetterHeading({ text, centered = false }) {
   )
 }
 
-function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading = false }) {
+function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading = false, isMobile = false }) {
   return (
     <section id={id} className="container my-16">
       <motion.div
@@ -142,7 +175,7 @@ function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading 
             {eyebrow}
           </span>
         )}
-        <LetterHeading text={title} centered={centeredHeading} />
+        <LetterHeading text={title} centered={centeredHeading} isMobile={isMobile} />
         {subtitle && (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -173,13 +206,15 @@ function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading 
 }
 
 export default function Landing() {
+  const isMobile = useIsMobile()
+
   return (
     <div className="bg-black text-white relative">
       <Navbar />
       <main>
         <Hero />
 
-        {/* ── Call-to-action band ── */}
+        {/* ── CTA band — near fold, renders immediately ── */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -190,16 +225,35 @@ export default function Landing() {
           <p className="cinematic-cta-text" style={{ fontFamily: '3rdMan, sans-serif' }}>
             Ready to join the heist?
           </p>
-          <div className="invert grayscale contrast-200">
-            <DevfolioApply slug="hack-heist-2" theme="light" />
-          </div>
+          <Suspense fallback={<div style={{ height: 44 }} />}>
+            <div className="invert grayscale contrast-200">
+              <DevfolioApply slug="hack-heist-2" theme="light" />
+            </div>
+          </Suspense>
         </motion.section>
 
-        {/* Countdown Section */}
-        <section className="container my-16">
-          <Countdown target={new Date('2025-03-29T09:00:00+05:30').getTime()} />
-        </section>
+        {/* ── Below-fold: each section deferred via IntersectionObserver ── */}
+        <LazySection>
+          <section className="container my-16">
+            <Suspense fallback={<SectionFallback />}>
+              <Countdown target={new Date('2025-03-29T09:00:00+05:30').getTime()} />
+            </Suspense>
+          </section>
+        </LazySection>
 
+        <LazySection>
+          <Suspense fallback={<SectionFallback />}>
+            <AboutHeist />
+          </Suspense>
+        </LazySection>
+
+        <LazySection>
+          <section id="timeline">
+            <Suspense fallback={<SectionFallback />}>
+              <Timeline />
+            </Suspense>
+          </section>
+        </LazySection>
         <AboutHeist />
 
         <div id="tracks">
@@ -211,21 +265,247 @@ export default function Landing() {
           <Timeline />
         </section>
 
-        {/* The Vault / Loot Section */}
-        <VaultSection />
+        <LazySection>
+          <Suspense fallback={<SectionFallback />}>
+            <VaultSection />
+          </Suspense>
+        </LazySection>
 
+        <LazySection>
+        <SectionShell id="partners" title="Partners" eyebrow="Allied Forces" subtitle="Our trusted allies in this heist." centeredHeading isMobile={isMobile}>
+          <div className="relative">
+            {/* Revealing Soon Text */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-12"
+            >
+              <motion.div
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-heist-red/30 bg-gradient-to-r from-heist-red/10 via-heist-red/5 to-heist-red/10 backdrop-blur-sm shadow-[0_0_25px_rgba(179,0,0,0.3)]"
+                animate={{ opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <motion.span
+                  className="text-heist-red text-sm md:text-base font-semibold uppercase tracking-wider"
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  Revealing Very Soon
+                </motion.span>
+                <motion.div
+                  className="flex gap-1"
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-heist-red" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-heist-red" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-heist-red" />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+
+            {/* Animated Placeholder Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.1,
+                    ease: 'easeOut'
+                  }}
+                  whileHover={{
+                    scale: 1.05,
+                    y: -5,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="group relative h-32 rounded-2xl overflow-hidden"
+                >
+                  {/* Animated Background */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-white/5 via-white/3 to-transparent border border-white/10 rounded-2xl"
+                    animate={{ opacity: [0.6, 1, 0.6] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
+                  />
+
+                  {/* Glowing Border Effect */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl border border-heist-red/30"
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }}
+                  />
+
+                  {/* Pulsing Glow */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl bg-heist-red/5 blur-xl"
+                    animate={{
+                      opacity: [0.2, 0.4, 0.2],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
+                  />
+
+                  {/* Shimmer Effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
+                    animate={{
+                      x: ['-100%', '200%'],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: 'linear',
+                      delay: i * 0.3,
+                    }}
+                  />
+
+                  {/* Center Icon/Placeholder */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.div
+                      className="w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center"
+                      animate={{
+                        rotate: [0, 5, -5, 0],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                        delay: i * 0.2,
+                      }}
+                    >
+                      <motion.div
+                        className="w-6 h-6 rounded bg-heist-red/30"
+                        animate={{
+                          scale: [1, 1.2, 1],
+                          opacity: [0.5, 0.8, 0.5],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                          delay: i * 0.15,
+                        }}
+                      />
+                    </motion.div>
+                  </div>
+
+                  {/* Hover Glow */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl bg-heist-red/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
         <SectionShell id="partners" title="Partners" eyebrow="Allied Forces" subtitle="Our trusted allies in this heist." centeredHeading>
           <ScrollTitleMarquee rows={['Title Sponsors', 'Gold Sponsors', 'Silver Sponsors', 'Community Partners', 'Media Partners']} />
         </SectionShell>
+        </LazySection>
 
+        <LazySection>
+        <SectionShell id="tracks" title="Our Tracks" eyebrow="Mission Paths" subtitle="Choose your path in this heist." centeredHeading isMobile={isMobile}>
+          <div className="relative">
+            {/* Animated Track Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {[
+                'AI/ML',
+                'Web3 & Blockchain',
+                'IoT',
+                'AR/VR',
+                'App Development',
+                'Open Innovation'
+              ].map((track, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.5,
+                    delay: i * 0.1,
+                    ease: 'easeOut'
+                  }}
+                  whileHover={{
+                    scale: 1.05,
+                    y: -5,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="group relative h-32 rounded-2xl overflow-hidden cursor-pointer"
+                >
+                  {/* Animated Background */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-br from-heist-red/20 via-heist-red/10 to-transparent border border-heist-red/30 rounded-2xl"
+                    animate={{ opacity: [0.6, 1, 0.6] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
+                  />
 
-        <SectionShell id="past" title="Our Past Heists" eyebrow="Field Records" subtitle="Gallery playback from previous ops." centeredHeading>
+                  {/* Glowing Border Effect */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl border border-heist-red/40"
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }}
+                  />
+
+                  {/* Pulsing Glow */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl bg-heist-red/10 blur-xl"
+                    animate={{
+                      opacity: [0.3, 0.5, 0.3],
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
+                  />
+
+                  {/* Shimmer Effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
+                    animate={{
+                      x: ['-100%', '200%'],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: 'linear',
+                      delay: i * 0.3,
+                    }}
+                  />
+
+                  {/* Track Name */}
+                  <div className="absolute inset-0 flex items-center justify-center z-10">
+                    <motion.h3
+                      className="text-white font-bold text-lg md:text-xl text-center px-4"
+                      style={{ fontFamily: 'Oxanium, sans-serif', textShadow: '0 0 15px rgba(179, 0, 0, 0.6)' }}
+                      animate={{ opacity: [0.8, 1, 0.8] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
+                    >
+                      {track}
+                    </motion.h3>
+                  </div>
+
+                  {/* Hover Glow */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl bg-heist-red/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </SectionShell>
+        </LazySection>
+
+        <LazySection>
+        <SectionShell id="past" title="Our Past Heists" eyebrow="Field Records" subtitle="Gallery playback from previous ops." centeredHeading isMobile={isMobile}>
           <div className="relative max-w-6xl mx-auto">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-heist-red/10 via-transparent to-heist-red/10 blur-3xl pointer-events-none" />
             <div className="relative grid gap-4 md:grid-cols-3 auto-rows-[200px]">
               {pastGallery.map((item, idx) => (
                 <motion.article
-                  key={item.title}
+                  key={idx}
                   initial={{ opacity: 0, y: 30, scale: 0.95 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, margin: '-50px' }}
@@ -234,19 +514,22 @@ export default function Landing() {
                 >
                   <img
                     src={item.src}
-                    alt={item.title}
+                    alt={item.caption}
                     loading="lazy"
+                    decoding="async"
+                    width={600}
+                    height={400}
                     className="h-full w-full object-cover transition duration-700 group-hover:scale-105 group-hover:rotate-1"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-70" />
                   <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                    <motion.h3
+                    <motion.p
                       className="text-lg font-semibold tracking-wide"
                       style={{ fontFamily: 'Oxanium, sans-serif' }}
                       whileHover={{ x: 4 }}
                     >
-                      {item.title}
-                    </motion.h3>
+                      {item.caption}
+                    </motion.p>
                   </div>
                   <motion.div
                     className="absolute inset-0 border-2 border-transparent rounded-3xl pointer-events-none"
@@ -258,18 +541,28 @@ export default function Landing() {
             </div>
           </div>
         </SectionShell>
+        </LazySection>
 
-        <SectionShell id="team" title="Meet Our Organizers" eyebrow="The Crew" centeredHeading>
-          <TeamSection />
+        <LazySection>
+        <SectionShell id="team" title="Meet Our Organizers" eyebrow="The Crew" centeredHeading isMobile={isMobile}>
+          <Suspense fallback={<SectionFallback />}>
+            <TeamSection />
+          </Suspense>
         </SectionShell>
+        </LazySection>
 
-
-
-
-        <FAQ />
+        <LazySection>
+          <Suspense fallback={<SectionFallback />}>
+            <FAQ />
+          </Suspense>
+        </LazySection>
       </main>
-      <Footer />
-    </div >
+      <LazySection>
+        <Suspense fallback={<SectionFallback />}>
+          <Footer />
+        </Suspense>
+      </LazySection>
+    </div>
   )
 }
 

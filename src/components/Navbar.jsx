@@ -10,26 +10,19 @@ function MaskLogo({ className = 'w-8 h-8' }) {
       whileHover={{ scale: 1.15, rotate: [0, -5, 5, 0] }}
       transition={{ type: 'spring', stiffness: 500, damping: 20 }}
     >
-      <motion.div
+      {/* CSS animation instead of Framer Motion — runs on compositor, zero TBT */}
+      <div
         className="absolute inset-0 rounded-full bg-heist-red/40 blur-md"
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.4, 0.6, 0.4]
-        }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ animation: 'logoGlow 3s ease-in-out infinite' }}
       />
-      <motion.img
+      <img
         src="/mask-logo.png"
         alt="Hack Heist Logo"
         className="relative z-10 w-full h-full object-contain"
-        animate={{
-          filter: [
-            'drop-shadow(0 0 4px rgba(179,0,0,0.5))',
-            'drop-shadow(0 0 8px rgba(179,0,0,0.8))',
-            'drop-shadow(0 0 4px rgba(179,0,0,0.5))'
-          ]
+        style={{
+          filter: 'drop-shadow(0 0 6px rgba(179,0,0,0.65))',
+          animation: 'logoShadow 2s ease-in-out infinite',
         }}
-        transition={{ duration: 2, repeat: Infinity }}
       />
     </motion.div>
   )
@@ -285,6 +278,7 @@ export default function Navbar() {
           id="mobile-menu"
           role="dialog"
           aria-modal="true"
+          aria-label="Navigation menu"
           initial={{ x: '100%', opacity: 0 }}
           animate={{
             x: open ? 0 : '100%',

@@ -58,7 +58,7 @@ const itemVariants = {
 function SocialIcon({ icon, href, name, type = 'emoji' }) {
   const renderIcon = () => {
     if (type === 'image') {
-      return <img src={icon} alt={name} className="h-5 w-5 object-contain" />
+      return <img src={icon} alt={name} width={20} height={20} className="h-5 w-5 object-contain" />
     }
     
     if (type === 'svg') {
@@ -223,7 +223,9 @@ export default function Footer() {
   >
     <img
       src="/devfolio-logo-light.svg"
-      alt="DEVFOLIO LOGO"
+      alt="Devfolio logo"
+      width={120}
+      height={28}
       className="h-7 object-contain"
     />
   </a>
