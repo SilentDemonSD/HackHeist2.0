@@ -8,7 +8,7 @@ import useParallax from '../hooks/useParallax'
 const stats = [
   { value: '36', unit: 'HRS', label: 'Non-stop hackathon' },
   { value: '50+', unit: '', label: 'Projects showcased' },
-  { value: '6', unit: 'TRACKS', label: 'Problem domains' },
+  { value: '1500+', unit: 'USERS', label: 'Registered participants' },
 ]
 
 const metadata = [

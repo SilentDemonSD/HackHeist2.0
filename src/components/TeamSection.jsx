@@ -1,169 +1,234 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react'
-import { motion, useMotionValue } from 'framer-motion'
+import { motion, useMotionValue, AnimatePresence } from 'framer-motion'
 
 /* ===== ORGANIZERS DATA ===== */
 const teamMembers = [
-  { name: 'Himanshu', img: 'https://iili.io/qFRTD3N.jpg', link: '#' },
-  { name: 'Palak', img: 'https://iili.io/qFRYVYQ.jpg', link: '#' },
-  { name: 'Tanishq', img: 'https://iili.io/qFRTeCx.jpg', link: '#' },
-  { name: 'Akshit', img: 'https://iili.io/qFRAyLG.jpg', link: '#' },
-  { name: 'Ayush', img: 'https://iili.io/qqRsdrX.png', link: '#' },
-  { name: 'Aryan', img: 'https://iili.io/qqRQTOb.png', link: '#' },
-  { name: 'Nirdesh', img: 'https://iili.io/qFRz6S1.jpg', link: '#' },
-  { name: 'Gaura', img: 'https://iili.io/qFRuc91.jpg', link: '#' },
-  { name: 'Itika', img: 'https://iili.io/qqRkj8N.jpg', link: '#' },
-  { name: 'Manan', img: 'https://iili.io/qFRuuMx.jpg', link: '#' },
-  { name: 'Subhadip', img: 'https://iili.io/qFRzF6B.png', link: '#' },
-  { name: 'Srishti', img: 'https://iili.io/qFR5QDX.jpg', link: '#' },
-  { name: 'Anshika', img: 'https://iili.io/qqRNf3B.png', link: '#' },
-  { name: 'Abheer', img: 'https://iili.io/qqR7wWg.jpg', link: '#' },
-  { name: 'Sumit', img: 'https://iili.io/qqRana4.jpg', link: '#' },
-  // { name: 'Aishwarya', img: '/team/16.jpg', link: '#' },
-  // { name: 'Ansh', img: '/team/17.jpg', link: '#' },
-  { name: 'Abhishikt', img: 'https://iili.io/qqRXgku.png', link: '#' },
-  { name: 'Harsh', img: 'https://iili.io/qFRuOAX.jpg', link: '#' },
-  { name: 'Khushbu', img: 'https://iili.io/qqRlzQ9.jpg', link: '#' },
-  { name: 'Rajveer', img: 'https://iili.io/qFRAQdN.jpg', link: '#' },
+  { name: 'Himanshu', img: 'https://iili.io/qFRTD3N.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/himanshukumard/' },
+  { name: 'Palak', img: 'https://iili.io/qFRYVYQ.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/palak-singhal-14a78324a/' },
+  { name: 'Tanishq', img: 'https://iili.io/qFRTeCx.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/tanishq-taliyan/' },
+  { name: 'Akshit', img: 'https://iili.io/qFRAyLG.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/sharmaakshit07/' },
+  { name: 'Ayush', img: 'https://iili.io/qqRsdrX.png', role: 'Organizer', link: 'https://www.linkedin.com/in/ayushsharma81/' },
+  { name: 'Arya', img: 'https://iili.io/qqRQTOb.png', role: 'Organizer', link: 'https://www.linkedin.com/in/arya-kant-rajvanshi-141bbb28a/' },
+  { name: 'Nirdesh', img: 'https://iili.io/qFRz6S1.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/nirdesh-tyagi-441300291/' },
+  { name: 'Gaura', img: 'https://iili.io/qFRuc91.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/gaura-siwach-b21a752a9/' },
+  { name: 'Itika', img: 'https://iili.io/qqRkj8N.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/itika-singhal-a2b675325/' },
+  { name: 'Manan', img: 'https://iili.io/qFRuuMx.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/manan-bhatia-7818a62a5/' },
+  { name: 'Subhadip', img: 'https://iili.io/qFRzF6B.png', role: 'Organizer', link: 'http://linkedin.com/in/mysterysd/' },
+  { name: 'Srishti', img: 'https://iili.io/qFR5QDX.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/srishti-ruhal-931193317/' },
+  { name: 'Anshika', img: 'https://iili.io/qqRNf3B.png', role: 'Organizer', link: 'https://www.linkedin.com/in/anshika1919' },
+  { name: 'Abheer', img: 'https://iili.io/qqR7wWg.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/abheer-rajput-160839311/' },
+  { name: 'Sumit', img: 'https://iili.io/qqRana4.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/sumit-aggarwal-7457b02a3/' },
+  { name: 'Abhishikt', img: 'https://iili.io/qqRXgku.png', role: 'Organizer', link: 'https://www.linkedin.com/in/abhishikt-issac-1234653b1/' },
+  { name: 'Harsh', img: 'https://iili.io/qFRuOAX.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/harsh-mavi-83944b380/' },
+  { name: 'Khushbu', img: 'https://iili.io/qqRlzQ9.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/khushbu-rawat-258533331/' },
+  { name: 'Rajveer', img: 'https://iili.io/qFRAQdN.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/rajveer-deshwal-a28469289/' },
 ]
+
+/* ── Card dimensions ── */
+const CARD_W = 160
+const CARD_W_MOBILE = 130
+const CARD_GAP = 20
+const CARD_GAP_MOBILE = 14
 
 // duplicate for seamless loop
 const belt = [...teamMembers, ...teamMembers]
 
+/* ── LinkedIn icon (inline SVG) ── */
+function LinkedInIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  )
+}
+
+/* ── Single crew card (used on both desktop & mobile) ── */
+function CrewCard({ member, onHover, onLeave, cardWidth }) {
+  const w = cardWidth || CARD_W
+  return (
+    <div
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      className="group select-none flex-shrink-0"
+      style={{ width: w }}
+    >
+      <div className="relative overflow-hidden rounded-2xl bg-neutral-900/60 border border-white/[0.06] transition-all duration-500 group-hover:border-red-500/30 group-hover:shadow-[0_0_40px_rgba(255,77,79,0.12)]">
+        {/* Photo — aspect 3:4 */}
+        <div className="relative" style={{ aspectRatio: '3 / 4' }}>
+          <img
+            src={member.img}
+            alt={member.name}
+            width={240}
+            height={320}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover grayscale brightness-[0.65] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.05]"
+            draggable={false}
+          />
+          {/* Gradient scrim */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-50 transition-opacity duration-500 pointer-events-none" />
+          {/* Red accent line at top */}
+          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/60 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
+        </div>
+
+        {/* Info bar + LinkedIn */}
+        <div className="relative px-2 py-2.5 bg-black/60 backdrop-blur-md flex items-center">
+          <div className="flex-1 min-w-0 text-center">
+            <p
+              className="text-[0.72rem] font-semibold text-white/90 group-hover:text-white tracking-wide truncate transition-colors duration-300"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
+            >
+              {member.name}
+            </p>
+            <p
+              className="text-[0.52rem] text-white/30 group-hover:text-red-400/70 uppercase tracking-[0.18em] mt-0.5 transition-colors duration-300"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
+            >
+              {member.role}
+            </p>
+          </div>
+
+          {/* LinkedIn button */}
+          {member.link && member.link !== '#' && (
+            <a
+              href={member.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="shrink-0 ml-1.5 flex h-6 w-6 items-center justify-center rounded-full
+                         border border-white/10 text-gray-500
+                         hover:border-red-500/40 hover:text-white hover:bg-red-500/10
+                         transition-all duration-300"
+              aria-label={`${member.name} LinkedIn`}
+            >
+              <LinkedInIcon />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── Detect mobile ── */
+const useIsMobile = () => {
+  const [m, setM] = useState(false)
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 768px)')
+    setM(mql.matches)
+    const h = (e) => setM(e.matches)
+    mql.addEventListener('change', h)
+    return () => mql.removeEventListener('change', h)
+  }, [])
+  return m
+}
+
 export default function TeamSection() {
+  const isMobile = useIsMobile()
   const x = useMotionValue(0)
   const [paused, setPaused] = useState(false)
   const [active, setActive] = useState(null)
   const beltRef = useRef(null)
   const [singleWidth, setSingleWidth] = useState(0)
 
-  /* ===== HACKVILLE-STYLE CONTINUOUS MOTION ===== */
-  const SPEED = 1.5 // px per frame (0.5–0.6 feels premium)
+  const SPEED = isMobile ? 0.5 : 0.8
+  const currentGap = isMobile ? CARD_GAP_MOBILE : CARD_GAP
+  const currentCardW = isMobile ? CARD_W_MOBILE : CARD_W
 
+  /* ── Continuous belt motion (both desktop & mobile) ── */
   useEffect(() => {
     let rafId
-
     const loop = () => {
       if (!paused) {
         const next = x.get() - SPEED
         x.set(next)
-
-        // seamless wrap using measured single belt width
         if (singleWidth > 0 && next <= -singleWidth) {
-          // add singleWidth so motion continues seamlessly
           x.set(next + singleWidth)
         }
       }
       rafId = requestAnimationFrame(loop)
     }
-
     rafId = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafId)
-  }, [paused, x, singleWidth])
+  }, [paused, x, singleWidth, SPEED])
 
-  // measure single belt width (one copy) for seamless looping
+  /* ── Measure belt ── */
   useLayoutEffect(() => {
-    function updateWidth() {
+    const updateWidth = () => {
       if (!beltRef.current) return
-      const total = beltRef.current.scrollWidth || 0
-      setSingleWidth(total / 2)
+      setSingleWidth(beltRef.current.scrollWidth / 2)
     }
-
     updateWidth()
     window.addEventListener('resize', updateWidth)
     return () => window.removeEventListener('resize', updateWidth)
-  }, [beltRef])
+  }, [beltRef, isMobile])
 
   return (
-    <section className="relative overflow-hidden py-14">
-      {/* 🔴 Ambient red glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(179,0,0,0.28),transparent_65%)] pointer-events-none" />
+    <section className="relative overflow-hidden py-6">
+      {/* Edge fade masks */}
+      <div className="absolute top-0 bottom-0 left-0 w-20 md:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }} />
+      <div className="absolute top-0 bottom-0 right-0 w-20 md:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }} />
 
-      {/* ===== BELT ===== */}
+      {/* Belt */}
       <motion.div
         ref={beltRef}
-        className="flex w-max gap-10 px-6 cursor-grab active:cursor-grabbing"
-        style={{ x }}
+        className="flex w-max cursor-grab active:cursor-grabbing"
+        style={{ x, gap: currentGap }}
         drag="x"
-        dragConstraints={{ left: singleWidth ? -singleWidth : -2000, right: 0 }}
+        dragConstraints={{ left: singleWidth ? -singleWidth : -4000, right: 0 }}
         dragElastic={0.04}
         onDragStart={() => setPaused(true)}
         onDragEnd={() => setPaused(false)}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
+        onMouseEnter={() => !isMobile && setPaused(true)}
+        onMouseLeave={() => !isMobile && setPaused(false)}
         onTouchStart={() => setPaused(true)}
         onTouchEnd={() => setPaused(false)}
       >
         {belt.map((member, i) => (
-          <a
-            key={i}
-            href={member.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            onMouseEnter={() => {
-              setActive(member)
-              setPaused(true)
+          <CrewCard
+            key={`${member.name}-${i}`}
+            member={member}
+            cardWidth={currentCardW}
+            onHover={() => {
+              if (!isMobile) {
+                setActive(member)
+                setPaused(true)
+              }
             }}
-            onMouseLeave={() => {
-              setActive(null)
-              setPaused(false)
+            onLeave={() => {
+              if (!isMobile) {
+                setActive(null)
+                setPaused(false)
+              }
             }}
-            className="group select-none"
-          >
-            <div
-              className="
-                h-24 w-24 md:h-28 md:w-28
-                rounded-full
-                bg-black/50
-                border border-white/10
-                overflow-hidden
-                transition-all duration-300
-                group-hover:scale-110
-                group-hover:border-heist-red
-                shadow-[0_0_30px_rgba(0,0,0,0.8)]
-              "
-            >
-              <img
-                src={member.img}
-                alt={member.name}
-                width={112}
-                height={112}
-                loading="lazy"
-                decoding="async"
-                className="
-                  h-full w-full object-cover
-                  grayscale
-                  transition duration-300
-                  group-hover:grayscale-0
-                "
-                draggable={false}
-              />
-            </div>
-          </a>
+          />
         ))}
       </motion.div>
 
-      {/* ===== INFO PANEL ===== */}
-      <div className="mt-10 flex justify-center">
-        <motion.div
-          animate={active ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-          transition={{ duration: 0.25 }}
-          className="
-            min-h-[40px]
-            px-8 py-2
-            rounded-full
-            bg-black/60 backdrop-blur
-            border border-heist-red/40
-            shadow-[0_0_30px_rgba(255,0,0,0.35)]
-            text-center
-          "
-        >
-          {active && (
-            <div className="text-gray-100 font-semibold text-sm">
-              {active.name}
-            </div>
-          )}
-        </motion.div>
-      </div>
+      {/* Active member tooltip (desktop only) */}
+      {!isMobile && (
+        <div className="flex justify-center mt-6 h-9">
+          <AnimatePresence mode="wait">
+            {active && (
+              <motion.div
+                key={active.name}
+                initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -6, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="px-6 py-1.5 rounded-full bg-black/70 backdrop-blur-lg border border-red-500/25 shadow-[0_0_24px_rgba(255,77,79,0.15)]"
+              >
+                <span className="text-[0.78rem] font-semibold text-white/90 tracking-wide" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                  {active.name}
+                </span>
+                <span className="text-[0.6rem] text-red-400/60 ml-2 uppercase tracking-widest" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                  {active.role}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </section>
   )
 }

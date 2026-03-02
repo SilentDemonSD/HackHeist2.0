@@ -35,7 +35,8 @@ const navLinks = [
   { href: '#partners', label: 'Partners' },
   { href: '#tracks', label: 'Tracks' },
   { href: '#past', label: 'Past Heists' },
-  { href: '#team', label: 'Our Team' }
+  { href: '#team', label: 'Our Team' },
+  { href: '#faq', label: 'FAQ' }
 ]
 
 function NavigationLink({ href, label, index }) {
@@ -125,7 +126,7 @@ export default function Navbar() {
   useEffect(() => { setOpen(false) }, [location.pathname])
 
   useEffect(() => {
-    function onKey(e) { if (e.key === 'Escape') setOpen(false) }
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])

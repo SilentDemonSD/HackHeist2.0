@@ -1,17 +1,8 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import LazySection from '../components/LazySection'
 import useIsMobile from '../hooks/useIsMobile'
-import DevfolioApply from '../components/DevfolioApply'
-import HeroCountdownTransition from '../components/HeroCountdownTransition'
-import Timeline from '../components/Timeline'
-import FAQ from '../components/FAQ'
-import Countdown from '../components/Countdown'
-import Footer from '../components/Footer'
-import AboutHeist from '../components/AboutHeist'
-import TeamSection from '../components/TeamSection'
-import VaultSection from '../components/VaultSection'
 import ScrollTitleMarquee from '../components/ScrollTitleMarquee'
 import HorizontalTracks, { MobileTracks } from '../components/HorizontalTracks'
 import { motion } from 'framer-motion'
@@ -99,7 +90,57 @@ const pastGallery = [
   },
 ]
 
-const gallerySpan = ['md:col-span-2 md:row-span-2', 'md:row-span-1', 'md:row-span-2', 'md:row-span-1', 'md:row-span-2', '', 'md:row-span-2', 'md:row-span-2', 'md:col-span-2', 'md:row-span-1']
+/* ── Explicit grid placement for a tight, gap-free masonry collage ──
+   3 columns × 6 rows, every cell accounted for:
+   Row 1-2: hero(2×2) + top-right(1×1) + mid-right(1×1)
+   Row 3-4: left(1×1) + center-tall(1×2) + right-tall(1×2) + below-left(1×1)
+   Row 5:   wide-bottom(2×1) + bottom-right(1×1)
+   Row 6:   full-width closing(3×1)
+   ──────────────────────────────────────────────── */
+const galleryLayout = [
+  { col: '1 / 3', row: '1 / 3' },  // 0: hero 2×2
+  { col: '3 / 4', row: '1 / 2' },  // 1: top-right
+  { col: '3 / 4', row: '2 / 3' },  // 2: mid-right
+  { col: '1 / 2', row: '3 / 4' },  // 3: left
+  { col: '2 / 3', row: '3 / 5' },  // 4: center tall
+  { col: '3 / 4', row: '3 / 5' },  // 5: right tall
+  { col: '1 / 2', row: '4 / 5' },  // 6: below-left
+  { col: '1 / 3', row: '5 / 6' },  // 7: wide bottom
+  { col: '3 / 4', row: '5 / 6' },  // 8: bottom-right
+  { col: '1 / 4', row: '6 / 7' },  // 9: full-width closing
+]
+
+/* ── Partner data — replace placeholder names / add logos ──────
+   Format per tier:
+     { tier: '<tier name>', partners: [{ name: '...', logo: '/logos/....svg' }] }
+   Put logo files in  public/logos/  (SVG preferred, ~200×60 px).
+   ────────────────────────────────────────────────────────────── */
+const PARTNERS_DATA = [
+  {
+    tier: 'Sponsors',
+        partners: [
+      { name: '.XYZ', logo: '/logo/xyz.svg' },
+      { name: 'Sponsor G' },
+      { name: 'Sponsor H' },
+      { name: 'Sponsor I' },
+    ],
+  },
+  {
+    tier: 'Community Partners',
+    partners: [
+      { name: 'Community A' },
+      { name: 'Community B' },
+      { name: 'Community C' },
+    ],
+  },
+  {
+    tier: 'Media Partners',
+    partners: [
+      { name: 'Media A' },
+      { name: 'Media B' },
+    ],
+  },
+]
 
 /* ── Per-letter animated heading (simplified single-element fade on mobile) ── */
 function LetterHeading({ text, centered = false, isMobile = false }) {
@@ -207,6 +248,7 @@ function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading 
 
 export default function Landing() {
   const isMobile = useIsMobile()
+  const [activeGalleryIdx, setActiveGalleryIdx] = useState(-1)
 
   return (
     <div className="bg-black text-white relative">
@@ -248,22 +290,19 @@ export default function Landing() {
         </LazySection>
 
         <LazySection>
+          <div id="tracks">
+            <HorizontalTracks />
+            <MobileTracks />
+          </div>
+        </LazySection>
+
+        <LazySection>
           <section id="timeline">
             <Suspense fallback={<SectionFallback />}>
               <Timeline />
             </Suspense>
           </section>
         </LazySection>
-        <AboutHeist />
-
-        <div id="tracks">
-          <HorizontalTracks />
-          <MobileTracks />
-        </div>
-
-        <section id="timeline">
-          <Timeline />
-        </section>
 
         <LazySection>
           <Suspense fallback={<SectionFallback />}>
@@ -272,273 +311,134 @@ export default function Landing() {
         </LazySection>
 
         <LazySection>
-        <SectionShell id="partners" title="Partners" eyebrow="Allied Forces" subtitle="Our trusted allies in this heist." centeredHeading isMobile={isMobile}>
-          <div className="relative">
-            {/* Revealing Soon Text */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center mb-12"
-            >
-              <motion.div
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-heist-red/30 bg-gradient-to-r from-heist-red/10 via-heist-red/5 to-heist-red/10 backdrop-blur-sm shadow-[0_0_25px_rgba(179,0,0,0.3)]"
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <motion.span
-                  className="text-heist-red text-sm md:text-base font-semibold uppercase tracking-wider"
-                  animate={{ opacity: [0.6, 1, 0.6] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  Revealing Very Soon
-                </motion.span>
-                <motion.div
-                  className="flex gap-1"
-                  animate={{ opacity: [0.3, 1, 0.3] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-heist-red" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-heist-red" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-heist-red" />
-                </motion.div>
-              </motion.div>
-            </motion.div>
-
-            {/* Animated Placeholder Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.1,
-                    ease: 'easeOut'
-                  }}
-                  whileHover={{
-                    scale: 1.05,
-                    y: -5,
-                    transition: { duration: 0.3 }
-                  }}
-                  className="group relative h-32 rounded-2xl overflow-hidden"
-                >
-                  {/* Animated Background */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-white/5 via-white/3 to-transparent border border-white/10 rounded-2xl"
-                    animate={{ opacity: [0.6, 1, 0.6] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
-                  />
-
-                  {/* Glowing Border Effect */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl border border-heist-red/30"
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }}
-                  />
-
-                  {/* Pulsing Glow */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl bg-heist-red/5 blur-xl"
-                    animate={{
-                      opacity: [0.2, 0.4, 0.2],
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
-                  />
-
-                  {/* Shimmer Effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12"
-                    animate={{
-                      x: ['-100%', '200%'],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: 'linear',
-                      delay: i * 0.3,
-                    }}
-                  />
-
-                  {/* Center Icon/Placeholder */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <motion.div
-                      className="w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center"
-                      animate={{
-                        rotate: [0, 5, -5, 0],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                        delay: i * 0.2,
-                      }}
-                    >
-                      <motion.div
-                        className="w-6 h-6 rounded bg-heist-red/30"
-                        animate={{
-                          scale: [1, 1.2, 1],
-                          opacity: [0.5, 0.8, 0.5],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          ease: 'easeInOut',
-                          delay: i * 0.15,
-                        }}
-                      />
-                    </motion.div>
-                  </div>
-
-                  {/* Hover Glow */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl bg-heist-red/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        <SectionShell id="partners" title="Partners" eyebrow="Allied Forces" subtitle="Our trusted allies in this heist." centeredHeading>
-          <ScrollTitleMarquee rows={['Title Sponsors', 'Gold Sponsors', 'Silver Sponsors', 'Community Partners', 'Media Partners']} />
-        </SectionShell>
-        </LazySection>
-
-        <LazySection>
-        <SectionShell id="tracks" title="Our Tracks" eyebrow="Mission Paths" subtitle="Choose your path in this heist." centeredHeading isMobile={isMobile}>
-          <div className="relative">
-            {/* Animated Track Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              {[
-                'AI/ML',
-                'Web3 & Blockchain',
-                'IoT',
-                'AR/VR',
-                'App Development',
-                'Open Innovation'
-              ].map((track, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.1,
-                    ease: 'easeOut'
-                  }}
-                  whileHover={{
-                    scale: 1.05,
-                    y: -5,
-                    transition: { duration: 0.3 }
-                  }}
-                  className="group relative h-32 rounded-2xl overflow-hidden cursor-pointer"
-                >
-                  {/* Animated Background */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-heist-red/20 via-heist-red/10 to-transparent border border-heist-red/30 rounded-2xl"
-                    animate={{ opacity: [0.6, 1, 0.6] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 }}
-                  />
-
-                  {/* Glowing Border Effect */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl border border-heist-red/40"
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }}
-                  />
-
-                  {/* Pulsing Glow */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl bg-heist-red/10 blur-xl"
-                    animate={{
-                      opacity: [0.3, 0.5, 0.3],
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
-                  />
-
-                  {/* Shimmer Effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
-                    animate={{
-                      x: ['-100%', '200%'],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: 'linear',
-                      delay: i * 0.3,
-                    }}
-                  />
-
-                  {/* Track Name */}
-                  <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <motion.h3
-                      className="text-white font-bold text-lg md:text-xl text-center px-4"
-                      style={{ fontFamily: 'Oxanium, sans-serif', textShadow: '0 0 15px rgba(179, 0, 0, 0.6)' }}
-                      animate={{ opacity: [0.8, 1, 0.8] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
-                    >
-                      {track}
-                    </motion.h3>
-                  </div>
-
-                  {/* Hover Glow */}
-                  <motion.div
-                    className="absolute inset-0 rounded-2xl bg-heist-red/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </SectionShell>
+          <SectionShell id="partners" title="Partners" eyebrow="Allied Forces" subtitle="Our trusted allies in this heist." centeredHeading isMobile={isMobile}>
+            <ScrollTitleMarquee rows={PARTNERS_DATA} partnerCta="https://forms.gle/uL5YnxXhoy7voP357" />
+          </SectionShell>
         </LazySection>
 
         <LazySection>
         <SectionShell id="past" title="Our Past Heists" eyebrow="Field Records" subtitle="Gallery playback from previous ops." centeredHeading isMobile={isMobile}>
           <div className="relative max-w-6xl mx-auto">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-heist-red/10 via-transparent to-heist-red/10 blur-3xl pointer-events-none" />
-            <div className="relative grid gap-4 md:grid-cols-3 auto-rows-[200px]">
-              {pastGallery.map((item, idx) => (
-                <motion.article
-                  key={idx}
-                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, margin: '-50px' }}
-                  transition={{ duration: 0.4, delay: idx * 0.05 }}
-                  className={`group relative overflow-hidden rounded-3xl border border-white/10 bg-black/40 backdrop-blur-xl shadow-[0_25px_50px_rgba(0,0,0,0.35)] ${gallerySpan[idx] ?? ''}`}
-                >
-                  <img
-                    src={item.src}
-                    alt={item.caption}
-                    loading="lazy"
-                    decoding="async"
-                    width={600}
-                    height={400}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105 group-hover:rotate-1"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent transition-opacity duration-500 group-hover:opacity-70" />
-                  <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                    <motion.p
-                      className="text-lg font-semibold tracking-wide"
-                      style={{ fontFamily: 'Oxanium, sans-serif' }}
-                      whileHover={{ x: 4 }}
+            {/* Ambient radial glow */}
+            <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(255,77,79,0.05) 0%, transparent 65%)' }} />
+
+            {/* ── Desktop: explicit-placement masonry grid ── */}
+            {!isMobile && (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gridAutoRows: '200px',
+                  gap: '10px',
+                }}
+              >
+                {pastGallery.map((item, idx) => (
+                  <motion.article
+                    key={idx}
+                    initial={{ opacity: 0, y: 38, scale: 0.92 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{
+                      duration: 0.6,
+                      delay: idx * 0.055,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
+                    style={{
+                      gridColumn: galleryLayout[idx].col,
+                      gridRow: galleryLayout[idx].row,
+                    }}
+                    className="group relative overflow-hidden rounded-2xl cursor-pointer bg-neutral-900"
+                  >
+                    {/* Image — grayscale by default, color on hover */}
+                    <img
+                      src={item.src}
+                      alt={item.caption}
+                      loading="lazy"
+                      decoding="async"
+                      width={600}
+                      height={400}
+                      className="h-full w-full object-cover grayscale brightness-[0.7] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.06]"
+                    />
+                    {/* Gradient scrim */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-50 pointer-events-none" />
+                    {/* Glow border on hover */}
+                    <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/[0.06] transition-all duration-300 group-hover:border-red-500/40 group-hover:shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]" />
+                    {/* Caption — slides up on hover */}
+                    <div className="absolute inset-x-0 bottom-0 p-4 translate-y-1 opacity-80 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                      <p
+                        className="text-[0.82rem] md:text-[0.88rem] font-medium tracking-wide text-white/90 group-hover:text-white leading-snug"
+                        style={{ fontFamily: "'Montserrat', sans-serif" }}
+                      >
+                        {item.caption}
+                      </p>
+                    </div>
+                    {/* Corner accent dot */}
+                    <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500/70 transition-all duration-300" />
+                  </motion.article>
+                ))}
+              </div>
+            )}
+
+            {/* ── Mobile: single-column stack — tap to reveal color ── */}
+            {isMobile && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {pastGallery.map((item, idx) => {
+                  const isActive = activeGalleryIdx === idx
+                  return (
+                    <motion.article
+                      key={idx}
+                      initial={{ opacity: 0, y: 28 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-30px' }}
+                      transition={{ duration: 0.5, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+                      onClick={() => setActiveGalleryIdx(isActive ? -1 : idx)}
+                      className="relative overflow-hidden rounded-2xl bg-neutral-900 cursor-pointer"
+                      style={{ aspectRatio: '16 / 10' }}
+                      animate={isActive ? { scale: 1.01 } : { scale: 1 }}
                     >
-                      {item.caption}
-                    </motion.p>
-                  </div>
-                  <motion.div
-                    className="absolute inset-0 border-2 border-transparent rounded-3xl pointer-events-none"
-                    whileHover={{ borderColor: 'rgba(255,77,79,0.55)' }}
-                    transition={{ duration: 0.2 }}
-                  />
-                </motion.article>
-              ))}
-            </div>
+                      <img
+                        src={item.src}
+                        alt={item.caption}
+                        loading="lazy"
+                        decoding="async"
+                        width={600}
+                        height={400}
+                        className={`h-full w-full object-cover transition-all duration-700 ease-out ${
+                          isActive
+                            ? 'grayscale-0 brightness-105 scale-[1.03]'
+                            : 'grayscale brightness-[0.7]'
+                        }`}
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${
+                        isActive ? 'opacity-45' : 'opacity-90'
+                      }`} />
+                      <div className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${
+                        isActive
+                          ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
+                          : 'border-white/[0.06]'
+                      }`} />
+                      <div className="absolute inset-x-0 bottom-0 p-4">
+                        <p
+                          className="text-[0.82rem] font-medium tracking-wide text-white/90 leading-snug"
+                          style={{ fontFamily: "'Montserrat', sans-serif" }}
+                        >
+                          {item.caption}
+                        </p>
+                        {!isActive && (
+                          <span
+                            className="text-[0.6rem] text-white/35 mt-1.5 block tracking-widest uppercase"
+                            style={{ fontFamily: "'Montserrat', sans-serif" }}
+                          >
+                            Tap to reveal
+                          </span>
+                        )}
+                      </div>
+                    </motion.article>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </SectionShell>
         </LazySection>
