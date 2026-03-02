@@ -1,5 +1,3 @@
-import tailwindForms from '@tailwindcss/forms';
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -32,7 +30,6 @@ export default {
       },
       fontFamily: {
         sans: ['Oxanium', 'sans-serif'],
-        inter: ['Inter', 'Inter var', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         scanline: {
@@ -54,7 +51,7 @@ export default {
       },
     },
   },
-  plugins: [tailwindForms],
+  plugins: [],
 }
 
 

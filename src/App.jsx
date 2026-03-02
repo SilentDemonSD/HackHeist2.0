@@ -1,11 +1,20 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing'
-import Register from './pages/Register'
-import BasicPage from './pages/BasicPage'
+
+// Lazy-load non-critical routes — keeps initial bundle focused on the landing page
+const Register = lazy(() => import(/* webpackChunkName: "register" */ './pages/Register'))
+const BasicPage = lazy(() => import(/* webpackChunkName: "basic-page" */ './pages/BasicPage'))
+
+const PageFallback = () => (
+  <div style={{ minHeight: '100vh', background: '#000' }} />
+)
+
 export default function App() {
   return (
     <>
       <BrowserRouter>
+        <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
@@ -42,6 +51,7 @@ export default function App() {
             }
           />
         </Routes>
+        </Suspense>
       </BrowserRouter>
     </>
   );

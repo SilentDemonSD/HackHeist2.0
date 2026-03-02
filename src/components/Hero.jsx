@@ -1,7 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
-import Dither from "./Dither";
+import useIsMobile from "../hooks/useIsMobile";
 import "./CinematicIntro.css";
+
+// Lazy-load Dither → keeps Three.js / R3F / postprocessing (~2.2 MiB)
+// out of the critical initial bundle  (Three.js best-practice #83 / #84)
+const Dither = lazy(() => import(/* webpackChunkName: "dither" */ "./Dither"));
 
 const TITLE = "HACK HEIST 2.0";
 
@@ -12,13 +16,14 @@ const rand = () => POOL[Math.floor(Math.random() * POOL.length)];
 // ── Per-letter component ──────────────────────────────────────────────────────
 // isScrambling tracks whether a random char is currently showing so we can
 // dim it — real letter = white, temporary cipher char = muted grey.
-function CipherLetter({ finalChar, isRevealed }) {
+function CipherLetter({ finalChar, isRevealed, isMobile }) {
   const [display, setDisplay] = useState(rand);
   const [isScrambling, setIsScrambling] = useState(true);
   const noiseRef = useRef(null);
   const hoverRef = useRef(null);
 
   // ① Live noise while unrevealed; lock to finalChar on reveal
+  // On mobile: 150 ms interval (vs 55 ms desktop) to reduce main-thread work
   useEffect(() => {
     if (noiseRef.current) clearInterval(noiseRef.current);
     if (isRevealed) {
@@ -27,13 +32,14 @@ function CipherLetter({ finalChar, isRevealed }) {
       return;
     }
     setIsScrambling(true);
-    noiseRef.current = setInterval(() => setDisplay(rand()), 55);
+    noiseRef.current = setInterval(() => setDisplay(rand()), isMobile ? 150 : 55);
     return () => { if (noiseRef.current) clearInterval(noiseRef.current); };
-  }, [isRevealed, finalChar]);
+  }, [isRevealed, finalChar, isMobile]);
 
   // ② Per-letter hover — fires whenever mouse enters THIS letter's span
+  //    Skipped on mobile (no pointer) to save CPU
   const handleEnter = () => {
-    if (!isRevealed) return;
+    if (isMobile || !isRevealed) return;
     if (hoverRef.current) clearInterval(hoverRef.current);
     setIsScrambling(true);
     let tick = 0;
@@ -129,27 +135,82 @@ function useCipherReveal(text, startDelay = 380) {
 
 // ── Hero ──────────────────────────────────────────────────────────────────────
 export default function Hero() {
+  const isMobile = useIsMobile();
   const { chars, revealed, allDone } = useCipherReveal(TITLE);
+  const videoRef = useRef(null);
+
+  // On mobile: defer the actual video src until the browser is idle.
+  // The poster gives an instant visual (22 KB), the 2.8 MB video streams in
+  // after the main thread settles — keeping FCP/LCP fast.
+  useEffect(() => {
+    if (!isMobile) return;
+    const el = videoRef.current;
+    if (!el) return;
+    const schedule = window.requestIdleCallback || ((cb) => setTimeout(cb, 200));
+    const id = schedule(() => {
+      el.src = "/videos/hh_intro.mp4";
+      el.load();
+    });
+    return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(id);
+    };
+  }, [isMobile]);
 
   return (
     <section className="cinematic-intro">
-      {/* Layer 0 — Dark crimson dither */}
-      <div className="cinematic-dither-bg">
-        <Dither
-          waveColor={[0.35, 0.04, 0.02]}
-          colorNum={50}
-          waveFrequency={2}
-          mouseRadius={0.12}
-          waveAmplitude={0.25}
-          waveSpeed={0.07}
-          enableMouseInteraction={false}
-          disableAnimation={false}
-        />
-      </div>
+      {/* Layer 0 — Dither: desktop-only (Three.js ~850 KB skipped on mobile) */}
+      {!isMobile ? (
+        <Suspense
+          fallback={
+            <div
+              className="cinematic-dither-bg"
+              style={{ background: "rgb(40,5,2)" }}
+            />
+          }
+        >
+          <div className="cinematic-dither-bg">
+            <Dither
+              waveColor={[0.35, 0.04, 0.02]}
+              colorNum={50}
+              waveFrequency={2}
+              mouseRadius={0.12}
+              waveAmplitude={0.25}
+              waveSpeed={0.07}
+              enableMouseInteraction={false}
+              disableAnimation={false}
+            />
+          </div>
+        </Suspense>
+      ) : (
+        <div className="cinematic-dither-bg cinematic-mobile-bg" />
+      )}
 
       {/* Layer 1 — Video */}
       <div className="cinematic-video-wrap">
-        <video src="/videos/hh_intro.mp4" autoPlay muted playsInline preload="auto" />
+        {isMobile ? (
+          /* Mobile: poster shows instantly, video src deferred via rIC */
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            poster="/videos/poster.jpg"
+            preload="none"
+          >
+            <track kind="captions" />
+          </video>
+        ) : (
+          /* Desktop: load normally */
+          <video
+            autoPlay
+            muted
+            playsInline
+            preload="none"
+            src="/videos/hh_intro.mp4"
+          >
+            <track kind="captions" />
+          </video>
+        )}
       </div>
 
       {/* Vignette */}
@@ -174,6 +235,7 @@ export default function Hero() {
                 key={i}
                 finalChar={char}
                 isRevealed={revealed[i]}
+                isMobile={isMobile}
               />
             )
           )}

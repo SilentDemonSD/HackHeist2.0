@@ -155,6 +155,16 @@
     0 0 50px rgba(179, 0, 0, 0.15);
 }
 
+/* ── Mobile-only hero background (replaces Three.js Dither + video) ── */
+.cinematic-mobile-bg {
+  background: radial-gradient(
+    ellipse 70% 50% at 50% 65%,
+    rgb(60, 8, 4),
+    rgb(15, 2, 1) 60%,
+    rgb(5, 0, 0)
+  );
+}
+
 /* ═══════ MOBILE ═══════ */
 @media (max-width: 768px) {
   .cinematic-title-block {

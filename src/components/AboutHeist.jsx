@@ -201,7 +201,7 @@ export default function AboutHeist() {
             onPointerLeave={() => setLaserFast(false)}
           >
             {prefersReducedMotion ? (
-              <img src={blueprintStatic} alt="Vault blueprint schematic" className="h-full w-full object-cover" loading="lazy" />
+              <img src={blueprintStatic} alt="Vault blueprint schematic" width={460} height={500} loading="lazy" decoding="async" className="h-full w-full object-cover" />
             ) : (
               <>
                 <svg
