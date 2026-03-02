@@ -1,0 +1,407 @@
+/* ══════════════════════════════════════════════════════
+   VAULT SECTION — hold-to-authenticate 3-vault design
+   ══════════════════════════════════════════════════════ */
+
+/* ── Section wrapper ───────────────────────────────── */
+.vault-section {
+  position: relative;
+  padding: 5.5rem 1.5rem 7rem;
+  overflow: hidden;
+}
+
+/* ── Background ────────────────────────────────────── */
+.vault-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.vault-bg__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #1a0000 0%, #0d0000 50%, #000 100%);
+}
+.vault-bg__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(179,0,0,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(179,0,0,0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.vault-bg__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(0,0,0,0.72) 100%);
+}
+.vault-scan {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0;
+  width: 3px;
+  background: linear-gradient(180deg, transparent, rgba(255,77,79,0.35), transparent);
+  filter: blur(2px);
+  z-index: 1;
+}
+
+/* ── Inner layout ──────────────────────────────────── */
+.vault-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+/* ── Heading group ─────────────────────────────────── */
+.vault-heading-group {
+  text-align: center;
+}
+.vault-eyebrow {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(255, 77, 79, 0.75);
+  margin-bottom: 0.6rem;
+  display: block;
+}
+.vault-title {
+  font-family: "3rdMan", "Montserrat", sans-serif;
+  font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+  font-weight: normal;
+  color: #ffffff;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-shadow: none;
+  margin: 0 0 0.85rem;
+}
+.vault-sub {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.88rem;
+  color: rgba(200, 200, 200, 0.6);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* ── 3-card grid ───────────────────────────────────── */
+.vault-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;
+  max-width: 1080px;
+  align-items: start;
+}
+
+/* ── Single vault card ─────────────────────────────── */
+.vcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 2rem 1.5rem 1.8rem;
+  background: rgba(12, 4, 4, 0.78);
+  border: 1px solid rgba(255, 77, 79, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.vcard--granted {
+  border-color: var(--vault-color, #FFD700);
+  box-shadow: 0 0 36px var(--vault-glow, rgba(255,215,0,0.35));
+}
+.vcard--denied {
+  border-color: rgba(255, 77, 79, 0.6);
+  box-shadow: 0 0 24px rgba(255,77,79,0.3);
+  animation: vcard-shake 0.55s ease-in-out;
+}
+@keyframes vcard-shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(8px); }
+  60%      { transform: translateX(-5px); }
+  80%      { transform: translateX(4px); }
+}
+
+/* Corner brackets */
+.vcard__corner {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-color: rgba(255, 77, 79, 0.55);
+  border-style: solid;
+  border-width: 0;
+}
+.vcard__corner--tl {
+  top: 10px; left: 10px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+  border-top-left-radius: 3px;
+}
+.vcard__corner--br {
+  bottom: 10px; right: 10px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+  border-bottom-right-radius: 3px;
+}
+
+/* Eyebrow + numeral + label */
+.vcard__eyebrow {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+}
+.vcard__numeral {
+  font-family: "3rdMan", "Montserrat", sans-serif;
+  font-size: clamp(1.15rem, 2.8vw, 1.55rem);
+  font-weight: normal;
+  color: var(--vault-color, #ff4d4f);
+  text-shadow: none;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.vcard__label {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-top: 0.2rem;
+}
+
+/* ── Door wrap (relative for sparks) ──────────────── */
+.vcard__door-wrap {
+  position: relative;
+  width: 160px; height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Vault door rings ──────────────────────────────── */
+.vcard__door {
+  position: relative;
+  width: 140px; height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vcard__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 77, 79, 0.5);
+  box-sizing: border-box;
+}
+.vcard__ring--outer { width: 138px; height: 138px; border-width: 2px; }
+.vcard__ring--mid   { width: 102px; height: 102px; border-width: 2px; border-style: dashed; }
+.vcard__ring--inner { width: 66px;  height: 66px;  border-width: 1.5px; }
+
+.vcard__bolt {
+  position: absolute;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #c81010;
+  box-shadow: 0 0 12px rgba(200,16,16,0.7);
+  z-index: 3;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.vcard__line {
+  position: absolute;
+  background: rgba(255, 77, 79, 0.25);
+  border-radius: 2px;
+}
+.vcard__line--h { width: 70%; height: 1px; }
+.vcard__line--v { width: 1px; height: 70%; }
+
+.vcard__tick {
+  position: absolute;
+  width: 100%; height: 100%;
+  top: 0; left: 0;
+}
+.vcard__tick::after {
+  content: "";
+  position: absolute;
+  top: 2px; left: 50%;
+  transform: translateX(-50%);
+  width: 2px; height: 7px;
+  background: rgba(255, 77, 79, 0.4);
+  border-radius: 1px;
+}
+
+/* Granted / denied icons overlay */
+.vcard__granted-icon,
+.vcard__denied-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+  z-index: 10;
+  pointer-events: none;
+  text-shadow: 0 0 16px currentColor;
+}
+.vcard__denied-icon { color: #ff4d4f; }
+
+/* ── Sparks ────────────────────────────────────────── */
+.vcard__spark {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  margin: -3px 0 0 -3px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* ── Status badge ──────────────────────────────────── */
+.vcard__status {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+.vcard__status--idle    { color: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.1); }
+.vcard__status--granted { color: inherit; border-color: inherit; }
+.vcard__status--denied  { color: #ff4d4f; border-color: rgba(255,77,79,0.35); }
+
+/* ── Prize amount reveal ───────────────────────────── */
+.vcard__amount {
+  font-family: "3rdMan", "Montserrat", sans-serif;
+  font-size: clamp(0.9rem, 2.5vw, 1.15rem);
+  font-weight: normal;
+  letter-spacing: 0.25em;
+  text-align: center;
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  width: 100%;
+}
+
+/* ── Hold button ───────────────────────────────────── */
+.vcard__hold-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+}
+.vcard__hold-btn {
+  position: relative;
+  width: 100%;
+  max-width: 240px;
+  padding: 0.72rem 1rem;
+  background: rgba(255, 77, 79, 0.07);
+  border: 1.5px solid rgba(255, 77, 79, 0.38);
+  border-radius: 50px;
+  color: rgba(255,255,255,0.82);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.vcard__hold-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.vcard__hold-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50px;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #fff calc(100% - 5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #fff calc(100% - 5px));
+}
+.vcard__hold-label {
+  position: relative;
+  z-index: 1;
+}
+.vcard__progress-pct {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+/* ── Floor glow ────────────────────────────────────── */
+.vault-floor {
+  width: 90%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,77,79,0.35), transparent);
+  margin-top: 0.5rem;
+}
+
+/* ── Responsive ────────────────────────────────────── */
+@media (max-width: 960px) {
+  .vault-section {
+    padding: 4rem 1.25rem 5rem;
+  }
+  .vault-inner {
+    gap: 2.5rem;
+  }
+  .vault-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .vcard {
+    padding: 1.5rem 1rem 1.4rem;
+    gap: 0.9rem;
+  }
+  .vcard__door-wrap { width: 140px; height: 140px; }
+  .vcard__door      { width: 120px; height: 120px; }
+  .vcard__ring--outer { width: 118px; height: 118px; }
+  .vcard__ring--mid   { width: 88px;  height: 88px; }
+  .vcard__ring--inner { width: 56px;  height: 56px; }
+}
+
+@media (max-width: 700px) {
+  .vault-section {
+    padding: 3.5rem 1rem 4.5rem;
+  }
+  .vault-cards {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+    margin: 0 auto;
+    gap: 1.2rem;
+  }
+  .vcard {
+    padding: 1.75rem 1.25rem 1.6rem;
+    gap: 1rem;
+  }
+  .vcard__door-wrap { width: 150px; height: 150px; }
+  .vcard__door      { width: 130px; height: 130px; }
+  .vcard__ring--outer { width: 128px; height: 128px; }
+  .vcard__ring--mid   { width: 96px;  height: 96px; }
+  .vcard__ring--inner { width: 62px;  height: 62px; }
+  .vcard__hold-btn  { max-width: 280px; }
+}

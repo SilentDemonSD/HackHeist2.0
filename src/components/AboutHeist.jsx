@@ -113,12 +113,28 @@ export default function AboutHeist() {
         </motion.p>
 
         {/* ── Heading ── */}
-        <motion.div className={styles.headingRow} variants={fadeUp} custom={0.5}>
-          <h2 id="mission-brief-heading" className={styles.heading}>
-            About Hack Heist
+        <div className={styles.headingRow}>
+          <h2 id="mission-brief-heading" className={styles.heading} style={{ cursor: "default" }}>
+            {"About Hack Heist".split("").map((char, i) =>
+              char === " " ? (
+                <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.22em" }} />
+              ) : (
+                <motion.span
+                  key={i}
+                  style={{ display: "inline-block" }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.042, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={{ color: "#ff4d4f", y: -6, transition: { duration: 0.13 } }}
+                >
+                  {char}
+                </motion.span>
+              )
+            )}
           </h2>
           <span className={styles.headingRule} />
-        </motion.div>
+        </div>
 
         {/* ── Main grid ── */}
         <div className={styles.mainGrid}>

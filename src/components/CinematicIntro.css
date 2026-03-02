@@ -71,10 +71,11 @@
   align-items: center;
   justify-content: flex-start;
   padding-top: 14vh;
-  pointer-events: none;
+  pointer-events: none; /* block events on the empty background area */
 }
 
 .cinematic-title {
+  pointer-events: auto; /* re-enable on the title so letter hover works */
   font-family: '3rdMan', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -157,11 +158,13 @@
 /* ═══════ MOBILE ═══════ */
 @media (max-width: 768px) {
   .cinematic-title-block {
-    padding-top: 12vh;
+    padding-top: 22vh;
+    justify-content: flex-start;
   }
 
   .cinematic-title {
     letter-spacing: 0;
+    font-size: clamp(3.5rem, 17vw, 6rem);
   }
 
   .cinematic-tagline {
@@ -181,11 +184,11 @@
 
 @media (max-width: 480px) {
   .cinematic-title-block {
-    padding-top: 10vh;
+    padding-top: 26vh;
   }
 
   .cinematic-title {
-    font-size: clamp(3rem, 16vw, 5rem);
+    font-size: clamp(3.5rem, 20vw, 6rem);
   }
 
   .cinematic-tagline {

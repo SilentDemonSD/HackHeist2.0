@@ -9,85 +9,287 @@ const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 
+const UNITS = [
+  { unit: "Day",    label: "DAYS" },
+  { unit: "Hour",   label: "HRS"  },
+  { unit: "Minute", label: "MIN"  },
+  { unit: "Second", label: "SEC"  },
+];
+
 export default function Countdown() {
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden bg-black py-16">
+    <section
+      className="relative w-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ padding: "4rem 1.5rem 4.5rem", background: "#06070b" }}
+    >
+      {/* Deep background radial */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139,0,0,0.18) 0%, transparent 70%)",
+        }}
+      />
 
-      {/* Background radial red glow */}
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_center,rgba(139,0,0,0.25)_0%,rgba(10,10,10,1)_70%)]" />
+      {/* Scanline overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, rgba(255,255,255,0.017) 0px, rgba(255,255,255,0.017) 1px, transparent 1px, transparent 3px)",
+          zIndex: 1,
+        }}
+      />
 
-      {/* Soft animated pulse glow */}
-      <div className="absolute inset-0 -z-10 flex items-center justify-center pointer-events-none">
-        <div className="w-[900px] h-[900px] bg-red-900/20 rounded-full blur-[160px] animate-pulse" style={{ animationDuration: "4s" }} />
-      </div>
+      {/* Soft bloom */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          width: 640,
+          height: 640,
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "rgba(180,0,0,0.10)",
+          borderRadius: "50%",
+          filter: "blur(120px)",
+          zIndex: 0,
+        }}
+      />
 
-      {/* Content Wrapper */}
-      <div className="w-full flex flex-col items-center px-6 md:px-16">
-
-        {/* Header */}
-        <motion.div
-          className="flex items-center gap-4 mb-14"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "200px" }}
-          transition={{ duration: 0.8 }}
+      {/* ── Header ── */}
+      <motion.div
+        className="relative flex flex-col items-center text-center"
+        style={{ marginBottom: "2.2rem", zIndex: 2 }}
+        initial={{ y: 24 }}
+        whileInView={{ y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.75 }}
+      >
+        {/* Eyebrow label — per-letter fade */}
+        <span
+          style={{
+            display: "block",
+            marginBottom: "0.55rem",
+          }}
         >
-          <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_20px_rgba(255,26,26,0.8)] animate-pulse" />
+          {"OPERATION: THIRD MAN".split("").map((char, i) =>
+            char === " " ? (
+              <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.38em" }} />
+            ) : (
+              <motion.span
+                key={i}
+                style={{
+                  display: "inline-block",
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: "0.58rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.48em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,77,79,0.7)",
+                }}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: i * 0.03,
+                  duration: 0.4,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                {char}
+              </motion.span>
+            )
+          )}
+        </span>
 
-          <h2
-            className="text-3xl md:text-4xl lg:text-5xl text-white tracking-widest uppercase font-semibold text-center"
-            style={{ fontFamily: "'Oxanium', sans-serif" }}
-          >
-            HackHeist Begins In
-          </h2>
-
-          <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_20px_rgba(255,26,26,0.8)] animate-pulse" />
-        </motion.div>
-
-        {/* Timer Grid */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-[1600px]"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "200px" }}
-          transition={{ duration: 0.8 }}
+        {/* Main headline — per-letter drop */}
+        <h2
+          style={{
+            fontFamily: "'3rdMan', sans-serif",
+            fontSize: "clamp(2.2rem, 5.5vw, 4.2rem)",
+            color: "#ffffff",
+            textTransform: "uppercase",
+            fontWeight: "normal",
+            margin: 0,
+            lineHeight: 1,
+            perspective: "600px",
+            cursor: "default",
+          }}
         >
-          <CountdownItem unit="Day" label="DAYS" />
-          <CountdownItem unit="Hour" label="HOURS" />
-          <CountdownItem unit="Minute" label="MINUTES" />
-          <CountdownItem unit="Second" label="SECONDS" />
-        </motion.div>
+          {"Commences In".split("").map((char, i) =>
+            char === " " ? (
+              <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.28em" }} />
+            ) : (
+              <motion.span
+                key={i}
+                style={{
+                  display: "inline-block",
+                  letterSpacing: "0.07em",
+                }}
+                initial={{ opacity: 0, y: 28, rotateX: -70 }}
+                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: i * 0.055,
+                  type: "spring",
+                  stiffness: 280,
+                  damping: 24,
+                  mass: 0.9,
+                }}
+                whileHover={{ color: "#ff4d4f", y: -6, transition: { duration: 0.14 } }}
+              >
+                {char}
+              </motion.span>
+            )
+          )}
+        </h2>
 
-      </div>
+        {/* Red rule */}
+        <div
+          style={{
+            width: 64,
+            height: 2,
+            marginTop: "1rem",
+            background:
+              "linear-gradient(90deg, transparent, #ff4d4f 40%, #ff4d4f 60%, transparent)",
+            borderRadius: 2,
+          }}
+        />
+      </motion.div>
+
+      {/* ── Timer grid ── */}
+      <motion.div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "clamp(0.5rem, 1.5vw, 1.25rem)",
+          width: "100%",
+          maxWidth: 900,
+          zIndex: 2,
+          position: "relative",
+        }}
+        initial={{ opacity: 0, scale: 0.96 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.75, delay: 0.1 }}
+      >
+        {UNITS.map(({ unit, label }, i) => (
+          <CountdownItem key={unit} unit={unit} label={label} index={i} />
+        ))}
+      </motion.div>
+
+      {/* Bottom tagline */}
+      <motion.p
+        style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: "0.62rem",
+          letterSpacing: "0.3em",
+          textTransform: "uppercase",
+          color: "rgba(255,255,255,0.18)",
+          marginTop: "2rem",
+          zIndex: 2,
+          position: "relative",
+        }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, delay: 0.4 }}
+      >
+        28 March 2026 &nbsp;·&nbsp; The Heist Begins
+      </motion.p>
     </section>
   );
 }
 
-function CountdownItem({ unit, label }) {
+function CountdownItem({ unit, label, index }) {
   const time = useTimer(unit);
-  const display = unit === "Second" ? String(time).padStart(2, "0") : time;
+  const display = String(time).padStart(2, "0");
 
   return (
     <motion.div
-      className="group flex flex-col items-center justify-center p-8 bg-black/80 backdrop-blur-md rounded-xl border border-red-900/40 shadow-[0_8px_32px_rgba(0,0,0,0.8)] relative overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:border-red-600/60 hover:shadow-[0_10px_40px_rgba(139,0,0,0.4)]"
-      whileHover={{ scale: 1.03 }}
+      className="group"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.55, delay: index * 0.08 }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "clamp(0.9rem, 2.5vw, 1.75rem) clamp(0.5rem, 1.5vw, 1rem)",
+        background:
+          "linear-gradient(155deg, rgba(255,255,255,0.038) 0%, rgba(255,255,255,0.012) 100%)",
+        border: "1px solid rgba(255,255,255,0.07)",
+        borderRadius: 16,
+        backdropFilter: "blur(12px)",
+        boxShadow:
+          "0 4px 24px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)",
+        overflow: "hidden",
+        cursor: "default",
+        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+      }}
     >
-      {/* Hover inner glow */}
-      <div className="absolute inset-0 border border-red-600/0 group-hover:border-red-500/50 rounded-xl transition-all duration-700 shadow-[inset_0_0_20px_rgba(255,26,26,0)] group-hover:shadow-[inset_0_0_40px_rgba(255,26,26,0.3)]" />
+      {/* Corner accent — top-left */}
+      <span
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: 28,
+          height: 28,
+          borderTop: "1.5px solid rgba(255,77,79,0.45)",
+          borderLeft: "1.5px solid rgba(255,77,79,0.45)",
+          borderTopLeftRadius: 14,
+          pointerEvents: "none",
+        }}
+      />
+      {/* Corner accent — bottom-right */}
+      <span
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          width: 28,
+          height: 28,
+          borderBottom: "1.5px solid rgba(255,77,79,0.45)",
+          borderRight: "1.5px solid rgba(255,77,79,0.45)",
+          borderBottomRightRadius: 14,
+          pointerEvents: "none",
+        }}
+      />
 
-      <div className="relative h-[140px] flex items-center justify-center overflow-hidden w-full">
+      {/* Digit */}
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "clamp(3rem, 8vw, 6.5rem)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+        }}
+      >
         <AnimatePresence mode="popLayout">
           <motion.span
             key={display}
-            initial={{ y: "60%", opacity: 0, scale: 0.9 }}
-            animate={{ y: "0%", opacity: 1, scale: 1 }}
-            exit={{ y: "-60%", opacity: 0, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 120, damping: 14 }}
-            className="absolute text-[5rem] md:text-[7rem] text-white leading-none"
+            initial={{ y: "55%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            exit={{ y: "-55%", opacity: 0 }}
+            transition={{ type: "spring", stiffness: 180, damping: 18 }}
             style={{
-              fontFamily: "'3rdMan', 'Compacta MT Bold', sans-serif",
+              position: "absolute",
+              fontFamily: "'3rdMan', sans-serif",
+              fontSize: "clamp(2rem, 6vw, 5rem)",
+              color: "#ffffff",
+              lineHeight: 1,
               textShadow:
-                "0 0 20px rgba(255,26,26,0.6), 0 10px 40px rgba(139,0,0,0.8)",
+                "0 0 18px rgba(255,77,79,0.55), 0 0 50px rgba(200,0,0,0.3)",
+              letterSpacing: "0.04em",
             }}
           >
             {display}
@@ -95,11 +297,27 @@ function CountdownItem({ unit, label }) {
         </AnimatePresence>
       </div>
 
-      <div className="h-px w-2/3 bg-gradient-to-r from-transparent via-red-900/60 to-transparent mt-4 mb-4" />
+      {/* Divider */}
+      <div
+        style={{
+          width: "55%",
+          height: 1,
+          margin: "0.4rem 0",
+          background:
+            "linear-gradient(90deg, transparent, rgba(255,77,79,0.4), transparent)",
+        }}
+      />
 
+      {/* Label */}
       <span
-        className="text-sm text-gray-400 tracking-[0.3em] uppercase font-bold group-hover:text-red-200 transition-colors duration-300"
-        style={{ fontFamily: "'Oxanium', sans-serif" }}
+        style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: "clamp(0.48rem, 1.1vw, 0.65rem)",
+          fontWeight: 700,
+          letterSpacing: "0.32em",
+          textTransform: "uppercase",
+          color: "rgba(180,180,180,0.5)",
+        }}
       >
         {label}
       </span>

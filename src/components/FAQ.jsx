@@ -83,13 +83,52 @@ export default function FAQ() {
           transition={{ duration: 0.4 }}
           className="mb-10"
         >
+          <span style={{
+            display: 'block',
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '0.65rem',
+            fontWeight: 600,
+            letterSpacing: '0.45em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,77,79,0.75)',
+            marginBottom: '0.55rem',
+          }}>
+            Intel Briefing
+          </span>
           <h2
-            className="text-3xl md:text-4xl font-bold tracking-[0.18em] uppercase"
-            style={{ fontFamily: 'Oxanium, sans-serif' }}
+            style={{
+              fontFamily: "'3rdMan', 'Montserrat', sans-serif",
+              fontSize: 'clamp(1.9rem, 4.5vw, 3.6rem)',
+              fontWeight: 'normal',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color: '#ffffff',
+              margin: 0,
+              lineHeight: 1.1,
+              cursor: 'default',
+            }}
           >
-            FAQ&apos;s
+            {"FAQ's".split('').map((char, i) => (
+              <motion.span
+                key={i}
+                style={{ display: 'inline-block' }}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.028 * i, duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -5, color: '#ff4d4f', transition: { duration: 0.15 } }}
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </motion.span>
+            ))}
           </h2>
-          <p className="mt-3 text-gray-400 max-w-xl">
+          <p style={{
+            fontFamily: "'Montserrat', sans-serif",
+            fontSize: '0.88rem',
+            color: 'rgba(200,200,200,0.6)',
+            marginTop: '0.6rem',
+            letterSpacing: '0.02em',
+          }}>
             Laser-scanned intel for your heist questions.
           </p>
         </motion.div>
