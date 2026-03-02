@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing'
+import MusicPlayer from './components/MusicPlayer'
 
 // Lazy-load non-critical routes — keeps initial bundle focused on the landing page
 const Register = lazy(() => import(/* webpackChunkName: "register" */ './pages/Register'))
@@ -53,6 +54,7 @@ export default function App() {
         </Routes>
         </Suspense>
       </BrowserRouter>
+      <MusicPlayer />
     </>
   );
 }

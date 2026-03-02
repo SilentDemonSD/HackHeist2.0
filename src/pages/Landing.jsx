@@ -120,24 +120,24 @@ const PARTNERS_DATA = [
     tier: 'Sponsors',
         partners: [
       { name: '.XYZ', logo: '/logo/xyz.svg' },
-      { name: 'Sponsor G' },
-      { name: 'Sponsor H' },
-      { name: 'Sponsor I' },
+      { name: 'UseQR', logo: '/logo/useqr.svg' },
+      { name: 'Sponsor X' },
+      { name: 'Sponsor X' },
     ],
   },
   {
     tier: 'Community Partners',
     partners: [
-      { name: 'Community A' },
-      { name: 'Community B' },
-      { name: 'Community C' },
+      { name: 'Community X' },
+      { name: 'Community X' },
+      { name: 'Community X' },
     ],
   },
   {
     tier: 'Media Partners',
     partners: [
-      { name: 'Media A' },
-      { name: 'Media B' },
+      { name: 'Media X' },
+      { name: 'Media X' },
     ],
   },
 ]
