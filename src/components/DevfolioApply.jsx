@@ -74,7 +74,7 @@ export default function DevfolioApply({ slug = 'hack-heist-2', theme = 'dark' })
           } else if (window.Devfolio && typeof window.Devfolio.reload === 'function') {
             window.Devfolio.reload()
           }
-        } catch (e) {
+        } catch {
           // noop
         }
       })
