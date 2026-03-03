@@ -29,7 +29,7 @@ export default {
         soft: '0 10px 30px rgba(0,0,0,0.35)',
       },
       fontFamily: {
-        sans: ['Oxanium', 'sans-serif'],
+        sans: ['Montserrat', 'sans-serif'],
       },
       keyframes: {
         scanline: {

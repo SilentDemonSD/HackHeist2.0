@@ -10,13 +10,13 @@ function MaskLogo({ className = 'w-8 h-8' }) {
       whileHover={{ scale: 1.15, rotate: [0, -5, 5, 0] }}
       transition={{ type: 'spring', stiffness: 500, damping: 20 }}
     >
-      {/* CSS animation instead of Framer Motion — runs on compositor, zero TBT */}
+      {/* CSS animation glow */}
       <div
         className="absolute inset-0 rounded-full bg-heist-red/40 blur-md"
         style={{ animation: 'logoGlow 3s ease-in-out infinite' }}
       />
       <img
-        src="/mask-logo.png"
+        src="/mask-logo.webp"
         alt="Hack Heist Logo"
         className="relative z-10 w-full h-full object-contain"
         style={{
@@ -51,7 +51,7 @@ function NavigationLink({ href, label, index }) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="relative text-sm font-semibold text-gray-300 hover:text-white px-3.5 py-2.5 rounded-full transition-colors overflow-hidden group"
-      style={{ fontFamily: 'Chakra Petch, sans-serif', letterSpacing: '0.02em' }}
+      style={{ fontFamily: "'Montserrat', sans-serif", letterSpacing: '0.02em' }}
     >
       {/* Border glow */}
       <motion.span
@@ -102,7 +102,7 @@ function MobileNavLink({ href, label, onClick, index }) {
       whileHover={{ x: 5, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
       whileTap={{ scale: 0.98 }}
       className="block rounded-2xl px-4 py-3 text-gray-200 hover:text-white transition-colors font-medium"
-      style={{ fontFamily: 'Chakra Petch, sans-serif', letterSpacing: '0.02em' }}
+      style={{ fontFamily: "'Montserrat', sans-serif", letterSpacing: '0.02em' }}
     >
       <span className="flex items-center gap-3">
         <motion.span
@@ -185,8 +185,8 @@ export default function Navbar() {
             <Link to="/" className="flex items-center gap-2 sm:gap-3 text-white font-semibold group">
               <MaskLogo className="w-7 h-7 sm:w-8 sm:h-8" />
               <motion.span
-                className="text-base sm:text-lg font-normal hidden sm:block whitespace-nowrap"
-                style={{ fontFamily: 'Bruno Ace, cursive', letterSpacing: '0.02em' }}
+                className="text-lg sm:text-xl font-normal hidden sm:block whitespace-nowrap"
+                style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", letterSpacing: '0.12em', wordSpacing: '0.15em' }}
                 whileHover={{
                   scale: 1.05,
                   textShadow: '0 0 8px rgba(179, 0, 0, 0.6)'
@@ -207,8 +207,8 @@ export default function Navbar() {
                 ))}
               </motion.span>
               <motion.span
-                className="text-sm font-normal sm:hidden"
-                style={{ fontFamily: 'Bruno Ace, cursive', letterSpacing: '0.02em' }}
+                className="text-base font-normal sm:hidden"
+                style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", letterSpacing: '0.12em', wordSpacing: '0.15em' }}
                 whileHover={{ scale: 1.08 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
               >
@@ -301,7 +301,7 @@ export default function Navbar() {
           >
             <div className="flex items-center gap-2 text-white font-normal">
               <MaskLogo className="w-7 h-7" />
-              <span style={{ fontFamily: 'Bruno Ace, cursive', letterSpacing: '0.02em' }}>HACK HEIST</span>
+              <span style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", letterSpacing: '0.12em', wordSpacing: '0.15em' }}>HACK HEIST</span>
             </div>
             <motion.button
               aria-label="Close menu"

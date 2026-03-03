@@ -8,7 +8,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV !== "production";
 
 export default defineConfig({
-  // Target modern browsers → smaller output (no async/await transpile, etc.)
   target: ["web", "es2020"],
 
   entry: { main: "./src/main.jsx" },
@@ -19,15 +18,15 @@ export default defineConfig({
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
     clean: true,
+    crossOriginLoading: "anonymous",
   },
 
   resolve: {
     extensions: [".js", ".jsx", ".json"],
   },
 
-  // Enable tree-shaking optimizations
   performance: {
-    hints: false, // Suppress size warnings (we know about Three.js)
+    hints: false,
   },
 
   experiments: {
@@ -36,11 +35,13 @@ export default defineConfig({
 
   module: {
     parser: {
-      // Allow `import styles from './x.module.css'` (default-export pattern)
       "css/auto": { namedExports: false },
+      javascript: {
+        dynamicImportMode: "lazy",
+      },
     },
     rules: [
-      // ── JSX / JS via builtin SWC ──
+      // JSX / JS
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -57,6 +58,11 @@ export default defineConfig({
                     refresh: isDev,
                   },
                 },
+                // Enable DCE
+                minify: !isDev ? {
+                  compress: true,
+                  mangle: true,
+                } : undefined,
               },
             },
           },
@@ -64,33 +70,36 @@ export default defineConfig({
         type: "javascript/auto",
       },
 
-      // ── CSS (auto-detects .module.css for CSS Modules) ──
+      // CSS
       {
         test: /\.css$/,
         use: ["postcss-loader"],
         type: "css/auto",
       },
 
-      // ── Images ──
+      // Images
       {
         test: /\.(png|jpe?g|gif|svg|webp|avif|ico)$/i,
         type: "asset",
-        parser: { dataUrlCondition: { maxSize: 8 * 1024 } },
+        parser: { dataUrlCondition: { maxSize: 4 * 1024 } },
       },
 
-      // ── Fonts ──
+      // Fonts
       {
         test: /\.(woff2?|eot|ttf|otf)$/i,
         type: "asset/resource",
+        generator: {
+          filename: "assets/fonts/[name].[contenthash:8][ext]",
+        },
       },
 
-      // ── Media (video / audio) ──
+      // Media
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)$/i,
         type: "asset/resource",
       },
 
-      // ── JSON ──
+      // JSON
       {
         test: /\.json$/,
         type: "json",
@@ -103,9 +112,10 @@ export default defineConfig({
       template: "./index.html",
       filename: "index.html",
       inject: true,
+      // Minify HTML
+      minify: !isDev,
     }),
 
-    // Copy public/ assets to output (models, textures, videos, favicons)
     new rspack.CopyRspackPlugin({
       patterns: [
         {
@@ -129,9 +139,9 @@ export default defineConfig({
   optimization: {
     splitChunks: {
       chunks: "all",
-      maxInitialRequests: 10,
+      maxInitialRequests: 15,
+      minSize: 10 * 1024,
       cacheGroups: {
-        // React core  — loaded eagerly, shared by every route
         react: {
           test: /[\\/]node_modules[\\/](react|react-dom|scheduler|react-router|react-router-dom)[\\/]/,
           name: "react-vendor",
@@ -139,7 +149,6 @@ export default defineConfig({
           reuseExistingChunk: true,
         },
 
-        // Framer Motion — used on almost every page
         framer: {
           test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
           name: "framer-vendor",
@@ -147,7 +156,6 @@ export default defineConfig({
           reuseExistingChunk: true,
         },
 
-        // Three.js + R3F + postprocessing — ONLY in async Dither chunk
         three: {
           test: /[\\/]node_modules[\\/](three|@react-three|postprocessing)[\\/]/,
           name: "three-vendor",
@@ -156,7 +164,13 @@ export default defineConfig({
           reuseExistingChunk: true,
         },
 
-        // Remaining vendor code
+        fonts: {
+          test: /[\\/]node_modules[\\/]@fontsource[\\/]/,
+          name: "fonts",
+          priority: 25,
+          reuseExistingChunk: true,
+        },
+
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: "vendor",
@@ -166,18 +180,23 @@ export default defineConfig({
       },
     },
 
+    runtimeChunk: "single",
+
     minimize: !isDev,
-    // Scope hoisting (module concatenation) for smaller output
     concatenateModules: !isDev,
     usedExports: true,
+    sideEffects: true,
     minimizer: [
       new rspack.SwcJsMinimizerRspackPlugin({
         minimizerOptions: {
           compress: {
             drop_console: true,
-            passes: 2,
+            passes: 3,
             pure_getters: true,
             unsafe_comps: true,
+            dead_code: true,
+            collapse_vars: true,
+            reduce_vars: true,
           },
           mangle: {
             safari10: true,
@@ -193,7 +212,6 @@ export default defineConfig({
     hot: true,
     historyApiFallback: true,
     static: { directory: "./public" },
-    // Mock /api/register (ported from former vite.config.js)
     setupMiddlewares(middlewares) {
       middlewares.unshift((req, res, next) => {
         if (req.method === "POST" && req.url === "/api/register") {

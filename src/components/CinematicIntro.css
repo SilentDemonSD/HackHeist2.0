@@ -1,10 +1,5 @@
-/* ═══════════════════════════════════════════════════════
-   CINEMATIC INTRO — HACK HEIST
-   Dither BEHIND video. Video blends via lighten.
-   Black video areas reveal dither. Building stays clean.
-   ═══════════════════════════════════════════════════════ */
+/* Cinematic Intro — Hack Heist */
 
-/* ── Full-viewport wrapper ── */
 .cinematic-intro {
   position: relative;
   width: 100%;
@@ -14,26 +9,18 @@
   background: #000;
 }
 
-/* ── LAYER 0: Dither (BEHIND the video) ── */
 .cinematic-dither-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* Mask dims dither over the building footprint to protect dark windows
-     (the lighten blend already protects the bright facade).  Full dither
-     intensity at edges/sky where the black background lives. */
+  /* Mask dims dither over building footprint */
   -webkit-mask-image:
     radial-gradient(ellipse 42% 38% at 50% 68%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.85) 55%, black 70%);
   mask-image:
     radial-gradient(ellipse 42% 38% at 50% 68%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.85) 55%, black 70%);
 }
 
-/* ── LAYER 1: Video (blends with dither via lighten) ──
-   lighten: result = max(video, dither)
-   → pure black video (0) → dither wins, shows pattern
-   → dark windows (~0.1-0.2) → mask already hides dither here
-   → gray/white facade → building always wins, stays clean     */
 .cinematic-video-wrap {
   position: absolute;
   inset: 0;
@@ -48,7 +35,6 @@
   display: block;
 }
 
-/* ── Vignette (dark edges for cinematic framing) ── */
 .cinematic-vignette {
   position: absolute;
   inset: 0;
@@ -61,7 +47,6 @@
     linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 10%);
 }
 
-/* ── LAYER 2: Title block ── */
 .cinematic-title-block {
   position: absolute;
   inset: 0;
@@ -71,11 +56,11 @@
   align-items: center;
   justify-content: flex-start;
   padding-top: 14vh;
-  pointer-events: none; /* block events on the empty background area */
+  pointer-events: none;
 }
 
 .cinematic-title {
-  pointer-events: auto; /* re-enable on the title so letter hover works */
+  pointer-events: auto;
   font-family: '3rdMan', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -91,7 +76,7 @@
 }
 
 .cinematic-tagline {
-  font-family: 'Oxanium', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: clamp(0.6rem, 1.4vw, 0.9rem);
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.2em;
@@ -112,7 +97,6 @@
   color: rgba(255, 255, 255, 0.15);
 }
 
-/* ── CTA band (below hero, uses 3rdMan) ── */
 .cinematic-cta {
   position: relative;
   padding: 3rem 1rem;
@@ -155,7 +139,6 @@
     0 0 50px rgba(179, 0, 0, 0.15);
 }
 
-/* ── Mobile-only hero background (replaces Three.js Dither + video) ── */
 .cinematic-mobile-bg {
   background: radial-gradient(
     ellipse 70% 50% at 50% 65%,

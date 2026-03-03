@@ -3,27 +3,20 @@ import { motion } from "framer-motion";
 import useIsMobile from "../hooks/useIsMobile";
 import "./CinematicIntro.css";
 
-// Lazy-load Dither → keeps Three.js / R3F / postprocessing (~2.2 MiB)
-// out of the critical initial bundle  (Three.js best-practice #83 / #84)
 const Dither = lazy(() => import(/* webpackChunkName: "dither" */ "./Dither"));
 
 const TITLE = "HACK HEIST 2.0";
-
-// Rich pool: letters + digits + symbols
 const POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&!*?^~+=/<>{}[]|\\".split("");
 const rand = () => POOL[Math.floor(Math.random() * POOL.length)];
 
-// ── Per-letter component ──────────────────────────────────────────────────────
-// isScrambling tracks whether a random char is currently showing so we can
-// dim it — real letter = white, temporary cipher char = muted grey.
+
 function CipherLetter({ finalChar, isRevealed, isMobile }) {
   const [display, setDisplay] = useState(rand);
   const [isScrambling, setIsScrambling] = useState(true);
   const noiseRef = useRef(null);
   const hoverRef = useRef(null);
 
-  // ① Live noise while unrevealed; lock to finalChar on reveal
-  // On mobile: 150 ms interval (vs 55 ms desktop) to reduce main-thread work
+  // Live noise while unrevealed; lock to finalChar on reveal
   useEffect(() => {
     if (noiseRef.current) clearInterval(noiseRef.current);
     if (isRevealed) {
@@ -36,8 +29,7 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
     return () => { if (noiseRef.current) clearInterval(noiseRef.current); };
   }, [isRevealed, finalChar, isMobile]);
 
-  // ② Per-letter hover — fires whenever mouse enters THIS letter's span
-  //    Skipped on mobile (no pointer) to save CPU
+  // Per-letter hover re-scramble
   const handleEnter = () => {
     if (isMobile || !isRevealed) return;
     if (hoverRef.current) clearInterval(hoverRef.current);
@@ -72,10 +64,7 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
     if (hoverRef.current) clearInterval(hoverRef.current);
   }, []);
 
-  // Colour logic:
-  // • unrevealed (initial decode noise) → red glow, as before
-  // • hover scrambling (revealed but cycling) → dim grey
-  // • resolved real letter → bright white
+  // Colour logic
   const color = isRevealed
     ? isScrambling
       ? "rgba(155, 155, 155, 0.5)"
@@ -133,32 +122,17 @@ function useCipherReveal(text, startDelay = 380) {
   return { chars, revealed, allDone };
 }
 
-// ── Hero ──────────────────────────────────────────────────────────────────────
 export default function Hero() {
   const isMobile = useIsMobile();
   const { chars, revealed, allDone } = useCipherReveal(TITLE);
-  const videoRef = useRef(null);
 
-  // On mobile: defer the actual video src until the browser is idle.
-  // The poster gives an instant visual (22 KB), the 2.8 MB video streams in
-  // after the main thread settles — keeping FCP/LCP fast.
-  useEffect(() => {
-    if (!isMobile) return;
-    const el = videoRef.current;
-    if (!el) return;
-    const schedule = window.requestIdleCallback || ((cb) => setTimeout(cb, 200));
-    const id = schedule(() => {
-      el.src = "/videos/hh_intro.mp4";
-      el.load();
-    });
-    return () => {
-      if (window.cancelIdleCallback) window.cancelIdleCallback(id);
-    };
-  }, [isMobile]);
+  const videoSrc = isMobile
+    ? "/videos/hh_intro_mobile.mp4"
+    : "/videos/hh_intro_desktop.mp4";
 
   return (
     <section className="cinematic-intro">
-      {/* Layer 0 — Dither: desktop-only (Three.js ~850 KB skipped on mobile) */}
+      {/* Dither (desktop only) */}
       {isMobile ? (
         <div className="cinematic-dither-bg cinematic-mobile-bg" />
       ) : (
@@ -185,32 +159,17 @@ export default function Hero() {
         </Suspense>
       )}
 
-      {/* Layer 1 — Video */}
+      {/* Video */}
       <div className="cinematic-video-wrap">
-        {isMobile ? (
-          /* Mobile: poster shows instantly, video src deferred via rIC */
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            playsInline
-            poster="/videos/poster.jpg"
-            preload="none"
-          >
-            <track kind="captions" />
-          </video>
-        ) : (
-          /* Desktop: load normally */
-          <video
-            autoPlay
-            muted
-            playsInline
-            preload="none"
-            src="/videos/hh_intro.mp4"
-          >
-            <track kind="captions" />
-          </video>
-        )}
+        <video
+          src={videoSrc}
+          muted
+          autoPlay
+          playsInline
+          preload="auto"
+        >
+          <track kind="captions" />
+        </video>
       </div>
 
       {/* Vignette */}

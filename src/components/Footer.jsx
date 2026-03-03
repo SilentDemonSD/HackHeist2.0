@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import instagramIcon from '../assets/links/instagram.png'
+import instagramIcon from '../assets/links/instagram.webp'
 
 /* ─── Data ─── */
 const socialLinks = [

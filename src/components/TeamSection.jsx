@@ -1,27 +1,47 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { motion, useMotionValue, AnimatePresence } from 'framer-motion'
 
-/* ===== ORGANIZERS DATA ===== */
+/* Team images */
+import imgHimanshu from '../assets/team/Himanshu.webp'
+import imgPalak from '../assets/team/Palak.webp'
+import imgTanishq from '../assets/team/Tanishq.webp'
+import imgAkshit from '../assets/team/Akshit.webp'
+import imgAyush from '../assets/team/Ayush.webp'
+import imgArya from '../assets/team/Arya.webp'
+import imgNirdesh from '../assets/team/Nirdesh.webp'
+import imgGaura from '../assets/team/Gaura.webp'
+import imgItika from '../assets/team/Itika.webp'
+import imgManan from '../assets/team/Manan.webp'
+import imgSubhadip from '../assets/team/Subhadip.webp'
+import imgSrishti from '../assets/team/Srishti.webp'
+import imgAnshika from '../assets/team/Anshika.webp'
+import imgAbheer from '../assets/team/Abheer.webp'
+import imgSumit from '../assets/team/Sumit.webp'
+import imgAbhishikt from '../assets/team/Abhishikt.webp'
+import imgHarsh from '../assets/team/Harsh.webp'
+import imgKhushbu from '../assets/team/Khushbu.webp'
+import imgRajveer from '../assets/team/Rajveer.webp'
+
 const teamMembers = [
-  { name: 'Himanshu', img: 'https://iili.io/qFRTD3N.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/himanshukumard/' },
-  { name: 'Palak', img: 'https://iili.io/qFRYVYQ.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/palak-singhal-14a78324a/' },
-  { name: 'Tanishq', img: 'https://iili.io/qFRTeCx.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/tanishq-taliyan/' },
-  { name: 'Akshit', img: 'https://iili.io/qFRAyLG.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/sharmaakshit07/' },
-  { name: 'Ayush', img: 'https://iili.io/qqRsdrX.png', role: 'Organizer', link: 'https://www.linkedin.com/in/ayushsharma81/' },
-  { name: 'Arya', img: 'https://iili.io/qqRQTOb.png', role: 'Organizer', link: 'https://www.linkedin.com/in/arya-kant-rajvanshi-141bbb28a/' },
-  { name: 'Nirdesh', img: 'https://iili.io/qFRz6S1.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/nirdesh-tyagi-441300291/' },
-  { name: 'Gaura', img: 'https://iili.io/qFRuc91.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/gaura-siwach-b21a752a9/' },
-  { name: 'Itika', img: 'https://iili.io/qqRkj8N.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/itika-singhal-a2b675325/' },
-  { name: 'Manan', img: 'https://iili.io/qFRuuMx.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/manan-bhatia-7818a62a5/' },
-  { name: 'Subhadip', img: 'https://iili.io/qFRzF6B.png', role: 'Organizer', link: 'http://linkedin.com/in/mysterysd/' },
-  { name: 'Srishti', img: 'https://iili.io/qFR5QDX.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/srishti-ruhal-931193317/' },
-  { name: 'Anshika', img: 'https://iili.io/qqRNf3B.png', role: 'Organizer', link: 'https://www.linkedin.com/in/anshika1919' },
-  { name: 'Abheer', img: 'https://iili.io/qqR7wWg.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/abheer-rajput-160839311/' },
-  { name: 'Sumit', img: 'https://iili.io/qqRana4.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/sumit-aggarwal-7457b02a3/' },
-  { name: 'Abhishikt', img: 'https://iili.io/qqRXgku.png', role: 'Organizer', link: 'https://www.linkedin.com/in/abhishikt-issac-1234653b1/' },
-  { name: 'Harsh', img: 'https://iili.io/qFRuOAX.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/harsh-mavi-83944b380/' },
-  { name: 'Khushbu', img: 'https://iili.io/qqRlzQ9.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/khushbu-rawat-258533331/' },
-  { name: 'Rajveer', img: 'https://iili.io/qFRAQdN.jpg', role: 'Organizer', link: 'https://www.linkedin.com/in/rajveer-deshwal-a28469289/' },
+  { name: 'Himanshu', img: imgHimanshu, role: 'Organizer', link: 'https://www.linkedin.com/in/himanshukumard/' },
+  { name: 'Palak', img: imgPalak, role: 'Organizer', link: 'https://www.linkedin.com/in/palak-singhal-14a78324a/' },
+  { name: 'Tanishq', img: imgTanishq, role: 'Organizer', link: 'https://www.linkedin.com/in/tanishq-taliyan/' },
+  { name: 'Akshit', img: imgAkshit, role: 'Organizer', link: 'https://www.linkedin.com/in/sharmaakshit07/' },
+  { name: 'Ayush', img: imgAyush, role: 'Organizer', link: 'https://www.linkedin.com/in/ayushsharma81/' },
+  { name: 'Arya', img: imgArya, role: 'Organizer', link: 'https://www.linkedin.com/in/arya-kant-rajvanshi-141bbb28a/' },
+  { name: 'Nirdesh', img: imgNirdesh, role: 'Organizer', link: 'https://www.linkedin.com/in/nirdesh-tyagi-441300291/' },
+  { name: 'Gaura', img: imgGaura, role: 'Organizer', link: 'https://www.linkedin.com/in/gaura-siwach-b21a752a9/' },
+  { name: 'Itika', img: imgItika, role: 'Organizer', link: 'https://www.linkedin.com/in/itika-singhal-a2b675325/' },
+  { name: 'Manan', img: imgManan, role: 'Organizer', link: 'https://www.linkedin.com/in/manan-bhatia-7818a62a5/' },
+  { name: 'Subhadip', img: imgSubhadip, role: 'Organizer', link: 'http://linkedin.com/in/mysterysd/' },
+  { name: 'Srishti', img: imgSrishti, role: 'Organizer', link: 'https://www.linkedin.com/in/srishti-ruhal-931193317/' },
+  { name: 'Anshika', img: imgAnshika, role: 'Organizer', link: 'https://www.linkedin.com/in/anshika1919' },
+  { name: 'Abheer', img: imgAbheer, role: 'Organizer', link: 'https://www.linkedin.com/in/abheer-rajput-160839311/' },
+  { name: 'Sumit', img: imgSumit, role: 'Organizer', link: 'https://www.linkedin.com/in/sumit-aggarwal-7457b02a3/' },
+  { name: 'Abhishikt', img: imgAbhishikt, role: 'Organizer', link: 'https://www.linkedin.com/in/abhishikt-issac-1234653b1/' },
+  { name: 'Harsh', img: imgHarsh, role: 'Organizer', link: 'https://www.linkedin.com/in/harsh-mavi-83944b380/' },
+  { name: 'Khushbu', img: imgKhushbu, role: 'Organizer', link: 'https://www.linkedin.com/in/khushbu-rawat-258533331/' },
+  { name: 'Rajveer', img: imgRajveer, role: 'Organizer', link: 'https://www.linkedin.com/in/rajveer-deshwal-a28469289/' },
 ]
 
 /* ── Card dimensions ── */

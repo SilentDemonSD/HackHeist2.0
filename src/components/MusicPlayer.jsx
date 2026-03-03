@@ -2,15 +2,12 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const MUSIC_SRC = '/music/bella_ciao.mp3'
-const KEY_MUTED   = 'hh_music_muted'
 const KEY_VOLUME  = 'hh_music_vol'
 const KEY_PLAYING = 'hh_music_playing'
 
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)) }
 
-const INTERACTION_EVENTS = ['click', 'touchstart', 'keydown', 'scroll', 'pointerdown']
-
-/* ── Waveform bars ── */
+/* Waveform bars */
 function Waveform({ playing }) {
   return (
     <span className="flex items-end gap-[2px] h-3.5" aria-hidden>
@@ -31,7 +28,7 @@ function Waveform({ playing }) {
   )
 }
 
-/* ── Volume icon ── */
+/* Volume icon */
 function VolIcon({ vol }) {
   if (vol === 0) return (
     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -56,93 +53,59 @@ export default function MusicPlayer() {
   const [playing,  setPlaying]  = useState(false)
   const [volume,   setVolume]   = useState(() => parseFloat(localStorage.getItem(KEY_VOLUME) ?? '0.35'))
   const [expanded, setExpanded] = useState(false)   // show volume panel
-  const [showHint, setShowHint] = useState(false)   // "tap to start" nudge
+  const [showHint, setShowHint] = useState(true)   // show "Play BGM" nudge
   const [visible,  setVisible]  = useState(true)
 
-  /* ── Init audio & attempt autoplay ── */
-  useEffect(() => {
+  /* Lazy audio init — created on first user tap */
+  const initAudio = useCallback(() => {
+    if (audioRef.current) return audioRef.current
     const savedVol = parseFloat(localStorage.getItem(KEY_VOLUME) ?? '0.35')
-
-    const audio = new Audio(MUSIC_SRC)
-    audio.loop    = true
-    audio.volume  = clamp(savedVol, 0, 1)
-    audio.preload = 'auto'
+    const audio = new Audio()
+    audio.preload = 'none'
+    audio.loop = true
+    audio.volume = clamp(savedVol, 0, 1)
+    audio.src = MUSIC_SRC  // fetch starts here, on demand
     audioRef.current = audio
+    return audio
+  }, [])
 
-    let started = false
-
-    const startAudio = () => {
-      if (started) return
-      started = true
-      audio.muted = false
-      audio.play()
-        .then(() => {
-          setPlaying(true)
-          localStorage.setItem(KEY_PLAYING, 'true')
-          setShowHint(false)
-        })
-        .catch(() => {})
-      // Remove all interaction listeners once audio starts
-      INTERACTION_EVENTS.forEach(ev => document.removeEventListener(ev, startAudio))
-    }
-
-    // Attempt 1: muted autoplay (browsers generally allow muted)
-    audio.muted = true
-    audio.play()
-      .then(() => {
-        // Immediately try to unmute
-        audio.muted = false
-        started = true
-        setPlaying(true)
-        localStorage.setItem(KEY_PLAYING, 'true')
-        INTERACTION_EVENTS.forEach(ev => document.removeEventListener(ev, startAudio))
-      })
-      .catch(() => {
-        // Attempt 2: play on first user interaction anywhere on the page
-        audio.muted = false
-        INTERACTION_EVENTS.forEach(ev =>
-          document.addEventListener(ev, startAudio, { once: true, passive: true })
-        )
-        setTimeout(() => {
-          if (!started) setShowHint(true)
-        }, 2000)
-      })
-
+  /* Cleanup on unmount */
+  useEffect(() => {
     return () => {
-      INTERACTION_EVENTS.forEach(ev => document.removeEventListener(ev, startAudio))
-      audio.pause()
-      audio.src = ''
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.src = ''
+      }
     }
   }, [])
 
-  /* ── Sync volume changes to audio element ── */
+  /* Sync volume */
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = clamp(volume, 0, 1)
     localStorage.setItem(KEY_VOLUME, String(volume))
   }, [volume])
 
-  /* ── Play / pause toggle ── */
+  /* Play / pause */
   const toggle = useCallback(() => {
-    const audio = audioRef.current
-    if (!audio) return
     setShowHint(false)
 
     if (playing) {
-      audio.pause()
-      setPlaying(false)
-      localStorage.setItem(KEY_PLAYING, 'false')
+      const audio = audioRef.current
+      if (audio) {
+        audio.pause()
+        setPlaying(false)
+        localStorage.setItem(KEY_PLAYING, 'false')
+      }
     } else {
-      if (!audio.src) { audio.src = MUSIC_SRC; audio.load() }
-      audio.muted = true
+      const audio = initAudio()
       audio.play().then(() => {
-        audio.muted = false
         setPlaying(true)
         localStorage.setItem(KEY_PLAYING, 'true')
       }).catch(() => {})
     }
-  }, [playing])
+  }, [playing, initAudio])
 
-  /* ── Volume change ── */
+  /* Volume change */
   const handleVolume = useCallback((e) => {
     const v = parseFloat(e.target.value)
     setVolume(v)
@@ -153,14 +116,14 @@ export default function MusicPlayer() {
     }
   }, [playing, toggle])
 
-  /* ── Auto-hide after 14s idle ── */
+  /* Auto-hide after 14s idle */
   useEffect(() => {
     if (playing) return
     const t = setTimeout(() => setVisible(false), 14000)
     return () => clearTimeout(t)
   }, [playing])
 
-  /* ── Re-appear on interaction ── */
+  /* Re-appear on interaction */
   useEffect(() => {
     const show = () => setVisible(true)
     window.addEventListener('mousemove', show, { passive: true })
@@ -171,7 +134,7 @@ export default function MusicPlayer() {
     }
   }, [])
 
-  /* ── Close panel on outside click ── */
+  /* Close panel on outside click */
   useEffect(() => {
     if (!expanded) return
     const close = (e) => {

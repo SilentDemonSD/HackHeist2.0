@@ -7,7 +7,6 @@ import ScrollTitleMarquee from '../components/ScrollTitleMarquee'
 import HorizontalTracks, { MobileTracks } from '../components/HorizontalTracks'
 import { motion } from 'framer-motion'
 
-// Lazy-load every below-fold section — only Hero + Navbar are critical-path
 const DevfolioApply = lazy(() => import(/* webpackChunkName: "devfolio" */ '../components/DevfolioApply'))
 const Timeline = lazy(() => import(/* webpackChunkName: "timeline" */ '../components/Timeline'))
 const FAQ = lazy(() => import(/* webpackChunkName: "faq" */ '../components/FAQ'))
@@ -19,22 +18,21 @@ const VaultSection = lazy(() => import(/* webpackChunkName: "vault" */ '../compo
 
 
 
-// Dark placeholder while lazy chunks load — prevents white flash
 const SectionFallback = () => (
   <div style={{ minHeight: '40vh', background: '#000' }} />
 )
 
 const gallerySources = [
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.47 PM.jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.47 PM (1).jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.48 PM.jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.48 PM (1).jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.48 PM (2).jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.49 PM.jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.40.49 PM (1).jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.41.14 PM.jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.41.15 PM.jpeg', import.meta.url).href,
-  new URL('../assets/gallery/WhatsApp Image 2025-11-20 at 9.41.15 PM (2).jpeg', import.meta.url).href,
+  new URL('../assets/gallery/gallery-02.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-01.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-05.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-03.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-04.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-07.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-06.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-08.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-11.webp', import.meta.url).href,
+  new URL('../assets/gallery/gallery-10.webp', import.meta.url).href,
 ]
 
 const pastGallery = [
@@ -90,13 +88,7 @@ const pastGallery = [
   },
 ]
 
-/* ── Explicit grid placement for a tight, gap-free masonry collage ──
-   3 columns × 6 rows, every cell accounted for:
-   Row 1-2: hero(2×2) + top-right(1×1) + mid-right(1×1)
-   Row 3-4: left(1×1) + center-tall(1×2) + right-tall(1×2) + below-left(1×1)
-   Row 5:   wide-bottom(2×1) + bottom-right(1×1)
-   Row 6:   full-width closing(3×1)
-   ──────────────────────────────────────────────── */
+/* Grid layout for gallery masonry */
 const galleryLayout = [
   { col: '1 / 3', row: '1 / 3' },  // 0: hero 2×2
   { col: '3 / 4', row: '1 / 2' },  // 1: top-right
@@ -110,11 +102,7 @@ const galleryLayout = [
   { col: '1 / 4', row: '6 / 7' },  // 9: full-width closing
 ]
 
-/* ── Partner data — replace placeholder names / add logos ──────
-   Format per tier:
-     { tier: '<tier name>', partners: [{ name: '...', logo: '/logos/....svg' }] }
-   Put logo files in  public/logos/  (SVG preferred, ~200×60 px).
-   ────────────────────────────────────────────────────────────── */
+
 const PARTNERS_DATA = [
   {
     tier: 'Sponsors',
@@ -142,7 +130,7 @@ const PARTNERS_DATA = [
   },
 ]
 
-/* ── Per-letter animated heading (simplified single-element fade on mobile) ── */
+/* Per-letter animated heading (single fade on mobile) */
 function LetterHeading({ text, centered = false, isMobile = false }) {
   const headingStyle = {
     fontFamily: "'3rdMan', 'Montserrat', sans-serif",
