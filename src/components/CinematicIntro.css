@@ -54,8 +54,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding-top: 14vh;
+  justify-content: center;
+  padding-bottom: 60vh;
+  /* nudge content slightly above dead-center */
   pointer-events: none;
 }
 
@@ -140,12 +141,10 @@
 }
 
 .cinematic-mobile-bg {
-  background: radial-gradient(
-    ellipse 70% 50% at 50% 65%,
-    rgb(60, 8, 4),
-    rgb(15, 2, 1) 60%,
-    rgb(5, 0, 0)
-  );
+  background: radial-gradient(ellipse 70% 50% at 50% 65%,
+      rgb(60, 8, 4),
+      rgb(15, 2, 1) 60%,
+      rgb(5, 0, 0));
 }
 
 /* ═══════ MOBILE ═══════ */
