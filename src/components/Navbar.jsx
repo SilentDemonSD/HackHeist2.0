@@ -120,6 +120,7 @@ function MobileNavLink({ href, label, onClick, index }) {
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const panelRef = useRef(null)
   const location = useLocation()
 
@@ -129,6 +130,12 @@ export default function Navbar() {
     const onKey = (e) => { if (e.key === 'Escape') setOpen(false) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
@@ -215,6 +222,29 @@ export default function Navbar() {
                 HACK HEIST
               </motion.span>
             </Link>
+
+            {/* Trae sponsor — slides in after scrolling past hero */}
+            <motion.div
+              className="flex items-center gap-1 sm:gap-1.5 ml-2 sm:ml-3 overflow-hidden"
+              initial={false}
+              animate={{
+                width: scrolled ? 'auto' : 0,
+                opacity: scrolled ? 1 : 0,
+              }}
+              transition={{ duration: 0.35, ease: 'easeInOut' }}
+            >
+              <span
+                className="text-[0.5rem] sm:text-[0.6rem] text-white/40 tracking-[0.15em] uppercase whitespace-nowrap"
+                style={{ fontFamily: "'3rdMan', sans-serif" }}
+              >/</span>
+              <img
+                src="/trae.webp"
+                alt="Trae"
+                className="h-3 sm:h-4 w-auto object-contain opacity-50"
+                onClick={() => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer')}
+                style={{ cursor: 'pointer' }}
+              />
+            </motion.div>
 
             {/* Spacing block */}
             <div className="hidden lg:block w-80" />

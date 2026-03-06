@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import useIsMobile from "../hooks/useIsMobile";
+import TraeDistortion from "./TraeDistortion";
 import "./CinematicIntro.css";
 
 const Dither = lazy(() => import(/* webpackChunkName: "dither" */ "./Dither"));
@@ -175,36 +176,38 @@ export default function Hero() {
       {/* Vignette */}
       <div className="cinematic-vignette" aria-hidden="true" />
 
-      {/* Layer 2 — Title + tagline */}
-      <div className="cinematic-title-block w-full flex flex-col items-center justify-center pointer-events-none z-10">
+      {/* Title block */}
+      <div className="cinematic-title-block">
 
-        {/* 1. Sponsor Row (BUILD WITH + TRAE Logo) */}
+        {/* Sponsor: BUILD WITH + TRAE */}
         <motion.div
-          className="sponsor-row flex items-center justify-center gap-0 mt-20 mb-1 pointer-events-auto"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="sponsor-row"
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="font-montserrat font-bold text-white/80 tracking-[0.25em] text-xl md:text-2xl">BUILD WITH</span>
-          <div className="relative flex items-center justify-center">
-            {/* Subtle red glow behind logo */}
-            <div className="absolute inset-0 bg-red-600/20 blur-xl rounded-full scale-150" aria-hidden />
-            <motion.img
-              src="/trae.png"
-              alt="Trae logo"
-              className="h-20 md:h-32 w-auto object-contain relative z-10"
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </div>
+          {isMobile ? (
+            <>
+              <span className="sponsor-label">BUILD WITH</span>
+              <img
+                src="/trae.webp"
+                alt="Trae"
+                className="sponsor-trae-static"
+                onClick={() => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer')}
+                style={{ cursor: 'pointer' }}
+              />
+            </>
+          ) : (
+            <TraeDistortion src="/trae.webp" className="sponsor-canvas" />
+          )}
         </motion.div>
 
-        {/* 2. Cipher Main Title */}
+        {/* Cipher title */}
         <motion.h1
-          className="cinematic-title pointer-events-auto m-0"
-          initial={{ opacity: 0, y: 40 }}
+          className="cinematic-title"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
           style={{ cursor: "default" }}
         >
           {chars.map((char, i) =>
@@ -221,18 +224,17 @@ export default function Hero() {
           )}
         </motion.h1>
 
-        {/* 3. Event Tagline */}
+        {/* Tagline */}
         <motion.p
-          className="cinematic-tagline pointer-events-auto mt-2 px-4"
+          className="cinematic-tagline"
           initial={{ opacity: 0 }}
           animate={allDone ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
         >
-          <span className="text-[#c53030] font-bold tracking-[0.12em]">28–29 MARCH, 2026</span>
-          <span className="mx-3 text-white/20">·</span>
-          <span>Assemble your crew. Crack the code. Pull off the perfect build.</span>
+          <span className="accent">28–29 March, 2026</span>
+          <span className="separator">·</span>
+          Assemble your crew. Crack the code. Pull off the perfect build.
         </motion.p>
-
       </div>
     </section>
   );
