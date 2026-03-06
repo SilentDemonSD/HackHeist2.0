@@ -50,7 +50,7 @@ function NavigationLink({ href, label, index }) {
       transition={{ delay: 0.6 + index * 0.05, duration: 0.3 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-sm font-semibold text-gray-300 hover:text-white px-3.5 py-2.5 rounded-full transition-colors overflow-hidden group"
+      className="relative text-sm font-semibold text-gray-300 hover:text-white px-2.5 py-2 rounded-full transition-colors overflow-hidden group whitespace-nowrap"
       style={{ fontFamily: "'Montserrat', sans-serif", letterSpacing: '0.02em' }}
     >
       {/* Border glow */}
@@ -246,8 +246,8 @@ export default function Navbar() {
               />
             </motion.div>
 
-            {/* Spacing block */}
-            <div className="hidden lg:block w-80" />
+            {/* Spacing block — shrinks when Trae sponsor is visible */}
+            <div className={`hidden lg:block transition-all duration-300 ${scrolled ? 'w-40' : 'w-80'}`} />
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-0 ml-auto">

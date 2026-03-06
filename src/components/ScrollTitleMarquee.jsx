@@ -199,7 +199,7 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
                      transition-all duration-300 pointer-events-auto"
           style={{ background: 'rgba(220,38,38,0.05)' }}
         >
-          Become a Partner
+          Why Sponsor Us?
           <svg
             className="w-3.5 h-3.5 opacity-60 group-hover:translate-x-0.5 transition-transform"
             fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}

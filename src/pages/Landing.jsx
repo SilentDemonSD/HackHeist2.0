@@ -300,7 +300,7 @@ export default function Landing() {
 
         <LazySection>
           <SectionShell id="partners" title="Partners" eyebrow="Allied Forces" subtitle="Our trusted allies in this heist." centeredHeading isMobile={isMobile}>
-            <ScrollTitleMarquee rows={PARTNERS_DATA} partnerCta="https://forms.gle/uL5YnxXhoy7voP357" />
+            <ScrollTitleMarquee rows={PARTNERS_DATA} partnerCta="https://fortune-cowl-835.notion.site/Hack-Heist-2-0-2bf0d83def6381f0af4bd849f5068fea" />
           </SectionShell>
         </LazySection>
 
