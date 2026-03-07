@@ -13,6 +13,7 @@ const FAQ = lazy(() => import(/* webpackChunkName: "faq" */ '../components/FAQ')
 const Countdown = lazy(() => import(/* webpackChunkName: "countdown" */ '../components/Countdown'))
 const Footer = lazy(() => import(/* webpackChunkName: "footer" */ '../components/Footer'))
 const AboutHeist = lazy(() => import(/* webpackChunkName: "about" */ '../components/AboutHeist'))
+const AboutGDG = lazy(() => import(/* webpackChunkName: "aboutgdg" */ '../components/AboutGDG'))
 const TeamSection = lazy(() => import(/* webpackChunkName: "team" */ '../components/TeamSection'))
 const VaultSection = lazy(() => import(/* webpackChunkName: "vault" */ '../components/VaultSection'))
 
@@ -106,7 +107,7 @@ const galleryLayout = [
 const PARTNERS_DATA = [
   {
     tier: 'Sponsors',
-        partners: [
+    partners: [
       { name: '.XYZ', logo: '/logo/xyz.svg' },
       { name: 'UseQR', logo: '/logo/useqr.svg' },
       { name: 'Sponsor X' },
@@ -278,6 +279,12 @@ export default function Landing() {
         </LazySection>
 
         <LazySection>
+          <Suspense fallback={<SectionFallback />}>
+            <AboutGDG />
+          </Suspense>
+        </LazySection>
+
+        <LazySection>
           <div id="tracks">
             <HorizontalTracks />
             <MobileTracks />
@@ -305,86 +312,40 @@ export default function Landing() {
         </LazySection>
 
         <LazySection>
-        <SectionShell id="past" title="Our Past Heists" eyebrow="Field Records" subtitle="Gallery playback from previous ops." centeredHeading isMobile={isMobile}>
-          <div className="relative max-w-6xl mx-auto">
-            {/* Ambient radial glow */}
-            <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(255,77,79,0.05) 0%, transparent 65%)' }} />
+          <SectionShell id="past" title="Our Past Heists" eyebrow="Field Records" subtitle="Gallery playback from previous ops." centeredHeading isMobile={isMobile}>
+            <div className="relative max-w-6xl mx-auto">
+              {/* Ambient radial glow */}
+              <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(255,77,79,0.05) 0%, transparent 65%)' }} />
 
-            {/* ── Desktop: explicit-placement masonry grid ── */}
-            {!isMobile && (
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gridAutoRows: '200px',
-                  gap: '10px',
-                }}
-              >
-                {pastGallery.map((item, idx) => (
-                  <motion.article
-                    key={idx}
-                    initial={{ opacity: 0, y: 38, scale: 0.92 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true, margin: '-50px' }}
-                    transition={{
-                      duration: 0.6,
-                      delay: idx * 0.055,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
-                    style={{
-                      gridColumn: galleryLayout[idx].col,
-                      gridRow: galleryLayout[idx].row,
-                    }}
-                    className="group relative overflow-hidden rounded-2xl cursor-pointer bg-neutral-900"
-                  >
-                    {/* Image — grayscale by default, color on hover */}
-                    <img
-                      src={item.src}
-                      alt={item.caption}
-                      loading="lazy"
-                      decoding="async"
-                      width={600}
-                      height={400}
-                      className="h-full w-full object-cover grayscale brightness-[0.7] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.06]"
-                    />
-                    {/* Gradient scrim */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-50 pointer-events-none" />
-                    {/* Glow border on hover */}
-                    <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/[0.06] transition-all duration-300 group-hover:border-red-500/40 group-hover:shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]" />
-                    {/* Caption — slides up on hover */}
-                    <div className="absolute inset-x-0 bottom-0 p-4 translate-y-1 opacity-80 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                      <p
-                        className="text-[0.82rem] md:text-[0.88rem] font-medium tracking-wide text-white/90 group-hover:text-white leading-snug"
-                        style={{ fontFamily: "'Montserrat', sans-serif" }}
-                      >
-                        {item.caption}
-                      </p>
-                    </div>
-                    {/* Corner accent dot */}
-                    <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500/70 transition-all duration-300" />
-                  </motion.article>
-                ))}
-              </div>
-            )}
-
-            {/* ── Mobile: single-column stack — tap to reveal color ── */}
-            {isMobile && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {pastGallery.map((item, idx) => {
-                  const isActive = activeGalleryIdx === idx
-                  return (
+              {/* ── Desktop: explicit-placement masonry grid ── */}
+              {!isMobile && (
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gridAutoRows: '200px',
+                    gap: '10px',
+                  }}
+                >
+                  {pastGallery.map((item, idx) => (
                     <motion.article
                       key={idx}
-                      initial={{ opacity: 0, y: 28 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: '-30px' }}
-                      transition={{ duration: 0.5, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
-                      onClick={() => setActiveGalleryIdx(isActive ? -1 : idx)}
-                      className="relative overflow-hidden rounded-2xl bg-neutral-900 cursor-pointer"
-                      style={{ aspectRatio: '16 / 10' }}
-                      animate={isActive ? { scale: 1.01 } : { scale: 1 }}
+                      initial={{ opacity: 0, y: 38, scale: 0.92 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, margin: '-50px' }}
+                      transition={{
+                        duration: 0.6,
+                        delay: idx * 0.055,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
+                      style={{
+                        gridColumn: galleryLayout[idx].col,
+                        gridRow: galleryLayout[idx].row,
+                      }}
+                      className="group relative overflow-hidden rounded-2xl cursor-pointer bg-neutral-900"
                     >
+                      {/* Image — grayscale by default, color on hover */}
                       <img
                         src={item.src}
                         alt={item.caption}
@@ -392,51 +353,94 @@ export default function Landing() {
                         decoding="async"
                         width={600}
                         height={400}
-                        className={`h-full w-full object-cover transition-all duration-700 ease-out ${
-                          isActive
-                            ? 'grayscale-0 brightness-105 scale-[1.03]'
-                            : 'grayscale brightness-[0.7]'
-                        }`}
+                        className="h-full w-full object-cover grayscale brightness-[0.7] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.06]"
                       />
-                      <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${
-                        isActive ? 'opacity-45' : 'opacity-90'
-                      }`} />
-                      <div className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${
-                        isActive
-                          ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
-                          : 'border-white/[0.06]'
-                      }`} />
-                      <div className="absolute inset-x-0 bottom-0 p-4">
+                      {/* Gradient scrim */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-50 pointer-events-none" />
+                      {/* Glow border on hover */}
+                      <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/[0.06] transition-all duration-300 group-hover:border-red-500/40 group-hover:shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]" />
+                      {/* Caption — slides up on hover */}
+                      <div className="absolute inset-x-0 bottom-0 p-4 translate-y-1 opacity-80 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                         <p
-                          className="text-[0.82rem] font-medium tracking-wide text-white/90 leading-snug"
+                          className="text-[0.82rem] md:text-[0.88rem] font-medium tracking-wide text-white/90 group-hover:text-white leading-snug"
                           style={{ fontFamily: "'Montserrat', sans-serif" }}
                         >
                           {item.caption}
                         </p>
-                        {!isActive && (
-                          <span
-                            className="text-[0.6rem] text-white/35 mt-1.5 block tracking-widest uppercase"
+                      </div>
+                      {/* Corner accent dot */}
+                      <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500/70 transition-all duration-300" />
+                    </motion.article>
+                  ))}
+                </div>
+              )}
+
+              {/* ── Mobile: single-column stack — tap to reveal color ── */}
+              {isMobile && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {pastGallery.map((item, idx) => {
+                    const isActive = activeGalleryIdx === idx
+                    return (
+                      <motion.article
+                        key={idx}
+                        initial={{ opacity: 0, y: 28 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-30px' }}
+                        transition={{ duration: 0.5, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+                        onClick={() => setActiveGalleryIdx(isActive ? -1 : idx)}
+                        className="relative overflow-hidden rounded-2xl bg-neutral-900 cursor-pointer"
+                        style={{ aspectRatio: '16 / 10' }}
+                        animate={isActive ? { scale: 1.01 } : { scale: 1 }}
+                      >
+                        <img
+                          src={item.src}
+                          alt={item.caption}
+                          loading="lazy"
+                          decoding="async"
+                          width={600}
+                          height={400}
+                          className={`h-full w-full object-cover transition-all duration-700 ease-out ${isActive
+                              ? 'grayscale-0 brightness-105 scale-[1.03]'
+                              : 'grayscale brightness-[0.7]'
+                            }`}
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${isActive ? 'opacity-45' : 'opacity-90'
+                          }`} />
+                        <div className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${isActive
+                            ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
+                            : 'border-white/[0.06]'
+                          }`} />
+                        <div className="absolute inset-x-0 bottom-0 p-4">
+                          <p
+                            className="text-[0.82rem] font-medium tracking-wide text-white/90 leading-snug"
                             style={{ fontFamily: "'Montserrat', sans-serif" }}
                           >
-                            Tap to reveal
-                          </span>
-                        )}
-                      </div>
-                    </motion.article>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        </SectionShell>
+                            {item.caption}
+                          </p>
+                          {!isActive && (
+                            <span
+                              className="text-[0.6rem] text-white/35 mt-1.5 block tracking-widest uppercase"
+                              style={{ fontFamily: "'Montserrat', sans-serif" }}
+                            >
+                              Tap to reveal
+                            </span>
+                          )}
+                        </div>
+                      </motion.article>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          </SectionShell>
         </LazySection>
 
         <LazySection>
-        <SectionShell id="team" title="Meet Our Organizers" eyebrow="The Crew" centeredHeading isMobile={isMobile}>
-          <Suspense fallback={<SectionFallback />}>
-            <TeamSection />
-          </Suspense>
-        </SectionShell>
+          <SectionShell id="team" title="Meet Our Organizers" eyebrow="The Crew" centeredHeading isMobile={isMobile}>
+            <Suspense fallback={<SectionFallback />}>
+              <TeamSection />
+            </Suspense>
+          </SectionShell>
         </LazySection>
 
         <LazySection>

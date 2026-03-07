@@ -1,0 +1,193 @@
+/* ══════════════════════════════════════════════
+   ABOUT GDG — module styles (adapted from About Heist)
+   ══════════════════════════════════════════════ */
+
+.missionSection {
+  background-color: #080707;
+}
+
+.radialGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 20% 50%, rgba(100, 0, 0, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(60, 0, 0, 0.12) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mix-blend-mode: screen;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.topBorder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 77, 79, 0.4) 30%, rgba(255, 77, 79, 0.4) 70%, transparent);
+  pointer-events: none;
+}
+
+/* ── Typography ── */
+
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.45em;
+  color: rgba(255, 77, 79, 0.75);
+  margin-bottom: 0.75rem;
+}
+
+.headingRow {
+  margin-bottom: 3rem;
+}
+
+.heading {
+  font-family: '3rdMan', sans-serif !important;
+  font-weight: normal !important;
+  font-size: clamp(2.2rem, 5vw, 3.8rem) !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  line-height: 1.1 !important;
+  text-shadow: 0 0 60px rgba(255, 77, 79, 0.12) !important;
+  margin: 0 0 0.75rem !important;
+}
+
+.headingRule {
+  display: block;
+  height: 2px;
+  width: 3.5rem;
+  background: linear-gradient(90deg, #ff4d4f, rgba(255, 77, 79, 0.2));
+  border-radius: 2px;
+}
+
+/* ── Layout ── */
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .mainGrid {
+    grid-template-columns: 1.6fr 1fr;
+    gap: 3rem;
+    align-items: stretch;
+  }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+}
+
+/* ── Copy block ── */
+
+.copyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  color: rgba(185, 185, 185, 0.9);
+  font-size: 0.93rem;
+  line-height: 1.75;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.leadLine {
+  color: rgba(235, 235, 235, 0.95);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.leadLine strong {
+  color: #ffffff;
+}
+
+
+/* ══════════════════════════════════════════════
+   LOGO PANEL
+   ══════════════════════════════════════════════ */
+
+.logoShell {
+  position: relative;
+  border-radius: 1.25rem;
+  background: rgba(10, 18, 30, 0.7);
+  border: 1px solid rgba(167, 209, 255, 0.2);
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  min-height: 280px;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+@media (min-width: 768px) {
+  .logoShell {
+    min-height: unset;
+    height: 100%;
+  }
+}
+
+.logoContainer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoLink {
+  display: block;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.logoLink:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 20px rgba(255, 77, 79, 0.4));
+}
+
+.gdgLogoImg {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 50%;
+  /* if it's a square image, making it round looks good, or just keep it square */
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+}
+
+.blueprintSvgOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+@media (max-width: 479px) {
+  .heading {
+    font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
+  }
+
+  .copyBlock {
+    font-size: 0.88rem;
+  }
+}
