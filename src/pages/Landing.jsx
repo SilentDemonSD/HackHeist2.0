@@ -257,9 +257,7 @@ export default function Landing() {
             Ready to join the heist?
           </p>
           <Suspense fallback={<div style={{ height: 44 }} />}>
-            <div className="invert grayscale contrast-200">
-              <DevfolioApply slug="hack-heist-2" theme="light" />
-            </div>
+            <DevfolioApply />
           </Suspense>
         </motion.section>
 
