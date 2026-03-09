@@ -6,9 +6,10 @@ import "./VaultSection.css";
 const VAULTS = [
   {
     id: 1,
-    label: "CHAMPION",
+    label: "The Professor's Pick",
     numeral: "I",
-    amount: "COMING SOON",
+    amount: "\u20B925,000",
+    amountNum: 25000,
     color: "#FFD700",
     glow: "rgba(255,215,0,0.55)",
     borderGlow: "rgba(255,215,0,0.35)",
@@ -18,9 +19,10 @@ const VAULTS = [
   },
   {
     id: 2,
-    label: "RUNNER UP",
+    label: "The Heist Crew",
     numeral: "II",
-    amount: "COMING SOON",
+    amount: "\u20B915,000",
+    amountNum: 15000,
     color: "#c0cfe0",
     glow: "rgba(192,207,224,0.45)",
     borderGlow: "rgba(192,207,224,0.25)",
@@ -30,9 +32,10 @@ const VAULTS = [
   },
   {
     id: 3,
-    label: "2ND RUNNER UP",
+    label: "The Rookie Robbers",
     numeral: "III",
-    amount: "COMING SOON",
+    amount: "\u20B910,000",
+    amountNum: 10000,
     color: "#cd7f32",
     glow: "rgba(205,127,50,0.45)",
     borderGlow: "rgba(205,127,50,0.25)",
@@ -251,6 +254,56 @@ function HoldButton({ vaultColor, onResult, disabled }) {
   );
 }
 
+/* ── Counting money animation ────────────────────────────── */
+function CountingAmount({ target, color }) {
+  const [display, setDisplay] = useState(0);
+  const [done, setDone] = useState(false);
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    const duration = 1400;
+    const start = performance.now();
+    const tick = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease-out cubic for satisfying deceleration
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(eased * target);
+      setDisplay(current);
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        setDone(true);
+      }
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target]);
+
+  const formatted = display.toLocaleString('en-IN');
+
+  return (
+    <>
+      <span className="vcard__amount-prefix">{'\u20B9'}</span>
+      <span className="vcard__amount-value">{formatted}</span>
+      {done && (
+        <motion.span
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(105deg, transparent 35%, ${color}18 50%, transparent 65%)`,
+            pointerEvents: 'none',
+          }}
+          initial={{ x: '-100%' }}
+          animate={{ x: '100%' }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        />
+      )}
+    </>
+  );
+}
+
 /* ── Single vault card ───────────────────────────────────── */
 function VaultCard({ vault, index }) {
   const [phase, setPhase] = useState("idle"); // idle | granted | denied
@@ -319,13 +372,17 @@ function VaultCard({ vault, index }) {
         {granted && (
           <motion.div
             className="vcard__amount"
-            style={{ color: vault.color, textShadow: `0 0 28px ${vault.glow}, 0 0 60px ${vault.glow}` }}
-            initial={{ opacity: 0, scale: 0.8, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              color: vault.color,
+              textShadow: `0 0 20px ${vault.glow}, 0 0 50px ${vault.glow}, 0 2px 4px rgba(0,0,0,0.5)`,
+              borderColor: `${vault.color}30`,
+            }}
+            initial={{ opacity: 0, scaleY: 0, y: 20 }}
+            animate={{ opacity: 1, scaleY: 1, y: 0 }}
+            exit={{ opacity: 0, scaleY: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           >
-            {vault.amount}
+            <CountingAmount target={vault.amountNum} color={vault.color} glow={vault.glow} />
           </motion.div>
         )}
       </AnimatePresence>

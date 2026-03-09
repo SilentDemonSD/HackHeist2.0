@@ -290,14 +290,38 @@
 /* ── Prize amount reveal ───────────────────────────── */
 .vcard__amount {
   font-family: "3rdMan", "Montserrat", sans-serif;
-  font-size: clamp(0.9rem, 2.5vw, 1.15rem);
+  font-size: clamp(2.8rem, 4vw, 2.2rem);
   font-weight: normal;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.12em;
   text-align: center;
-  padding: 0.55rem 1rem;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.03);
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid transparent;
   width: 100%;
+  transform-origin: center bottom;
+  position: relative;
+  overflow: hidden;
+}
+.vcard__amount::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.vcard__amount-prefix {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.55em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  vertical-align: middle;
+  margin-right: 0.15em;
+}
+.vcard__amount-value {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Hold button ───────────────────────────────────── */
