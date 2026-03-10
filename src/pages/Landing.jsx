@@ -16,6 +16,7 @@ const AboutHeist = lazy(() => import(/* webpackChunkName: "about" */ '../compone
 const AboutGDG = lazy(() => import(/* webpackChunkName: "aboutgdg" */ '../components/AboutGDG'))
 const TeamSection = lazy(() => import(/* webpackChunkName: "team" */ '../components/TeamSection'))
 const VaultSection = lazy(() => import(/* webpackChunkName: "vault" */ '../components/VaultSection'))
+const HiringBlimp = lazy(() => import(/* webpackChunkName: "hiring-blimp" */ '../components/HiringBlimp'))
 
 
 
@@ -242,6 +243,10 @@ export default function Landing() {
   return (
     <div className="bg-black text-white relative">
       <Navbar />
+      {/* Hiring blimp — fixed overlay, above navbar */}
+      <Suspense fallback={null}>
+        <HiringBlimp />
+      </Suspense>
       <main>
         <Hero />
 

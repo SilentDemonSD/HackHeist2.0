@@ -1,0 +1,300 @@
+/* ============================================================
+   HiringBlimp v7 — Money Heist Themed, Fully-Immersive Blimp
+   ============================================================ */
+
+/* ── Layer 1: Entry slide (CSS transition, bottom-right → top-left) ── */
+.hb-entry {
+  position: fixed;
+  top: 8px;
+  left: 1.5%;
+  z-index: 55;
+  transform: translate(85vw, 100vh);
+  opacity: 0;
+  pointer-events: none;
+}
+.hb-entry.hb-entered {
+  transform: translate(0, 0);
+  opacity: 1;
+  pointer-events: auto;
+  transition:
+    transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.6s ease-out;
+}
+
+/* ── Layer 2: Drag wrapper ─────────────────────────────────── */
+.hb-wrap {
+  cursor: grab;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+.hb-wrap:active {
+  cursor: grabbing;
+}
+
+/* ── Hit-area (clickable + draggable zone) ─────────────────── */
+.hb-hitarea {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 260px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Blimp image layer (z-index 3 — topmost) ──────────────── */
+.hb-blimp-layer {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.hb-blimp-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 12px rgba(200, 40, 40, 0.18));
+  transition: filter 0.5s ease;
+}
+.hb-wrap:hover .hb-blimp-img {
+  filter: drop-shadow(0 4px 24px rgba(200, 40, 40, 0.35));
+}
+
+/* ── Heist Red Glow — idle pulse behind blimp ──────────────── */
+.hb-heist-glow {
+  position: absolute;
+  inset: -18% -12%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(200, 40, 40, 0.12) 0%,
+    rgba(200, 40, 40, 0.04) 50%,
+    transparent 78%
+  );
+  pointer-events: none;
+  animation: hb-pulse 6.8s ease-in-out infinite;
+  z-index: -1;
+}
+@keyframes hb-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* ── Ropes layer (z-index 1 — behind blimp) ───────────────── */
+.hb-ropes-layer {
+  position: relative;
+  z-index: 1;
+  width: 60%;
+  margin-top: -18px;
+  pointer-events: none;
+}
+.hb-rope-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Banner sway wrapper (z-index 2 — between) ────────────── */
+.hb-banner-sway {
+  position: relative;
+  z-index: 2;
+  margin-top: -6px;
+  animation: hb-sway 6.8s ease-in-out infinite;
+  transform-origin: top center;
+}
+@keyframes hb-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(1.2deg);
+  }
+  75% {
+    transform: rotate(-1.2deg);
+  }
+}
+
+/* ── Banner card — glassmorphism + Money Heist red accent ──── */
+.hb-banner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 18px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(200, 40, 40, 0.25);
+  background: rgba(18, 2, 4, 0.78);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow:
+    0 6px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(200, 40, 40, 0.08) inset,
+    0 0 30px rgba(200, 40, 40, 0.06);
+  transition:
+    box-shadow 0.5s ease,
+    border-color 0.5s ease;
+}
+.hb-wrap:hover .hb-banner {
+  border-color: rgba(200, 40, 40, 0.45);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(200, 40, 40, 0.15) inset,
+    0 0 50px rgba(200, 40, 40, 0.12);
+}
+
+/* Banner inner glow sweep — cinematic light pass */
+.hb-banner__glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(200, 40, 40, 0.06) 50%,
+    transparent 60%
+  );
+  animation: hb-sweep 8s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes hb-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  60%,
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+/* ── Banner typography ─────────────────────────────────────── */
+.hb-banner__eyebrow {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(200, 40, 40, 0.85);
+  margin-bottom: 4px;
+}
+.hb-banner__headline {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  color: #f0e8e2;
+  text-shadow: 0 1px 6px rgba(200, 40, 40, 0.15);
+}
+.hb-banner__divider {
+  width: 32px;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(200, 40, 40, 0.65),
+    transparent
+  );
+  margin: 6px 0;
+  border-radius: 1px;
+}
+.hb-banner__company-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 6px;
+  width: 100%;
+}
+.hb-banner__company-img {
+  display: block;
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+.hb-wrap:hover .hb-banner__company-img {
+  opacity: 0.95;
+}
+.hb-banner__cta {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: rgba(200, 40, 40, 0.9);
+  transition: color 0.3s ease;
+}
+.hb-wrap:hover .hb-banner__cta {
+  color: #e44050;
+}
+.hb-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.hb-wrap:hover .hb-arrow {
+  transform: translateX(3px);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hb-entry {
+    top: 6px;
+    left: 1%;
+  }
+  .hb-entry:not(.hb-entered) {
+    transform: translate(80vw, 100vh);
+  }
+  .hb-hitarea {
+    width: 180px;
+  }
+  .hb-banner {
+    padding: 10px 12px 9px;
+    border-radius: 8px;
+  }
+  .hb-banner__eyebrow {
+    font-size: 6.5px;
+    letter-spacing: 2px;
+  }
+  .hb-banner__headline {
+    font-size: 13px;
+  }
+  .hb-banner__company-img {
+    height: 14px;
+  }
+  .hb-banner__cta {
+    font-size: 9.5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .hb-hitarea {
+    width: 140px;
+  }
+  .hb-banner {
+    padding: 8px 8px 7px;
+  }
+  .hb-banner__headline {
+    font-size: 11px;
+  }
+}
+
+/* ── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hb-banner-sway,
+  .hb-heist-glow,
+  .hb-banner__glow {
+    animation: none;
+  }
+  .hb-entry.hb-entered {
+    transition: none;
+  }
+  .hb-wrap {
+    transition: none;
+  }
+}
