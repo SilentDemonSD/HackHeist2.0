@@ -111,7 +111,7 @@ const PARTNERS_DATA = [
     partners: [
       { name: '.XYZ', logo: '/logo/xyz.svg' },
       { name: 'UseQR', logo: '/logo/useqr.svg' },
-      { name: 'Sponsor X' },
+      { name: 'BUMP.FM' , logo: 'logo/Logo Light Version Bump fm.png' },
       { name: 'Sponsor X' },
     ],
   },
