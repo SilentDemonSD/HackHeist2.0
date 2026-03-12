@@ -88,7 +88,6 @@ export default function DevfolioApply() {
         position: 'relative',
       }}
     >
-      {/* Red heist glow shell behind button */}
       <motion.div
         aria-hidden="true"
         style={{
@@ -147,7 +146,6 @@ export default function DevfolioApply() {
         }}
         whileTap={{ scale: 0.95, transition: { duration: 0.08 } }}
       >
-        {/* Shine sweep */}
         <motion.span
           aria-hidden="true"
           style={{

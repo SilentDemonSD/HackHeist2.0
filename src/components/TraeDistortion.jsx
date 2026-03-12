@@ -9,10 +9,6 @@ const IMG_H = 44;
 const GAP = 14;
 const PAD = 6;
 
-/**
- * Renders "BUILD WITH" + Trae logo as a single canvas with
- * mouse-driven horizontal-slice distortion (desktop only).
- */
 export default function TraeDistortion({ src, className = "" }) {
   const canvasRef = useRef(null);
   const offscreenRef = useRef(null);

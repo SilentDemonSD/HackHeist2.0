@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { motion, useMotionValue, AnimatePresence } from 'framer-motion'
+import useIsMobile from '../hooks/useIsMobile'
 
-/* Team images */
 import imgHimanshu from '../assets/team/Himanshu.webp'
 import imgPalak from '../assets/team/Palak.webp'
 import imgTanishq from '../assets/team/Tanishq.webp'
@@ -44,7 +44,6 @@ const teamMembers = [
   { name: 'Rajveer', img: imgRajveer, role: 'Organizer', link: 'https://www.linkedin.com/in/rajveer-deshwal-a28469289/' },
 ]
 
-/* ── Card dimensions ── */
 const CARD_W = 160
 const CARD_W_MOBILE = 130
 const CARD_GAP = 20
@@ -53,7 +52,6 @@ const CARD_GAP_MOBILE = 14
 // duplicate for seamless loop
 const belt = [...teamMembers, ...teamMembers]
 
-/* ── LinkedIn icon (inline SVG) ── */
 function LinkedInIcon() {
   return (
     <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -62,7 +60,6 @@ function LinkedInIcon() {
   )
 }
 
-/* ── Single crew card (used on both desktop & mobile) ── */
 function CrewCard({ member, onHover, onLeave, cardWidth }) {
   const w = cardWidth || CARD_W
   return (
@@ -73,7 +70,6 @@ function CrewCard({ member, onHover, onLeave, cardWidth }) {
       style={{ width: w }}
     >
       <div className="relative overflow-hidden rounded-2xl bg-neutral-900/60 border border-white/[0.06] transition-all duration-500 group-hover:border-red-500/30 group-hover:shadow-[0_0_40px_rgba(255,77,79,0.12)]">
-        {/* Photo — aspect 3:4 */}
         <div className="relative" style={{ aspectRatio: '3 / 4' }}>
           <img
             src={member.img}
@@ -85,13 +81,10 @@ function CrewCard({ member, onHover, onLeave, cardWidth }) {
             className="h-full w-full object-cover grayscale brightness-[0.65] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.05]"
             draggable={false}
           />
-          {/* Gradient scrim */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-50 transition-opacity duration-500 pointer-events-none" />
-          {/* Red accent line at top */}
           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/60 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
         </div>
 
-        {/* Info bar + LinkedIn */}
         <div className="relative px-2 py-2.5 bg-black/60 backdrop-blur-md flex items-center">
           <div className="flex-1 min-w-0 text-center">
             <p
@@ -108,7 +101,6 @@ function CrewCard({ member, onHover, onLeave, cardWidth }) {
             </p>
           </div>
 
-          {/* LinkedIn button */}
           {member.link && member.link !== '#' && (
             <a
               href={member.link}
@@ -130,19 +122,6 @@ function CrewCard({ member, onHover, onLeave, cardWidth }) {
   )
 }
 
-/* ── Detect mobile ── */
-const useIsMobile = () => {
-  const [m, setM] = useState(false)
-  useEffect(() => {
-    const mql = window.matchMedia('(max-width: 768px)')
-    setM(mql.matches)
-    const h = (e) => setM(e.matches)
-    mql.addEventListener('change', h)
-    return () => mql.removeEventListener('change', h)
-  }, [])
-  return m
-}
-
 export default function TeamSection() {
   const isMobile = useIsMobile()
   const x = useMotionValue(0)
@@ -155,7 +134,6 @@ export default function TeamSection() {
   const currentGap = isMobile ? CARD_GAP_MOBILE : CARD_GAP
   const currentCardW = isMobile ? CARD_W_MOBILE : CARD_W
 
-  /* ── Continuous belt motion (both desktop & mobile) ── */
   useEffect(() => {
     let rafId
     const loop = () => {
@@ -172,7 +150,6 @@ export default function TeamSection() {
     return () => cancelAnimationFrame(rafId)
   }, [paused, x, singleWidth, SPEED])
 
-  /* ── Measure belt ── */
   useLayoutEffect(() => {
     const updateWidth = () => {
       if (!beltRef.current) return
@@ -185,11 +162,9 @@ export default function TeamSection() {
 
   return (
     <section className="relative overflow-hidden py-6">
-      {/* Edge fade masks */}
       <div className="absolute top-0 bottom-0 left-0 w-20 md:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }} />
       <div className="absolute top-0 bottom-0 right-0 w-20 md:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }} />
 
-      {/* Belt */}
       <motion.div
         ref={beltRef}
         className="flex w-max cursor-grab active:cursor-grabbing"
@@ -225,7 +200,6 @@ export default function TeamSection() {
         ))}
       </motion.div>
 
-      {/* Active member tooltip (desktop only) */}
       {!isMobile && (
         <div className="flex justify-center mt-6 h-9">
           <AnimatePresence mode="wait">

@@ -6,8 +6,6 @@ import "./timeline.css";
 const VIEWBOX = { width: 2400, height: 360 };
 const PATH_D = "M 60 295 C 240 165, 460 112, 660 197 S 940 315, 1160 222 S 1380 112, 1600 197 S 1860 315, 2060 222 S 2240 128, 2360 171";
 
-// 13 events spanning 09:00 Day 1 → 17:00 Day 2 (32h total)
-// t formula: 0.03 + (hoursFromStart / 32) * 0.94
 const timelineEvents = [
   { id: "checkin",   day: 1, time: "09:00", title: "Doors Open",        detail: "Registration & welcome kit",      t: 0.03, above: true  },
   { id: "brief",     day: 1, time: "10:00", title: "Opening Ceremony",  detail: "Kickoff, rules & intel briefing", t: 0.07, above: false },
@@ -26,7 +24,6 @@ const timelineEvents = [
 
 const noop = () => { };
 
-/* ─── Heist Getaway Car — top-down view, nose faces RIGHT (0°) ─── */
 function HeistCar() {
   return (
     <svg
@@ -51,10 +48,8 @@ function HeistCar() {
         </radialGradient>
       </defs>
 
-      {/* Ground shadow */}
       <ellipse cx="30" cy="17" rx="25" ry="8" fill="url(#hcShadow)" />
 
-      {/* ── Main body ── */}
       <path
         d="M8 14 C8 7,13 3,22 3 L40 3 C51 3,56 7,56 14 C56 21,51 25,40 25 L22 25 C13 25,8 21,8 14Z"
         fill="url(#hcBody)"
@@ -62,26 +57,21 @@ function HeistCar() {
         strokeWidth="0.6"
       />
 
-      {/* Red accent pinstripes */}
       <path d="M22 3.8 L40 3.8" stroke="rgba(255,77,79,0.6)"  strokeWidth="0.9" strokeLinecap="round" />
       <path d="M22 24.2 L40 24.2" stroke="rgba(255,77,79,0.6)" strokeWidth="0.9" strokeLinecap="round" />
 
-      {/* ── Roof dome ── */}
       <path
         d="M20 14 C20 10,23 8,30 8 L34 8 C42 8,43 10,43 14 C43 18,42 20,34 20 L30 20 C23 20,20 18,20 14Z"
         fill="url(#hcRoof)"
       />
-      {/* Roof highlight glint */}
       <ellipse cx="33" cy="11" rx="5.5" ry="1.4" fill="rgba(255,255,255,0.065)" />
 
-      {/* ── Front windshield (right / nose side) ── */}
       <path
         d="M43 9.5 L50.5 11.5 L50.5 16.5 L43 18.5 Z"
         fill="rgba(80,175,255,0.18)"
         stroke="rgba(140,210,255,0.22)"
         strokeWidth="0.5"
       />
-      {/* ── Rear window (left / tail side) ── */}
       <path
         d="M20 9.5 L13 11.5 L13 16.5 L20 18.5 Z"
         fill="rgba(80,175,255,0.12)"
@@ -89,47 +79,38 @@ function HeistCar() {
         strokeWidth="0.5"
       />
 
-      {/* ── Headlights (front / right) ── */}
       <ellipse cx="54.5" cy="10.5" rx="2.4" ry="1.7" fill="#fff9e0" opacity="0.93" />
       <ellipse cx="54.5" cy="17.5" rx="2.4" ry="1.7" fill="#fff9e0" opacity="0.93" />
       <ellipse cx="54.5" cy="10.5" rx="1.1" ry="0.9" fill="white" />
       <ellipse cx="54.5" cy="17.5" rx="1.1" ry="0.9" fill="white" />
 
-      {/* ── Tail lights (rear / left) ── */}
       <ellipse cx="7.5" cy="10.5" rx="2.2" ry="1.6" fill="#ff4d4f" />
       <ellipse cx="7.5" cy="17.5" rx="2.2" ry="1.6" fill="#ff4d4f" />
-      {/* inner glow */}
       <ellipse cx="7.5" cy="10.5" rx="1.0" ry="0.8" fill="#ff8080" />
       <ellipse cx="7.5" cy="17.5" rx="1.0" ry="0.8" fill="#ff8080" />
 
-      {/* ── Rear spoiler ── */}
       <rect x="5.5" y="9.5" width="2.2" height="9" rx="1.1"
         fill="#1a1b28" stroke="rgba(255,77,79,0.55)" strokeWidth="0.7" />
 
-      {/* ── Wheel-arch recesses ── */}
       <rect x="14" y="0.5"  width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
       <rect x="37" y="0.5"  width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
       <rect x="14" y="22"   width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
       <rect x="37" y="22"   width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
 
-      {/* ── Tires (rubber) ── */}
       <ellipse cx="18.5" cy="3"  rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
       <ellipse cx="41.5" cy="3"  rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
       <ellipse cx="18.5" cy="25" rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
       <ellipse cx="41.5" cy="25" rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
 
-      {/* ── Alloy rims ── */}
       <ellipse cx="18.5" cy="3"  rx="2"   ry="1.3" fill="#3a3b52" />
       <ellipse cx="41.5" cy="3"  rx="2"   ry="1.3" fill="#3a3b52" />
       <ellipse cx="18.5" cy="25" rx="2"   ry="1.3" fill="#3a3b52" />
       <ellipse cx="41.5" cy="25" rx="2"   ry="1.3" fill="#3a3b52" />
-      {/* rim center dot */}
       <circle cx="18.5" cy="3"  r="0.7" fill="#5a5c78" />
       <circle cx="41.5" cy="3"  r="0.7" fill="#5a5c78" />
       <circle cx="18.5" cy="25" r="0.7" fill="#5a5c78" />
       <circle cx="41.5" cy="25" r="0.7" fill="#5a5c78" />
 
-      {/* Hood center crease */}
       <path d="M44 14 L50 14" stroke="rgba(255,255,255,0.1)" strokeWidth="0.7" strokeLinecap="round" />
     </svg>
   );
@@ -326,7 +307,6 @@ export default function Timeline({
         >
           <div className="timeline-stage-grid" aria-hidden="true" />
 
-          {/* Day labels */}
           <div className="timeline-day-label timeline-day-label--1" aria-hidden="true">DAY 1</div>
           <div className="timeline-day-label timeline-day-label--2" aria-hidden="true">DAY 2</div>
 
@@ -435,7 +415,6 @@ export default function Timeline({
         </div>
       </div>
 
-      {/* legacy mobile vertical list removed — road UI used on all screens */}
     </section>
   );
 }

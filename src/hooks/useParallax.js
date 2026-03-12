@@ -1,9 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-/**
- * Creates a subtle parallax effect for any element by translating it
- * relative to pointer position within the element's bounds.
- */
 export function useParallax({ maxOffset = 8, disabled = false } = {}) {
   const ref = useRef(null)
   const [style, setStyle] = useState({ transform: 'translate3d(0,0,0)' })
@@ -46,5 +42,4 @@ export function useParallax({ maxOffset = 8, disabled = false } = {}) {
 }
 
 export default useParallax
-
 

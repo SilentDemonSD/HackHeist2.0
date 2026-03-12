@@ -107,12 +107,10 @@ export default function AboutHeist() {
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 py-16 md:py-24">
 
-        {/* ── Eyebrow ── */}
         <motion.p className={styles.eyebrow} variants={fadeUp} custom={0}>
           Mission Brief
         </motion.p>
 
-        {/* ── Heading ── */}
         <div className={styles.headingRow}>
           <h2 id="mission-brief-heading" className={styles.heading} style={{ cursor: "default" }}>
             {"About Hack Heist".split("").map((char, i) =>
@@ -136,10 +134,8 @@ export default function AboutHeist() {
           <span className={styles.headingRule} />
         </div>
 
-        {/* ── Main grid ── */}
         <div className={styles.mainGrid}>
 
-          {/* LEFT — copy + stats + highlights */}
           <div className={styles.leftCol}>
 
             <motion.div className={styles.copyBlock} variants={fadeUp} custom={1}>
@@ -165,21 +161,18 @@ export default function AboutHeist() {
               </p>
             </motion.div>
 
-            {/* Stats */}
             <motion.div className={styles.statsRow} variants={sectionVariants}>
               {stats.map((s, i) => (
                 <StatCard key={s.label} {...s} index={i} />
               ))}
             </motion.div>
 
-            {/* Highlights */}
             <motion.div className={styles.highlightsRow} variants={sectionVariants}>
               {highlights.map((h, i) => (
                 <HighlightCard key={h.title} {...h} index={i} />
               ))}
             </motion.div>
 
-            {/* Meta chips */}
             <motion.div className={styles.metaRow} variants={fadeUp} custom={2}>
               {metadata.map((item) => (
                 <div key={item.id} className={styles.metaChip}>
@@ -191,7 +184,6 @@ export default function AboutHeist() {
             </motion.div>
           </div>
 
-          {/* RIGHT — blueprint panel */}
           <motion.div
             className={styles.blueprintShell}
             variants={{ hidden: { opacity: 0, scale: 0.96 }, show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } } }}
@@ -232,10 +224,7 @@ export default function AboutHeist() {
                     </marker>
                   </defs>
 
-                  {/* ── dark background ── */}
                   <rect width="460" height="500" fill="#050c13" />
-
-                  {/* ── blueprint grid ── */}
                   <g className={styles.gridAnimate} stroke="rgba(167,209,255,0.1)" strokeWidth="0.5">
                     {Array.from({ length: 25 }).map((_, i) => (
                       <line key={`h${i}`} x1="0" x2="460" y1={(i + 1) * 20} y2={(i + 1) * 20} />
@@ -245,7 +234,6 @@ export default function AboutHeist() {
                     ))}
                   </g>
 
-                  {/* ── outer frame with tick marks ── */}
                   <rect x="18" y="32" width="424" height="444" fill="none" stroke="rgba(167,209,255,0.28)" strokeWidth="1" />
                   {[60,100,140,180,220,260,300,340,380,420].map(x => (
                     <g key={`xt${x}`}>
@@ -260,70 +248,53 @@ export default function AboutHeist() {
                     </g>
                   ))}
 
-                  {/* ══════════ HEADER STRIP ══════════ */}
                   <rect x="18" y="10" width="424" height="22" fill="rgba(167,209,255,0.04)" stroke="rgba(167,209,255,0.25)" strokeWidth="0.8" />
                   <text x="30" y="24" fill="rgba(167,209,255,0.5)" fontSize="6" fontFamily="monospace" letterSpacing="2">CLASSIFIED</text>
                   <text x="230" y="24" textAnchor="middle" fill="rgba(167,209,255,0.6)" fontSize="6.5" fontFamily="monospace" letterSpacing="3">VAULT-B2 FLOOR PLAN</text>
                   <text x="432" y="24" textAnchor="end" fill="rgba(255,77,79,0.55)" fontSize="6" fontFamily="monospace" letterSpacing="1.5">HH-2.0</text>
 
-                  {/* ══════════ NORTH ROW ══════════ */}
-
-                  {/* SERVER ROOM: x=30,y=50 w=102 h=92 */}
                   <rect x="30" y="50" width="102" height="92" fill="url(#roomFill)" stroke="rgba(167,209,255,0.5)" strokeWidth="1.2" />
-                  {/* server racks */}
                   <rect x="42" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
                   <rect x="62" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
                   <rect x="82" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
-                  {/* rack LEDs */}
                   {[0,1,2,3,4,5].map(r => <circle key={r} cx="46" cy={68 + r*8} r="1" fill="rgba(167,209,255,0.7)" />)}
                   {[0,1,2,3,4,5].map(r => <circle key={r} cx="66" cy={68 + r*8} r="1" fill="rgba(255,77,79,0.7)" />)}
                   {[0,1,2,3,4,5].map(r => <circle key={r} cx="86" cy={68 + r*8} r="1" fill="rgba(167,209,255,0.7)" />)}
                   <text x="81" y="152" textAnchor="middle" fill="rgba(167,209,255,0.55)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">SERVER</text>
-                  {/* door gap bottom-center */}
                   <line x1="62" y1="142" x2="100" y2="142" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M62,142 Q62,155 100,142" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
 
-                  {/* HACK LAB: x=155,y=50 w=140 h=192 (full tall, spans to corridor) */}
                   <rect x="155" y="50" width="140" height="192" fill="url(#roomFill)" stroke="rgba(167,209,255,0.45)" strokeWidth="1.2" />
-                  {/* desks 2×2 grid */}
                   <rect x="167" y="62" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
                   <rect x="207" y="62" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
                   <rect x="247" y="62" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
                   <rect x="167" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
                   <rect x="207" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
                   <rect x="247" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
-                  {/* laptop icons on desks */}
                   {[[167,62],[207,62],[247,62],[167,92],[207,92],[247,92]].map(([dx,dy],i) => (
                     <rect key={i} x={dx+9} y={dy+5} width="12" height="9" fill="none" stroke="rgba(167,209,255,0.6)" strokeWidth="0.6" rx="0.5" />
                   ))}
                   <text x="225" y="138" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="7" fontFamily="monospace" letterSpacing="2">HACK LAB</text>
                   <text x="225" y="149" textAnchor="middle" fill="rgba(167,209,255,0.3)" fontSize="5.5" fontFamily="monospace">RM-02</text>
-                  {/* security cam on ceiling of hack lab */}
                   <circle cx="225" cy="162" r="4" fill="none" stroke="rgba(255,200,0,0.5)" strokeWidth="0.8" />
                   <path d="M225,162 L218,172 L232,172 Z" fill="none" stroke="rgba(255,200,0,0.35)" strokeWidth="0.7" />
                   <text x="225" y="183" textAnchor="middle" fill="rgba(255,200,0,0.35)" fontSize="5" fontFamily="monospace">CAM-A</text>
-                  {/* door gap right side — into vault antechamber */}
                   <line x1="295" y1="108" x2="295" y2="136" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M295,108 Q308,122 295,136" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
 
-                  {/* VAULT: x=320,y=50 w=112 h=192 */}
-                  {/* outer double-border glow */}
                   <rect x="320" y="50" width="112" height="192" fill="url(#vaultFill)" stroke="rgba(255,77,79,0.65)" strokeWidth="1.8" filter="url(#redGlow)" />
                   <rect x="325" y="55" width="102" height="182" fill="none" stroke="rgba(255,77,79,0.2)" strokeWidth="3" />
-                  {/* vault circular door */}
                   <circle cx="376" cy="140" r="52" fill="none" stroke="rgba(255,77,79,0.18)" strokeWidth="1" />
                   <circle cx="376" cy="140" r="38" fill="rgba(255,77,79,0.06)" stroke="rgba(255,77,79,0.5)" strokeWidth="1.4" className={styles.ringDash} />
                   <circle cx="376" cy="140" r="26" fill="none" stroke="rgba(255,77,79,0.4)" strokeWidth="1" />
                   <circle cx="376" cy="140" r="10" fill="rgba(255,77,79,0.15)" stroke="rgba(255,77,79,0.7)" strokeWidth="1" />
                   <circle cx="376" cy="140" r="3" fill="#ff4d4f" />
-                  {/* locking bolts */}
                   {[0,60,120,180,240,300].map(deg => {
                     const rad = (deg * Math.PI) / 180
                     const bx = 376 + 33 * Math.cos(rad)
                     const by = 140 + 33 * Math.sin(rad)
                     return <circle key={deg} cx={bx} cy={by} r="2.5" fill="rgba(255,77,79,0.5)" stroke="rgba(255,77,79,0.8)" strokeWidth="0.6" />
                   })}
-                  {/* spoke lines */}
                   {[0,90,180,270].map(deg => {
                     const rad = (deg * Math.PI) / 180
                     return <line key={deg} x1={376 + 10*Math.cos(rad)} y1={140 + 10*Math.sin(rad)} x2={376 + 24*Math.cos(rad)} y2={140 + 24*Math.sin(rad)} stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" />
@@ -331,94 +302,62 @@ export default function AboutHeist() {
                   <text x="376" y="76" textAnchor="middle" fill="rgba(255,77,79,0.8)" fontSize="7.5" fontFamily="monospace" letterSpacing="2.5">VAULT</text>
                   <text x="376" y="87" textAnchor="middle" fill="rgba(255,77,79,0.45)" fontSize="5.5" fontFamily="monospace" letterSpacing="1">B2-CORE</text>
                   <text x="376" y="218" textAnchor="middle" fill="rgba(255,77,79,0.35)" fontSize="5" fontFamily="monospace">RESTRICTED ACCESS</text>
-                  {/* door gap on left side */}
                   <line x1="320" y1="108" x2="320" y2="136" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M320,108 Q307,122 320,136" fill="none" stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" strokeDasharray="2 3" />
 
-                  {/* COMMS ROOM: x=30,y=162 w=102 h=80 */}
                   <rect x="30" y="162" width="102" height="80" fill="url(#roomFill)" stroke="rgba(167,209,255,0.45)" strokeWidth="1.2" />
-                  {/* antenna */}
                   <line x1="81" y1="205" x2="81" y2="180" stroke="rgba(167,209,255,0.55)" strokeWidth="1" />
                   <line x1="68" y1="185" x2="94" y2="185" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
                   <line x1="72" y1="192" x2="90" y2="192" stroke="rgba(167,209,255,0.35)" strokeWidth="0.7" />
-                  {/* signal arcs */}
                   <path d="M63,175 Q81,165 99,175" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.8" strokeDasharray="2 2" />
                   <path d="M58,170 Q81,157 104,170" fill="none" stroke="rgba(167,209,255,0.2)" strokeWidth="0.7" strokeDasharray="2 3" />
                   <text x="81" y="233" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">COMMS</text>
-                  {/* door gap on right */}
                   <line x1="132" y1="192" x2="132" y2="218" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M132,192 Q145,205 132,218" fill="none" stroke="rgba(167,209,255,0.35)" strokeWidth="0.7" strokeDasharray="2 3" />
 
-                  {/* ══ VERTICAL CONNECTORS (shafts) ══ */}
-                  {/* Server → Comms (door gap bridging) already via hack lab side */}
-                  {/* Server room door bottom → top of comms: gap marked already */}
-                  {/* Left shaft: server bottom->comms area */}
                   <rect x="30" y="142" width="102" height="20" fill="rgba(167,209,255,0.015)" stroke="rgba(167,209,255,0.2)" strokeWidth="0.7" />
 
-                  {/* ══ MAIN CORRIDOR ══ */}
                   <rect x="30" y="242" width="402" height="40" fill="rgba(167,209,255,0.03)" stroke="rgba(167,209,255,0.4)" strokeWidth="1.2" />
-                  {/* corridor direction arrows */}
                   <line x1="80" y1="262" x2="380" y2="262" stroke="rgba(167,209,255,0.2)" strokeWidth="0.7" strokeDasharray="6 8" />
                   <text x="230" y="267" textAnchor="middle" fill="rgba(167,209,255,0.4)" fontSize="6" fontFamily="monospace" letterSpacing="3.5">MAIN CORRIDOR</text>
-                  {/* cam in corridor */}
                   <circle cx="150" cy="249" r="3" fill="none" stroke="rgba(255,200,0,0.45)" strokeWidth="0.8" />
                   <path d="M150,249 L143,255 L157,255 Z" fill="none" stroke="rgba(255,200,0,0.3)" strokeWidth="0.7" />
                   <circle cx="320" cy="249" r="3" fill="none" stroke="rgba(255,200,0,0.45)" strokeWidth="0.8" />
                   <path d="M320,249 L313,255 L327,255 Z" fill="none" stroke="rgba(255,200,0,0.3)" strokeWidth="0.7" />
 
-                  {/* ══ SOUTH ROW ══ */}
-
-                  {/* SECURITY: x=30,y=302 w=120 h=108 */}
                   <rect x="30" y="302" width="120" height="108" fill="url(#roomFill)" stroke="rgba(167,209,255,0.45)" strokeWidth="1.2" />
-                  {/* large camera cone */}
                   <circle cx="90" cy="330" r="6" fill="rgba(255,200,0,0.15)" stroke="rgba(255,200,0,0.7)" strokeWidth="1" />
                   <path d="M90,330 L66,360 L114,360 Z" fill="rgba(255,200,0,0.06)" stroke="rgba(255,200,0,0.4)" strokeWidth="0.8" />
-                  {/* scan lines inside cone */}
                   <line x1="76" y1="342" x2="104" y2="342" stroke="rgba(255,200,0,0.25)" strokeWidth="0.5" />
                   <line x1="72" y1="350" x2="108" y2="350" stroke="rgba(255,200,0,0.2)" strokeWidth="0.5" />
-                  {/* cross/X deny symbol */}
                   <line x1="70" y1="372" x2="82" y2="384" stroke="rgba(255,77,79,0.55)" strokeWidth="1" />
                   <line x1="82" y1="372" x2="70" y2="384" stroke="rgba(255,77,79,0.55)" strokeWidth="1" />
                   <text x="90" y="400" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">SECURITY</text>
-                  {/* door top */}
                   <line x1="64" y1="302" x2="116" y2="302" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M64,302 Q64,291 116,302" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
 
-                  {/* BRIEFING RM: x=170,y=302 w=140 h=108 */}
                   <rect x="170" y="302" width="140" height="108" fill="url(#roomFill)" stroke="rgba(167,209,255,0.4)" strokeWidth="1.2" />
-                  {/* table top-view */}
                   <rect x="200" y="322" width="80" height="42" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="2" />
-                  {/* chairs around table */}
                   {[0,1,2,3].map(i => <rect key={i} x={206 + i*18} y="318" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
                   {[0,1,2,3].map(i => <rect key={i} x={206 + i*18} y="364" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
                   <text x="240" y="386" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">BRIEFING</text>
-                  {/* door top */}
                   <line x1="210" y1="302" x2="270" y2="302" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M210,302 Q210,291 270,302" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
 
-                  {/* ACCESS SHAFT: x=330,y=302 w=102 h=108 */}
                   <rect x="330" y="302" width="102" height="108" fill="rgba(255,77,79,0.04)" stroke="rgba(167,209,255,0.5)" strokeWidth="1.2" />
-                  {/* hatch pattern — ventilation */}
                   {[0,1,2,3,4,5].map(i => (
                     <line key={i} x1={330 + i*17} y1="302" x2={330} y2={302 + i*17} stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
                   ))}
                   {[1,2,3,4,5,6].map(i => (
                     <line key={i} x1={432} y1={302 + i*17} x2={432 - i*17 + (i>6?0:0)} y2="302" stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
                   ))}
-                  {/* ladder symbol */}
                   <line x1="370" y1="316" x2="370" y2="396" stroke="rgba(167,209,255,0.5)" strokeWidth="1" />
                   <line x1="385" y1="316" x2="385" y2="396" stroke="rgba(167,209,255,0.5)" strokeWidth="1" />
                   {[0,1,2,3,4,5,6].map(i => <line key={i} x1="370" y1={320+i*12} x2="385" y2={320+i*12} stroke="rgba(167,209,255,0.45)" strokeWidth="0.8" />)}
                   <text x="381" y="408" textAnchor="middle" fill="rgba(167,209,255,0.55)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">ACCESS</text>
-                  {/* door top */}
                   <line x1="356" y1="302" x2="406" y2="302" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M356,302 Q356,291 406,302" fill="none" stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" strokeDasharray="2 3" />
 
-                  {/* ══ VERTICAL CONNECTORS (shafts between corridor + rooms) ══ */}
-                  {/* Not needed for hack lab (full height) / vault (full height) */}
-                  {/* Left col connector (server/comms → corridor) done via rooms */}
-
-                  {/* ══ HEIST ROUTE ══ (Entry → Corridor → Vault) */}
                   <path
                     d="M381 410 L381 302 L381 262 L335 262 L335 242"
                     fill="none"
@@ -430,7 +369,6 @@ export default function AboutHeist() {
                     filter="url(#redGlow)"
                   />
 
-                  {/* ══ ROOM CODE LABELS bottom-right of each room ══ */}
                   <text x="128" y="148" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-01</text>
                   <text x="291" y="238" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-02</text>
                   <text x="428" y="238" textAnchor="end" fill="rgba(255,77,79,0.35)" fontSize="5" fontFamily="monospace">SEC-B2</text>
@@ -439,18 +377,15 @@ export default function AboutHeist() {
                   <text x="308" y="406" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">RM-05</text>
                   <text x="430" y="406" textAnchor="end" fill="rgba(167,209,255,0.25)" fontSize="5" fontFamily="monospace">ACC-01</text>
 
-                  {/* ══ SCALE BAR ══ */}
                   <line x1="30" y1="488" x2="110" y2="488" stroke="rgba(167,209,255,0.35)" strokeWidth="0.8" />
                   <line x1="30" y1="484" x2="30" y2="492" stroke="rgba(167,209,255,0.35)" strokeWidth="0.8" />
                   <line x1="110" y1="484" x2="110" y2="492" stroke="rgba(167,209,255,0.35)" strokeWidth="0.8" />
                   <text x="70" y="496" textAnchor="middle" fill="rgba(167,209,255,0.3)" fontSize="5" fontFamily="monospace">10m</text>
 
-                  {/* ══ NORTH ARROW ══ */}
                   <line x1="430" y1="492" x2="430" y2="476" stroke="rgba(167,209,255,0.4)" strokeWidth="1" />
                   <polygon points="426,480 430,470 434,480" fill="rgba(167,209,255,0.5)" />
                   <text x="430" y="498" textAnchor="middle" fill="rgba(167,209,255,0.4)" fontSize="6" fontFamily="monospace">N</text>
 
-                  {/* ══ CORNER CROSSHAIRS ══ */}
                   <g stroke="rgba(255,77,79,0.4)" strokeWidth="0.8">
                     <line x1="14" y1="38" x2="24" y2="38" /><line x1="19" y1="33" x2="19" y2="43" />
                     <line x1="436" y1="38" x2="446" y2="38" /><line x1="441" y1="33" x2="441" y2="43" />
@@ -458,7 +393,6 @@ export default function AboutHeist() {
                     <line x1="436" y1="470" x2="446" y2="470" /><line x1="441" y1="465" x2="441" y2="475" />
                   </g>
 
-                  {/* ══ FOOTER ══ */}
                   <text x="230" y="495" textAnchor="middle" fill="rgba(255,77,79,0.28)" fontSize="5" fontFamily="monospace" letterSpacing="1.5">HACKHEIST 2.0 · GDG ON CAMPUS MIET · CLASSIFIED</text>
                 </svg>
 

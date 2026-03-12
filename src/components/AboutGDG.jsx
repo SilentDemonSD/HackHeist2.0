@@ -32,13 +32,10 @@ export default function AboutGDG() {
       <div className={styles.topBorder} aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 py-16 md:py-24">
-
-        {/* ── Eyebrow ── */}
         <motion.p className={styles.eyebrow} variants={fadeUp} custom={0}>
 
         </motion.p>
 
-        {/* ── Heading ── */}
         <div className={styles.headingRow}>
           <h2 id="gdg-heading" className={styles.heading} style={{ cursor: "default" }}>
             {"About GDG On Campus MIET".split("").map((char, i) =>
@@ -62,10 +59,8 @@ export default function AboutGDG() {
           <span className={styles.headingRule} />
         </div>
 
-        {/* ── Main grid ── */}
         <div className={styles.mainGrid}>
 
-          {/* LEFT — copy block */}
           <div className={styles.leftCol}>
             <motion.div className={styles.copyBlock} variants={fadeUp} custom={1}>
               <p className={styles.leadLine}>
@@ -97,7 +92,6 @@ export default function AboutGDG() {
             </motion.div>
           </div>
 
-          {/* RIGHT — GDG Logo Panel */}
           <motion.div
             className={styles.logoShell}
             variants={{
@@ -121,7 +115,6 @@ export default function AboutGDG() {
               </a>
             </div>
 
-            {/* Visual corner crosshairs to match HackHeist theme */}
             <svg className={styles.blueprintSvgOverlay} viewBox="0 0 460 500" role="presentation">
               <g stroke="rgba(255,77,79,0.4)" strokeWidth="0.8">
                 <line x1="14" y1="38" x2="24" y2="38" /><line x1="19" y1="33" x2="19" y2="43" />

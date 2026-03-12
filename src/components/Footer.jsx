@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import instagramIcon from '../assets/links/instagram.webp'
 
-/* ─── Data ─── */
 const socialLinks = [
   {
     name: 'Website',
@@ -40,7 +39,6 @@ const quickLinks = [
   { href: '#team', label: 'Our Team' },
 ]
 
-/* ─── Stagger variants ─── */
 const stagger = {
   hidden: { opacity: 0 },
   show: {
@@ -54,7 +52,6 @@ const rise = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
 }
 
-/* ─── SVG icons ─── */
 function SvgIcon({ icon }) {
   if (icon === 'link') {
     return (
@@ -94,7 +91,6 @@ function SocialIcon({ icon, href, name, type }) {
       whileTap={{ scale: 0.92 }}
       aria-label={name}
     >
-      {/* Glow ring on hover */}
       <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100
                        shadow-[0_0_12px_rgba(239,68,68,0.35)] transition-opacity" />
       <span className="relative text-gray-400 group-hover:text-white transition-colors">
@@ -107,11 +103,9 @@ function SocialIcon({ icon, href, name, type }) {
   )
 }
 
-/* ─── Footer ─── */
 export default function Footer() {
   return (
     <footer className="relative border-t border-white/[0.06] bg-[#060606]">
-      {/* Background texture */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
@@ -121,10 +115,8 @@ export default function Footer() {
         }}
       />
 
-      {/* Top-edge red accent line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
 
-      {/* Ambient glow */}
       <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[180px] bg-red-500/[0.04] rounded-full blur-[100px]" />
 
       <motion.div
@@ -134,10 +126,8 @@ export default function Footer() {
         viewport={{ once: true, amount: 0.15 }}
         variants={stagger}
       >
-        {/* ─── 4-column grid ─── */}
         <div className="grid gap-12 sm:gap-10 md:grid-cols-2 lg:grid-cols-4">
 
-          {/* Col 1 — Brand */}
           <motion.div variants={rise} className="space-y-5">
             <div className="flex items-center gap-1.5 select-none">
               <span
@@ -168,7 +158,6 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          {/* Col 2 — Get In Touch */}
           <motion.div variants={rise} className="space-y-5">
             <h4
               className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-red-500/80"
@@ -204,7 +193,6 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          {/* Col 3 — Quick Links */}
           <motion.div variants={rise} className="space-y-5">
             <h4
               className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-red-500/80"
@@ -227,7 +215,6 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          {/* Col 4 — Map */}
           <motion.div variants={rise} className="space-y-5">
             <h4
               className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-red-500/80"
@@ -251,16 +238,13 @@ export default function Footer() {
           </motion.div>
         </div>
 
-        {/* ─── Divider ─── */}
         <div className="mt-14 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
-        {/* ─── GDG branding row ─── */}
         <motion.div
           variants={rise}
           className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-between"
         >
           <div className="flex items-center gap-3">
-            {/* Google G icon */}
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.06]">
               <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -286,7 +270,6 @@ export default function Footer() {
           </div>
         </motion.div>
 
-        {/* ─── Devfolio row ─── */}
         <div className="mt-8 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
         <motion.div
@@ -315,7 +298,6 @@ export default function Footer() {
           </a>
         </motion.div>
 
-        {/* ─── Copyright ─── */}
         <div className="mt-8 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
         <motion.p

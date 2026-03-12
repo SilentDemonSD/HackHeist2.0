@@ -34,3 +34,12 @@
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/robots.txt
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

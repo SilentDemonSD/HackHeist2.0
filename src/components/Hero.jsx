@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import useIsMobile from "../hooks/useIsMobile";
+import useReducedMotion from "../hooks/useReducedMotion";
 import TraeDistortion from "./TraeDistortion";
 import "./CinematicIntro.css";
 
@@ -17,7 +18,6 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
   const noiseRef = useRef(null);
   const hoverRef = useRef(null);
 
-  // Live noise while unrevealed; lock to finalChar on reveal
   useEffect(() => {
     if (noiseRef.current) clearInterval(noiseRef.current);
     if (isRevealed) {
@@ -30,7 +30,6 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
     return () => { if (noiseRef.current) clearInterval(noiseRef.current); };
   }, [isRevealed, finalChar, isMobile]);
 
-  // Per-letter hover re-scramble
   const handleEnter = () => {
     if (isMobile || !isRevealed) return;
     if (hoverRef.current) clearInterval(hoverRef.current);
@@ -59,13 +58,11 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
     }
   };
 
-  // Cleanup on unmount
   useEffect(() => () => {
     if (noiseRef.current) clearInterval(noiseRef.current);
     if (hoverRef.current) clearInterval(hoverRef.current);
   }, []);
 
-  // Colour logic
   const color = isRevealed
     ? isScrambling
       ? "rgba(155, 155, 155, 0.5)"
@@ -94,7 +91,6 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
   );
 }
 
-// ── Reveal sequencer ─────────────────────────────────────────────────────────
 function useCipherReveal(text, startDelay = 380) {
   const chars = text.split("");
   const [revealed, setRevealed] = useState(() => chars.map(c => c === " "));
@@ -123,8 +119,68 @@ function useCipherReveal(text, startDelay = 380) {
   return { chars, revealed, allDone };
 }
 
+function HeroVideo({ src }) {
+  const videoRef = useRef(null);
+  const loadedRef = useRef(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let obs;
+
+    function loadVideo() {
+      if (loadedRef.current) return;
+      loadedRef.current = true;
+      video.src = src;
+      video.load();
+      video.play().catch(() => {});
+    }
+
+    function scheduleLoad() {
+      obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            loadVideo();
+            obs.disconnect();
+          }
+        },
+        { rootMargin: "0px" }
+      );
+      obs.observe(video);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(scheduleLoad, 800);
+      }, { once: true });
+    } else {
+      setTimeout(scheduleLoad, 800);
+    }
+
+    return () => {
+      obs?.disconnect();
+    };
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      muted
+      autoPlay
+      playsInline
+      preload="metadata"
+      aria-hidden="true"
+    >
+      <source data-src={src} type="video/mp4" />
+      <track kind="captions" />
+    </video>
+  );
+}
+
 export default function Hero() {
   const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const { chars, revealed, allDone } = useCipherReveal(TITLE);
 
   const videoSrc = isMobile
@@ -133,7 +189,6 @@ export default function Hero() {
 
   return (
     <section className="cinematic-intro">
-      {/* Dither (desktop only) */}
       {isMobile ? (
         <div className="cinematic-dither-bg cinematic-mobile-bg" />
       ) : (
@@ -154,37 +209,29 @@ export default function Hero() {
               waveAmplitude={0.25}
               waveSpeed={0.07}
               enableMouseInteraction={false}
-              disableAnimation={false}
+              disableAnimation={prefersReducedMotion}
             />
           </div>
         </Suspense>
       )}
 
-      {/* Video */}
       <div className="cinematic-video-wrap">
-        <video
-          src={videoSrc}
-          muted
-          autoPlay
-          playsInline
-          preload="auto"
-        >
-          <track kind="captions" />
-        </video>
+        <HeroVideo src={videoSrc} />
       </div>
 
-      {/* Vignette */}
       <div className="cinematic-vignette" aria-hidden="true" />
 
-      {/* Title block */}
       <div className="cinematic-title-block">
 
-        {/* Sponsor: BUILD WITH + TRAE */}
         <motion.div
           className="sponsor-row"
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : { duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }
+          }
         >
           {isMobile ? (
             <>
@@ -192,6 +239,8 @@ export default function Hero() {
               <img
                 src="/trae.webp"
                 alt="Trae"
+                width={90}
+                height={32}
                 className="sponsor-trae-static"
                 onClick={() => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer')}
                 style={{ cursor: 'pointer' }}
@@ -202,13 +251,19 @@ export default function Hero() {
           )}
         </motion.div>
 
-        {/* Cipher title */}
         <motion.h1
           className="cinematic-title"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          style={{ cursor: "default" }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : { duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }
+          }
+          style={{
+            cursor: "default",
+            willChange: "transform, opacity",
+          }}
         >
           {chars.map((char, i) =>
             char === " " ? (
@@ -224,12 +279,16 @@ export default function Hero() {
           )}
         </motion.h1>
 
-        {/* Tagline */}
         <motion.p
           className="cinematic-tagline"
           initial={{ opacity: 0 }}
           animate={allDone ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : { duration: 0.9, ease: "easeOut" }
+          }
+          style={{ willChange: "opacity" }}
         >
           <span className="accent">28–29 March, 2026</span>
           <span className="separator">·</span>

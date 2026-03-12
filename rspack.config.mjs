@@ -31,6 +31,8 @@ export default defineConfig({
 
   experiments: {
     css: true,
+    // Defer compilation of async chunks until first request — speeds up dev cold start
+    ...(isDev && { lazyCompilation: true }),
   },
 
   module: {
@@ -51,6 +53,7 @@ export default defineConfig({
             options: {
               jsc: {
                 parser: { syntax: "ecmascript", jsx: true },
+                target: "es2020",
                 transform: {
                   react: {
                     runtime: "automatic",
@@ -58,11 +61,9 @@ export default defineConfig({
                     refresh: isDev,
                   },
                 },
-                // Enable DCE
-                minify: !isDev ? {
-                  compress: true,
-                  mangle: true,
-                } : undefined,
+                // NOTE: loader-level minify is intentionally omitted here.
+                // SwcJsMinimizerRspackPlugin handles all minification in the
+                // optimization phase, which is faster (single pass, no duplication).
               },
             },
           },
@@ -137,6 +138,24 @@ export default defineConfig({
   ].filter(Boolean),
 
   optimization: {
+    // Stable IDs for long-term caching (content-addressed, not numeric)
+    moduleIds: "deterministic",
+    chunkIds: "deterministic",
+
+    // Enhanced tree-shaking
+    providedExports: true,
+    usedExports: true,
+    innerGraph: true,
+    sideEffects: true,
+
+    // Mangle export names in production for additional byte savings
+    mangleExports: !isDev,
+
+    // Remove chunks that end up empty after tree-shaking
+    removeEmptyChunks: true,
+
+    concatenateModules: !isDev,
+    minimize: !isDev,
     splitChunks: {
       chunks: "all",
       maxInitialRequests: 15,
@@ -153,6 +172,13 @@ export default defineConfig({
           test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
           name: "framer-vendor",
           priority: 20,
+          reuseExistingChunk: true,
+        },
+
+        lenis: {
+          test: /[\\/]node_modules[\\/]lenis[\\/]/,
+          name: "lenis-vendor",
+          priority: 18,
           reuseExistingChunk: true,
         },
 
@@ -182,10 +208,6 @@ export default defineConfig({
 
     runtimeChunk: "single",
 
-    minimize: !isDev,
-    concatenateModules: !isDev,
-    usedExports: true,
-    sideEffects: true,
     minimizer: [
       new rspack.SwcJsMinimizerRspackPlugin({
         minimizerOptions: {

@@ -10,7 +10,6 @@ function MaskLogo({ className = 'w-8 h-8' }) {
       whileHover={{ scale: 1.15, rotate: [0, -5, 5, 0] }}
       transition={{ type: 'spring', stiffness: 500, damping: 20 }}
     >
-      {/* CSS animation glow */}
       <div
         className="absolute inset-0 rounded-full bg-heist-red/40 blur-md"
         style={{ animation: 'logoGlow 3s ease-in-out infinite' }}
@@ -53,7 +52,6 @@ function NavigationLink({ href, label, index }) {
       className="relative text-sm font-semibold text-gray-300 hover:text-white px-2.5 py-2 rounded-full transition-colors overflow-hidden group whitespace-nowrap"
       style={{ fontFamily: "'Montserrat', sans-serif", letterSpacing: '0.02em' }}
     >
-      {/* Border glow */}
       <motion.span
         className="absolute inset-0 rounded-full border border-heist-red/50"
         initial={{ scale: 0, opacity: 0 }}
@@ -64,7 +62,6 @@ function NavigationLink({ href, label, index }) {
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       />
 
-      {/* Hover background */}
       <motion.span
         className="absolute inset-0 bg-gradient-to-r from-heist-red/20 via-heist-red/35 to-heist-red/20 rounded-full"
         initial={{ scale: 0, opacity: 0 }}
@@ -75,7 +72,6 @@ function NavigationLink({ href, label, index }) {
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       />
 
-      {/* Glow effect */}
       <motion.span
         className="absolute inset-0 bg-heist-red/20 rounded-full blur-md"
         initial={{ scale: 0, opacity: 0 }}
@@ -164,7 +160,6 @@ export default function Navbar() {
               '0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1)',
           }}
         >
-          {/* Animated background gradient */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-heist-red/0 via-heist-red/10 to-heist-red/0"
             animate={{
@@ -177,7 +172,6 @@ export default function Navbar() {
             }}
           />
 
-          {/* Glow effect on hover */}
           <motion.div
             className="absolute inset-0 rounded-full"
             animate={{
@@ -223,7 +217,6 @@ export default function Navbar() {
               </motion.span>
             </Link>
 
-            {/* Trae sponsor — slides in after scrolling past hero */}
             <motion.div
               className="flex items-center gap-1 sm:gap-1.5 ml-2 sm:ml-3 overflow-hidden"
               initial={false}
@@ -246,17 +239,14 @@ export default function Navbar() {
               />
             </motion.div>
 
-            {/* Spacing block — shrinks when Trae sponsor is visible */}
             <div className={`hidden lg:block transition-all duration-300 ${scrolled ? 'w-40' : 'w-80'}`} />
 
-            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-0 ml-auto">
               {navLinks.map((link, index) => (
                 <NavigationLink key={link.href} {...link} index={index} />
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
             <motion.button
               aria-controls="mobile-menu"
               aria-expanded={open}
@@ -303,7 +293,6 @@ export default function Navbar() {
           </div>
         </motion.nav>
 
-        {/* Mobile Menu Panel */}
         <motion.div
           ref={panelRef}
           id="mobile-menu"
@@ -322,7 +311,6 @@ export default function Navbar() {
           }}
           className="lg:hidden fixed inset-y-0 right-0 w-72 sm:w-80 bg-black/95 backdrop-blur-2xl border-l border-white/10 shadow-2xl rounded-l-3xl"
         >
-          {/* Header */}
           <motion.div
             className="p-4 flex items-center justify-between border-b border-white/10"
             initial={{ opacity: 0 }}
@@ -346,7 +334,6 @@ export default function Navbar() {
             </motion.button>
           </motion.div>
 
-          {/* Navigation Links */}
           <div className="p-4 space-y-2">
             {navLinks.map((link, index) => (
               <MobileNavLink
@@ -358,11 +345,9 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Decorative bottom gradient */}
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-heist-red/10 to-transparent pointer-events-none" />
         </motion.div>
 
-        {/* Backdrop overlay for mobile menu */}
         {open && (
           <motion.div
             initial={{ opacity: 0 }}

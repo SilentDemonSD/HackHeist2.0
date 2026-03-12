@@ -1,15 +1,9 @@
-/* ══════════════════════════════════════════════════════
-   VAULT SECTION — hold-to-authenticate 3-vault design
-   ══════════════════════════════════════════════════════ */
-
-/* ── Section wrapper ───────────────────────────────── */
 .vault-section {
   position: relative;
   padding: 5.5rem 1.5rem 7rem;
   overflow: hidden;
 }
 
-/* ── Background ────────────────────────────────────── */
 .vault-bg {
   position: absolute;
   inset: 0;
@@ -45,7 +39,6 @@
   z-index: 1;
 }
 
-/* ── Inner layout ──────────────────────────────────── */
 .vault-inner {
   position: relative;
   z-index: 2;
@@ -57,7 +50,6 @@
   gap: 3.5rem;
 }
 
-/* ── Heading group ─────────────────────────────────── */
 .vault-heading-group {
   text-align: center;
 }
@@ -92,7 +84,6 @@
   letter-spacing: 0.02em;
 }
 
-/* ── 3-card grid ───────────────────────────────────── */
 .vault-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -102,7 +93,6 @@
   align-items: start;
 }
 
-/* ── Single vault card ─────────────────────────────── */
 .vcard {
   position: relative;
   display: flex;
@@ -134,7 +124,6 @@
   80%      { transform: translateX(4px); }
 }
 
-/* Corner brackets */
 .vcard__corner {
   position: absolute;
   width: 14px; height: 14px;
@@ -155,7 +144,6 @@
   border-bottom-right-radius: 3px;
 }
 
-/* Eyebrow + numeral + label */
 .vcard__eyebrow {
   font-family: "Montserrat", sans-serif;
   font-size: 0.68rem;
@@ -184,7 +172,6 @@
   margin-top: 0.2rem;
 }
 
-/* ── Door wrap (relative for sparks) ──────────────── */
 .vcard__door-wrap {
   position: relative;
   width: 160px; height: 160px;
@@ -193,7 +180,6 @@
   justify-content: center;
 }
 
-/* ── Vault door rings ──────────────────────────────── */
 .vcard__door {
   position: relative;
   width: 140px; height: 140px;
@@ -245,7 +231,6 @@
   border-radius: 1px;
 }
 
-/* Granted / denied icons overlay */
 .vcard__granted-icon,
 .vcard__denied-icon {
   position: absolute;
@@ -261,7 +246,6 @@
 }
 .vcard__denied-icon { color: #ff4d4f; }
 
-/* ── Sparks ────────────────────────────────────────── */
 .vcard__spark {
   position: absolute;
   width: 6px; height: 6px;
@@ -272,7 +256,6 @@
   z-index: 20;
 }
 
-/* ── Status badge ──────────────────────────────────── */
 .vcard__status {
   font-family: "Montserrat", sans-serif;
   font-size: 0.68rem;
@@ -287,7 +270,6 @@
 .vcard__status--granted { color: inherit; border-color: inherit; }
 .vcard__status--denied  { color: #ff4d4f; border-color: rgba(255,77,79,0.35); }
 
-/* ── Prize amount reveal ───────────────────────────── */
 .vcard__amount {
   font-family: "3rdMan", "Montserrat", sans-serif;
   font-size: clamp(2.8rem, 4vw, 2.2rem);
@@ -324,7 +306,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Hold button ───────────────────────────────────── */
 .vcard__hold-wrap {
   display: flex;
   flex-direction: column;
@@ -377,7 +358,6 @@
   letter-spacing: 0.1em;
 }
 
-/* ── Floor glow ────────────────────────────────────── */
 .vault-floor {
   width: 90%;
   height: 1px;
@@ -385,7 +365,6 @@
   margin-top: 0.5rem;
 }
 
-/* ── Responsive ────────────────────────────────────── */
 @media (max-width: 960px) {
   .vault-section {
     padding: 4rem 1.25rem 5rem;

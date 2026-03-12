@@ -1,8 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./VaultSection.css";
-
-/* ── Prize data ──────────────────────────────────────────── */
 const VAULTS = [
   {
     id: 1,
@@ -48,7 +46,6 @@ const VAULTS = [
 const HOLD_DURATION = 2200; // ms
 const GRANT_PROBABILITY = 0.70;
 
-/* ── VaultDoor (ring animation) ─────────────────────────── */
 function VaultDoor({ scanning, granted, denied, color }) {
   const ringColor = granted ? color : denied ? "#ff4d4f" : "rgba(255,60,60,0.5)";
 
@@ -143,7 +140,6 @@ function VaultDoor({ scanning, granted, denied, color }) {
   );
 }
 
-/* ── Sparks ──────────────────────────────────────────────── */
 function Sparks({ active, color }) {
   return (
     <AnimatePresence>
@@ -171,7 +167,6 @@ function Sparks({ active, color }) {
   );
 }
 
-/* ── Hold-to-authenticate button ─────────────────────────── */
 function HoldButton({ vaultColor, onResult, disabled }) {
   const [progress, setProgress] = useState(0);
   const [holding, setHolding] = useState(false);
@@ -254,7 +249,6 @@ function HoldButton({ vaultColor, onResult, disabled }) {
   );
 }
 
-/* ── Counting money animation ────────────────────────────── */
 function CountingAmount({ target, color }) {
   const [display, setDisplay] = useState(0);
   const [done, setDone] = useState(false);
@@ -304,7 +298,6 @@ function CountingAmount({ target, color }) {
   );
 }
 
-/* ── Single vault card ───────────────────────────────────── */
 function VaultCard({ vault, index }) {
   const [phase, setPhase] = useState("idle"); // idle | granted | denied
   const [sparks, setSparks] = useState(false);
@@ -332,7 +325,6 @@ function VaultCard({ vault, index }) {
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Corner brackets */}
       <span className="vcard__corner vcard__corner--tl" />
       <span className="vcard__corner vcard__corner--br" />
 
@@ -344,7 +336,6 @@ function VaultCard({ vault, index }) {
         <Sparks active={sparks} color={vault.color} />
       </div>
 
-      {/* Status badge */}
       <AnimatePresence mode="wait">
         {granted ? (
           <motion.div key="g" className="vcard__status vcard__status--granted"
@@ -367,7 +358,6 @@ function VaultCard({ vault, index }) {
         )}
       </AnimatePresence>
 
-      {/* Prize amount reveal on grant */}
       <AnimatePresence>
         {granted && (
           <motion.div
@@ -387,7 +377,6 @@ function VaultCard({ vault, index }) {
         )}
       </AnimatePresence>
 
-      {/* Hold button — hidden once granted */}
       {!granted && (
         <HoldButton vaultColor={vault.color} onResult={handleResult} disabled={denied} />
       )}
@@ -397,7 +386,6 @@ function VaultCard({ vault, index }) {
   );
 }
 
-/* ── Scan line ───────────────────────────────────────────── */
 function ScanLine() {
   return (
     <motion.div
@@ -408,7 +396,6 @@ function ScanLine() {
   );
 }
 
-/* ── Main ────────────────────────────────────────────────── */
 export default function VaultSection() {
   return (
     <section className="vault-section" id="prizes">

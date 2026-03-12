@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-/* ─── Data ─── */
 const faqs = [
   {
     q: 'Who can participate?',
@@ -25,7 +24,6 @@ const faqs = [
   },
 ]
 
-/* ─── Blinking cursor ─── */
 function Cursor() {
   return (
     <motion.span
@@ -37,7 +35,6 @@ function Cursor() {
   )
 }
 
-/* ─── Single FAQ item ─── */
 function FAQItem({ item, idx, isOpen, toggle }) {
   return (
     <motion.div
@@ -46,7 +43,6 @@ function FAQItem({ item, idx, isOpen, toggle }) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ delay: idx * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
-      {/* Question button */}
       <motion.button
         onClick={() => toggle(idx)}
         whileHover={{ x: 4 }}
@@ -56,7 +52,6 @@ function FAQItem({ item, idx, isOpen, toggle }) {
                    bg-white/[0.03] border border-white/[0.06]
                    hover:border-red-500/30 transition-colors"
       >
-        {/* Terminal prompt */}
         <span
           className="shrink-0 text-red-500/70 text-xs font-mono select-none"
           aria-hidden
@@ -71,7 +66,6 @@ function FAQItem({ item, idx, isOpen, toggle }) {
           {item.q}
         </span>
 
-        {/* Toggle icon */}
         <motion.span
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.25 }}
@@ -84,7 +78,6 @@ function FAQItem({ item, idx, isOpen, toggle }) {
         </motion.span>
       </motion.button>
 
-      {/* Answer */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -101,7 +94,6 @@ function FAQItem({ item, idx, isOpen, toggle }) {
                          bg-gradient-to-br from-red-500/[0.07] to-transparent
                          border border-red-500/[0.12]"
             >
-              {/* Scan-line overlay */}
               <div
                 className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-[0.03]"
                 style={{
@@ -131,7 +123,6 @@ function FAQItem({ item, idx, isOpen, toggle }) {
   )
 }
 
-/* ─── Main FAQ section ─── */
 export default function FAQ() {
   const [openSet, setOpenSet] = useState(new Set())
   const faqEndRef = useRef(null)
@@ -162,10 +153,8 @@ export default function FAQ() {
       className="relative py-16 md:py-28 overflow-hidden"
       aria-label="FAQ"
     >
-      {/* Background */}
       <div className="absolute inset-0 bg-[#0a0a0a]" />
 
-      {/* Subtle grid */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
@@ -175,11 +164,9 @@ export default function FAQ() {
         }}
       />
 
-      {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-red-500/[0.06] rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6">
-        {/* Heading — centred */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -229,7 +216,6 @@ export default function FAQ() {
           </p>
         </motion.div>
 
-        {/* Toggle All — centred */}
         <div className="flex justify-center mb-8">
           <button
             onClick={toggleAll}
@@ -242,7 +228,6 @@ export default function FAQ() {
           </button>
         </div>
 
-        {/* FAQ list */}
         <div className="space-y-4">
           {faqs.map((item, idx) => (
             <FAQItem

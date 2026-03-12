@@ -5,7 +5,6 @@ import './HiringBlimp.css'
 
 const CAREERS_URL = 'https://hack-heist-2.devfolio.co/'
 
-/* ── Rope SVG — thin cables from behind blimp to banner ────────────────── */
 function RopeSVG() {
   return (
     <svg
@@ -41,12 +40,6 @@ function RopeSVG() {
   )
 }
 
-/* ── Main Component ────────────────────────────────────────────────────── */
-/* Architecture: 3 nested layers to avoid Framer Motion conflicts
-   Layer 1 (div.hb-entry)  — CSS transition for entry slide (bottom-right → top-left)
-   Layer 2 (motion.hb-wrap) — Framer Motion drag only (x + y, no animation lock)
-   Layer 3 (motion.hb-hitarea) — Bob effect via useSpring (visual only) */
-
 export default function HiringBlimp() {
   const isMobile = useIsMobile()
   const wrapRef = useRef(null)
@@ -54,7 +47,6 @@ export default function HiringBlimp() {
   const [entered, setEntered] = useState(false)
   const [hasLanded, setHasLanded] = useState(false)
 
-  /* ── Idle bob — smooth sine, 6.8s cycle ── */
   const bobY = useMotionValue(0)
   const bobYSmooth = useSpring(bobY, { stiffness: 16, damping: 7, mass: 1.4 })
 
@@ -72,21 +64,18 @@ export default function HiringBlimp() {
     return () => cancelAnimationFrame(raf)
   }, [hasLanded, bobY])
 
-  /* ── Trigger CSS entry after delay ── */
   useEffect(() => {
     const delay = isMobile ? 1500 : 2000
     const timer = setTimeout(() => setEntered(true), delay)
     return () => clearTimeout(timer)
   }, [isMobile])
 
-  /* ── When CSS slide finishes, enable drag ── */
   const handleTransitionEnd = useCallback((e) => {
     if (e.propertyName === 'transform') {
       setHasLanded(true)
     }
   }, [])
 
-  /* ── Full-page drag bounds ── */
   const getDragBounds = useCallback(() => {
     const vw = window.innerWidth
     const vh = window.innerHeight
@@ -113,12 +102,10 @@ export default function HiringBlimp() {
   }, [isDragging])
 
   return (
-    /* Layer 1: CSS entry slide (bottom-right → top-left) */
     <div
       className={`hb-entry ${entered ? 'hb-entered' : ''}`}
       onTransitionEnd={handleTransitionEnd}
     >
-      {/* Layer 2: Framer Motion drag (both x + y, no animation lock) */}
       <motion.div
         ref={wrapRef}
         className="hb-wrap"
@@ -133,13 +120,11 @@ export default function HiringBlimp() {
         role="complementary"
         aria-label="Hiring opportunity — drag to move"
       >
-        {/* Layer 3: Bob effect (visual only, doesn't block drag) */}
         <motion.div
           className="hb-hitarea"
           style={{ y: hasLanded ? bobYSmooth : 0 }}
           onClick={handleClick}
         >
-        {/* ── Blimp image (z-index: 3 — front) ── */}
         <div className="hb-blimp-layer">
           <picture>
             <source srcSet="/blimp.webp" type="image/webp" />
@@ -150,16 +135,13 @@ export default function HiringBlimp() {
               draggable={false}
             />
           </picture>
-          {/* Heist red pulse glow — visible on idle */}
           <div className="hb-heist-glow" aria-hidden="true" />
         </div>
 
-        {/* ── Ropes (z-index: 1 — behind blimp) ── */}
         <div className="hb-ropes-layer">
           <RopeSVG />
         </div>
 
-        {/* ── Banner ── */}
         <div className="hb-banner-sway">
           <div className="hb-banner">
             <div className="hb-banner__glow" aria-hidden="true" />

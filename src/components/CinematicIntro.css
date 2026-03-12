@@ -1,5 +1,3 @@
-/* Cinematic Intro — Hack Heist */
-
 .cinematic-intro {
   position: relative;
   width: 100%;
@@ -14,7 +12,6 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  /* Mask dims dither over building footprint */
   -webkit-mask-image:
     radial-gradient(ellipse 42% 38% at 50% 68%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.85) 55%, black 70%);
   mask-image:
@@ -175,7 +172,6 @@
       rgb(5, 0, 0));
 }
 
-/* ═══════ MOBILE ═══════ */
 @media (max-width: 768px) {
   .cinematic-title-block {
     padding-top: 18vh;

@@ -1,9 +1,6 @@
 import React, { useRef, useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-/* ═══════════════════════════════════════════════════════════════
-   Tier visual presets
-   ═══════════════════════════════════════════════════════════════ */
 const TIER_PRESETS = {
   'Title Sponsors': { accent: '#FFD700', accentRgb: '255,215,0', baseDuration: 28 },
   'Gold Sponsors':  { accent: '#FFB90F', accentRgb: '255,185,15', baseDuration: 32 },
@@ -17,9 +14,6 @@ const FALLBACK = { accent: '#888', accentRgb: '136,136,136', baseDuration: 30 };
    always overflows and the blur-fade edges look correct. */
 const MIN_PILLS = 16;
 
-/* ═══════════════════════════════════════════════════════════════
-   PartnerPill
-   ═══════════════════════════════════════════════════════════════ */
 function PartnerPill({ name, logo, accent, accentRgb }) {
   return (
     <div
@@ -58,11 +52,6 @@ function PartnerPill({ name, logo, accent, accentRgb }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   InfiniteRibbon — pure CSS @keyframes marquee.
-   Repeats partners enough times to guarantee the ribbon always
-   overflows the viewport so blur-fade edges work correctly.
-   ═══════════════════════════════════════════════════════════════ */
 function InfiniteRibbon({ partners, accent, accentRgb, duration, reverse }) {
   const dir = reverse ? 'reverse' : 'normal';
 
@@ -86,11 +75,9 @@ function InfiniteRibbon({ partners, accent, accentRgb, duration, reverse }) {
           animationDirection: dir,
         }}
       >
-        {/* First half */}
         {halfPills.map((p) => (
           <PartnerPill key={`a-${p._k}`} name={p.name} logo={p.logo} accent={accent} accentRgb={accentRgb} />
         ))}
-        {/* Duplicate half — seamless loop */}
         {halfPills.map((p) => (
           <PartnerPill key={`b-${p._k}`} name={p.name} logo={p.logo} accent={accent} accentRgb={accentRgb} />
         ))}
@@ -99,16 +86,11 @@ function InfiniteRibbon({ partners, accent, accentRgb, duration, reverse }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   TierRow — centred tier label + infinite ribbon
-   alignRight flips the label to the right side
-   ═══════════════════════════════════════════════════════════════ */
 function TierRow({ tier, partners, preset, reverse, alignRight }) {
   const { accent, accentRgb, baseDuration } = preset;
 
   return (
     <div className="flex flex-col gap-2">
-      {/* Tier label — alternates left / right */}
       <div className={`flex items-center gap-3 px-1 ${alignRight ? 'flex-row-reverse' : ''}`}>
         <span
           className="w-1.5 h-1.5 rounded-full flex-shrink-0"
@@ -123,7 +105,6 @@ function TierRow({ tier, partners, preset, reverse, alignRight }) {
         <div className="flex-1 h-px" style={{ background: `rgba(${accentRgb},0.08)` }} />
       </div>
 
-      {/* Infinite ribbon */}
       <InfiniteRibbon
         partners={partners}
         accent={accent}
@@ -135,16 +116,6 @@ function TierRow({ tier, partners, preset, reverse, alignRight }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   ScrollTitleMarquee — partners & sponsors showcase
-
-   <ScrollTitleMarquee
-     rows={[
-       { tier: 'Title Sponsors', partners: [{ name: 'X', logo: '/logos/x.svg' }] },
-     ]}
-     partnerCta="/partner-with-us"
-   />
-   ═══════════════════════════════════════════════════════════════ */
 export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: false, margin: '-10% 0px' });
@@ -157,7 +128,6 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
       transition={{ duration: 0.6 }}
       className="relative w-full select-none"
     >
-      {/* ── Blur-fade edges ── */}
       <div
         className="absolute left-0 top-0 bottom-0 w-16 md:w-28 z-10 pointer-events-none"
         style={{
@@ -171,7 +141,6 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
         }}
       />
 
-      {/* ── Tier rows ── */}
       <div className="flex flex-col gap-5 md:gap-6 py-4">
         {rows.map((row, idx) => {
           const preset = TIER_PRESETS[row.tier] || FALLBACK;
@@ -188,7 +157,6 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
         })}
       </div>
 
-      {/* ── Become a Partner CTA ── */}
       <div className="flex justify-center mt-8 mb-2">
         <a
           href={partnerCta}
@@ -209,7 +177,6 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
         </a>
       </div>
 
-      {/* ── Keyframes ── */}
       <style>{`
         @keyframes partnerMarquee {
           0%   { transform: translateX(0); }

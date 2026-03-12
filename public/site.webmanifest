@@ -1,0 +1,17 @@
+{
+  "name": "Hack Heist 2.0 — 36-Hour Hackathon",
+  "short_name": "Hack Heist",
+  "description": "Hack Heist 2.0 is a 36-hour hackathon organized by GDG On Campus MIET. March 28–29, 2026 at MIET Meerut.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

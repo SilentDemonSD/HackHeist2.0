@@ -33,12 +33,16 @@
     font-family: 'Montserrat', sans-serif;
     background-color: var(--bg);
     color: white;
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
     @apply min-h-screen antialiased;
     background: radial-gradient(1200px 600px at 50% -20%, rgba(179, 0, 0, 0.12), transparent 60%), #000;
     font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
   }
 
   h1,
@@ -53,6 +57,12 @@
     color: #f5f5f5;
     text-transform: uppercase;
   }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .bg-noise {
@@ -65,6 +75,23 @@
       transparent 1px,
       transparent 2px);
   mix-blend-mode: overlay;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.animate-layer {
+  will-change: transform, opacity;
+}
+
+header[class*="fixed"],
+nav[class*="fixed"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @keyframes logoGlow {
@@ -74,4 +101,15 @@
 @keyframes logoShadow {
   0%, 100% { opacity: 0.8; }
   50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

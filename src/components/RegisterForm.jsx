@@ -50,7 +50,6 @@ export default function RegisterForm() {
       const data = await res.json()
       if (data?.ok) { setSuccess(true); localStorage.removeItem('hackheist:register') }
     } catch {
-      // Fallback save
       localStorage.setItem('hackheist:register:pending', JSON.stringify(form))
       setSuccess(true)
     } finally {
@@ -152,5 +151,4 @@ export default function RegisterForm() {
     </form>
   )
 }
-
 

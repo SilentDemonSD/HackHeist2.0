@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Target Date: March 28, 2026
 const COUNTDOWN_FROM = "2026-03-28T00:00:00";
 
 const SECOND = 1000;
@@ -22,7 +21,6 @@ export default function Countdown() {
       className="relative w-full flex flex-col items-center justify-center overflow-hidden"
       style={{ padding: "4rem 1.5rem 4.5rem", background: "#06070b" }}
     >
-      {/* Deep background radial */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -31,7 +29,6 @@ export default function Countdown() {
         }}
       />
 
-      {/* Scanline overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -41,7 +38,6 @@ export default function Countdown() {
         }}
       />
 
-      {/* Soft bloom */}
       <div
         className="absolute pointer-events-none"
         style={{
@@ -57,7 +53,6 @@ export default function Countdown() {
         }}
       />
 
-      {/* ── Header ── */}
       <motion.div
         className="relative flex flex-col items-center text-center"
         style={{ marginBottom: "2.2rem", zIndex: 2 }}
@@ -66,7 +61,6 @@ export default function Countdown() {
         viewport={{ once: true }}
         transition={{ duration: 0.75 }}
       >
-        {/* Eyebrow label — per-letter fade */}
         <span
           style={{
             display: "block",
@@ -103,7 +97,6 @@ export default function Countdown() {
           )}
         </span>
 
-        {/* Main headline — per-letter drop */}
         <h2
           style={{
             fontFamily: "'3rdMan', sans-serif",
@@ -145,7 +138,6 @@ export default function Countdown() {
           )}
         </h2>
 
-        {/* Red rule */}
         <div
           style={{
             width: 64,
@@ -158,7 +150,6 @@ export default function Countdown() {
         />
       </motion.div>
 
-      {/* ── Timer grid ── */}
       <motion.div
         style={{
           display: "grid",
@@ -179,7 +170,6 @@ export default function Countdown() {
         ))}
       </motion.div>
 
-      {/* Bottom tagline */}
       <motion.p
         style={{
           fontFamily: "'Montserrat', sans-serif",
@@ -233,7 +223,6 @@ function CountdownItem({ unit, label, index }) {
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
       }}
     >
-      {/* Corner accent — top-left */}
       <span
         style={{
           position: "absolute",
@@ -247,7 +236,6 @@ function CountdownItem({ unit, label, index }) {
           pointerEvents: "none",
         }}
       />
-      {/* Corner accent — bottom-right */}
       <span
         style={{
           position: "absolute",
@@ -262,7 +250,6 @@ function CountdownItem({ unit, label, index }) {
         }}
       />
 
-      {/* Digit */}
       <div
         style={{
           position: "relative",
@@ -297,7 +284,6 @@ function CountdownItem({ unit, label, index }) {
         </AnimatePresence>
       </div>
 
-      {/* Divider */}
       <div
         style={{
           width: "55%",
@@ -308,7 +294,6 @@ function CountdownItem({ unit, label, index }) {
         }}
       />
 
-      {/* Label */}
       <span
         style={{
           fontFamily: "'Montserrat', sans-serif",

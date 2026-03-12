@@ -90,7 +90,6 @@ const pastGallery = [
   },
 ]
 
-/* Grid layout for gallery masonry */
 const galleryLayout = [
   { col: '1 / 3', row: '1 / 3' },  // 0: hero 2×2
   { col: '3 / 4', row: '1 / 2' },  // 1: top-right
@@ -243,14 +242,12 @@ export default function Landing() {
   return (
     <div className="bg-black text-white relative">
       <Navbar />
-      {/* Hiring blimp — fixed overlay, above navbar */}
       <Suspense fallback={null}>
         <HiringBlimp />
       </Suspense>
       <main>
         <Hero />
 
-        {/* ── CTA band — near fold, renders immediately ── */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -266,7 +263,6 @@ export default function Landing() {
           </Suspense>
         </motion.section>
 
-        {/* ── Below-fold: each section deferred via IntersectionObserver ── */}
         <LazySection>
           <section className="container my-16">
             <Suspense fallback={<SectionFallback />}>
@@ -317,10 +313,8 @@ export default function Landing() {
         <LazySection>
           <SectionShell id="past" title="Our Past Heists" eyebrow="Field Records" subtitle="Gallery playback from previous ops." centeredHeading isMobile={isMobile}>
             <div className="relative max-w-6xl mx-auto">
-              {/* Ambient radial glow */}
               <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(255,77,79,0.05) 0%, transparent 65%)' }} />
 
-              {/* ── Desktop: explicit-placement masonry grid ── */}
               {!isMobile && (
                 <div
                   style={{
@@ -348,7 +342,6 @@ export default function Landing() {
                       }}
                       className="group relative overflow-hidden rounded-2xl cursor-pointer bg-neutral-900"
                     >
-                      {/* Image — grayscale by default, color on hover */}
                       <img
                         src={item.src}
                         alt={item.caption}
@@ -358,11 +351,8 @@ export default function Landing() {
                         height={400}
                         className="h-full w-full object-cover grayscale brightness-[0.7] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.06]"
                       />
-                      {/* Gradient scrim */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-50 pointer-events-none" />
-                      {/* Glow border on hover */}
                       <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/[0.06] transition-all duration-300 group-hover:border-red-500/40 group-hover:shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]" />
-                      {/* Caption — slides up on hover */}
                       <div className="absolute inset-x-0 bottom-0 p-4 translate-y-1 opacity-80 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                         <p
                           className="text-[0.82rem] md:text-[0.88rem] font-medium tracking-wide text-white/90 group-hover:text-white leading-snug"
@@ -371,14 +361,12 @@ export default function Landing() {
                           {item.caption}
                         </p>
                       </div>
-                      {/* Corner accent dot */}
                       <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500/70 transition-all duration-300" />
                     </motion.article>
                   ))}
                 </div>
               )}
 
-              {/* ── Mobile: single-column stack — tap to reveal color ── */}
               {isMobile && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   {pastGallery.map((item, idx) => {

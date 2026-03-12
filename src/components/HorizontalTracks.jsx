@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-/* ── SVG Icons ─────────────────────────────────────────────── */
 const BrainIcon = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" /><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" /><path d="M17.599 6.5a3 3 0 0 0 .399-1.375" /></svg>;
 const LayersIcon = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></svg>;
 const ShieldIcon = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2-1 4-2 7-2 2.89 0 5.48.97 7 2a1 1 0 0 1 1 1v7z" /></svg>;
@@ -9,7 +8,6 @@ const ZapIcon = ({ className }) => <svg className={className} xmlns="http://www.
 const CpuIcon = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="16" height="16" x="4" y="4" rx="2" /><rect width="6" height="6" x="9" y="9" rx="1" /><path d="M15 2v2" /><path d="M15 20v2" /><path d="M2 15h2" /><path d="M2 9h2" /><path d="M20 15h2" /><path d="M20 9h2" /><path d="M9 2v2" /><path d="M9 20v2" /></svg>;
 const CodeIcon = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>;
 
-/* ── Track data ────────────────────────────────────────────── */
 const TRACKS = [
   {
     id: 'ai-ml',
@@ -67,22 +65,14 @@ const TRACKS = [
   },
 ];
 
-/* ── Card dimensions (keep in sync with container padding) ── */
 const CARD_W = 500;          // px — card width on desktop
 const CARD_GAP = 40;         // px — gap between cards
 const N = 6;                 // total number of tracks
 
-/* ── Scroll-timeline with dwell ────────────────────────────────
-   Each card gets a "dwell" zone where x stays constant (card sits
-   centered) + "transit" zones where x moves to the next card.
-
-   Budget:  N × dwell  +  (N-1) × transit  =  1.0
-   ────────────────────────────────────────────────────────────── */
 const DWELL   = 0.07;                              // 7% of scroll per card pause
 const TRANSIT = (1 - N * DWELL) / (N - 1);         // ~0.116 per transition
-const CARD_STEP = CARD_W + CARD_GAP;               // 540 px
+const CARD_STEP = CARD_W + CARD_GAP;
 
-// Build the staircase keyframes once (for x transform & per-card transforms)
 const getCardDwellStart = (i) => i * (TRANSIT + DWELL);
 const getCardDwellEnd   = (i) => i * (TRANSIT + DWELL) + DWELL;
 
@@ -94,17 +84,14 @@ for (let i = 0; i < N; i++) {
   X_OUTPUT.push(-i * CARD_STEP, -i * CARD_STEP);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   TrackCard — desktop (inside horizontal scroll)
-   ═══════════════════════════════════════════════════════════════ */
 function TrackCard({ track, index, scrollYProgress }) {
   const dwellStart = getCardDwellStart(index);
   const dwellEnd   = getCardDwellEnd(index);
 
   // Transition radius: card ramps in during the transit *before* its dwell
   // and ramps out during the transit *after* its dwell
-  const rampIn  = dwellStart - TRANSIT * 0.55;   // start becoming visible
-  const rampOut = dwellEnd   + TRANSIT * 0.55;    // finish fading out
+  const rampIn  = dwellStart - TRANSIT * 0.55;
+  const rampOut = dwellEnd   + TRANSIT * 0.55;
 
   const scale   = useTransform(scrollYProgress,
     [rampIn, dwellStart, dwellEnd, rampOut],
@@ -137,13 +124,11 @@ function TrackCard({ track, index, scrollYProgress }) {
           boxShadow: '0 0 60px rgba(0,0,0,0.6)',
         }}
       >
-        {/* Top accent line */}
         <div
           className="absolute top-0 left-0 right-0 h-px"
           style={{ background: `linear-gradient(90deg, transparent, ${track.accent}40, transparent)` }}
         />
 
-        {/* Glow */}
         <div
           className="absolute -top-20 -right-20 w-48 h-48 rounded-full opacity-[0.04] group-hover:opacity-[0.08]
                      transition-opacity duration-700 pointer-events-none"
@@ -151,7 +136,6 @@ function TrackCard({ track, index, scrollYProgress }) {
         />
 
         <div className="relative p-7 lg:p-8 flex flex-col gap-5">
-          {/* Icon + index */}
           <div className="flex items-center justify-between">
             <div
               className="w-11 h-11 rounded-xl flex items-center justify-center"
@@ -171,7 +155,6 @@ function TrackCard({ track, index, scrollYProgress }) {
             </span>
           </div>
 
-          {/* Title */}
           <div>
             <h3
               className="text-[1.25rem] lg:text-[1.35rem] uppercase tracking-[0.08em] text-white leading-tight"
@@ -187,10 +170,8 @@ function TrackCard({ track, index, scrollYProgress }) {
             </p>
           </div>
 
-          {/* Divider */}
           <div className="h-px w-full" style={{ background: `${track.accent}10` }} />
 
-          {/* Problem statement */}
           <p
             className="text-[0.8rem] lg:text-[0.84rem] leading-[1.65] text-white/55"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
@@ -198,7 +179,6 @@ function TrackCard({ track, index, scrollYProgress }) {
             {track.description}
           </p>
 
-          {/* Hover CTA */}
           <div
             className="flex items-center gap-2 text-[0.65rem] font-semibold tracking-[0.15em] uppercase
                        opacity-0 translate-y-2 group-hover:opacity-70 group-hover:translate-y-0
@@ -216,9 +196,6 @@ function TrackCard({ track, index, scrollYProgress }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Section header (shared between desktop & mobile)
-   ═══════════════════════════════════════════════════════════════ */
 function SectionHeader({ className = '' }) {
   return (
     <div className={`text-center ${className}`}>
@@ -261,14 +238,6 @@ function SectionHeader({ className = '' }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Desktop — vertical scroll → horizontal card scroll
-
-   Container padding `calc(50vw - CARD_W/2)` on each side ensures
-   the FIRST card starts centred on screen and the LAST card ends
-   centred.  With that geometry, card_i is centred at
-   scrollYProgress = i / (N-1).
-   ═══════════════════════════════════════════════════════════════ */
 const HorizontalTracks = () => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -288,12 +257,10 @@ const HorizontalTracks = () => {
       style={{ height: '450vh' }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col">
-        {/* Header — fixed at top */}
         <div className="pt-16 lg:pt-20 pb-6 px-4 z-10">
           <SectionHeader />
         </div>
 
-        {/* Horizontal cards */}
         <div className="flex-1 flex items-center overflow-hidden">
           <motion.div
             className="flex w-max"
@@ -316,7 +283,6 @@ const HorizontalTracks = () => {
           </motion.div>
         </div>
 
-        {/* Scroll progress dots */}
         <div className="flex flex-col items-center pb-8 gap-3 opacity-40">
           <span
             className="text-[0.55rem] tracking-[0.3em] text-white uppercase"
@@ -331,9 +297,6 @@ const HorizontalTracks = () => {
   );
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   Mobile — vertical stacked cards
-   ═══════════════════════════════════════════════════════════════ */
 export const MobileTracks = () => (
   <section className="relative bg-[#050505] py-16 px-5 md:hidden">
     <SectionHeader className="mb-10" />
@@ -352,14 +315,12 @@ export const MobileTracks = () => (
             background: '#0a0a0a',
           }}
         >
-          {/* Top accent */}
           <div
             className="absolute top-0 left-0 right-0 h-px"
             style={{ background: `linear-gradient(90deg, transparent, ${track.accent}30, transparent)` }}
           />
 
           <div className="p-5 flex flex-col gap-3.5">
-            {/* Icon + index row */}
             <div className="flex items-center justify-between">
               <div
                 className="w-9 h-9 rounded-lg flex items-center justify-center"
@@ -379,7 +340,6 @@ export const MobileTracks = () => (
               </span>
             </div>
 
-            {/* Title + tagline */}
             <div>
               <h3
                 className="text-[1.05rem] uppercase tracking-[0.06em] text-white leading-tight"
@@ -395,10 +355,8 @@ export const MobileTracks = () => (
               </p>
             </div>
 
-            {/* Divider */}
             <div className="h-px w-full" style={{ background: `${track.accent}0a` }} />
 
-            {/* Description */}
             <p
               className="text-[0.75rem] leading-[1.6] text-white/50"
               style={{ fontFamily: "'Montserrat', sans-serif" }}

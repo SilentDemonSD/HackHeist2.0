@@ -7,7 +7,6 @@ const KEY_PLAYING = 'hh_music_playing'
 
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)) }
 
-/* Waveform bars */
 function Waveform({ playing }) {
   return (
     <span className="flex items-end gap-[2px] h-3.5" aria-hidden>
@@ -28,7 +27,6 @@ function Waveform({ playing }) {
   )
 }
 
-/* Volume icon */
 function VolIcon({ vol }) {
   if (vol === 0) return (
     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -56,7 +54,6 @@ export default function MusicPlayer() {
   const [showHint, setShowHint] = useState(true)   // show "Play BGM" nudge
   const [visible,  setVisible]  = useState(true)
 
-  /* Lazy audio init — created on first user tap */
   const initAudio = useCallback(() => {
     if (audioRef.current) return audioRef.current
     const savedVol = parseFloat(localStorage.getItem(KEY_VOLUME) ?? '0.35')
@@ -69,7 +66,6 @@ export default function MusicPlayer() {
     return audio
   }, [])
 
-  /* Cleanup on unmount */
   useEffect(() => {
     return () => {
       if (audioRef.current) {
@@ -79,13 +75,11 @@ export default function MusicPlayer() {
     }
   }, [])
 
-  /* Sync volume */
   useEffect(() => {
     if (audioRef.current) audioRef.current.volume = clamp(volume, 0, 1)
     localStorage.setItem(KEY_VOLUME, String(volume))
   }, [volume])
 
-  /* Play / pause */
   const toggle = useCallback(() => {
     setShowHint(false)
 
@@ -105,25 +99,21 @@ export default function MusicPlayer() {
     }
   }, [playing, initAudio])
 
-  /* Volume change */
   const handleVolume = useCallback((e) => {
     const v = parseFloat(e.target.value)
     setVolume(v)
     if (audioRef.current) {
       audioRef.current.volume = v
-      // If user turns volume up from 0 and music is paused, start it
       if (v > 0 && !playing) toggle()
     }
   }, [playing, toggle])
 
-  /* Auto-hide after 14s idle */
   useEffect(() => {
     if (playing) return
     const t = setTimeout(() => setVisible(false), 14000)
     return () => clearTimeout(t)
   }, [playing])
 
-  /* Re-appear on interaction */
   useEffect(() => {
     const show = () => setVisible(true)
     window.addEventListener('mousemove', show, { passive: true })
@@ -134,7 +124,6 @@ export default function MusicPlayer() {
     }
   }, [])
 
-  /* Close panel on outside click */
   useEffect(() => {
     if (!expanded) return
     const close = (e) => {
@@ -185,7 +174,6 @@ export default function MusicPlayer() {
         }
       `}</style>
 
-      {/* "Tap to play" hint */}
       <AnimatePresence>
         {showHint && (
           <motion.button
@@ -206,7 +194,6 @@ export default function MusicPlayer() {
         )}
       </AnimatePresence>
 
-      {/* Main floating player */}
       <AnimatePresence>
         {visible && (
           <motion.div
@@ -218,7 +205,6 @@ export default function MusicPlayer() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed bottom-5 right-5 z-[9999] flex flex-col items-end gap-2"
           >
-            {/* ── Volume panel (slides up) ── */}
             <AnimatePresence>
               {expanded && (
                 <motion.div
@@ -230,7 +216,6 @@ export default function MusicPlayer() {
                   className="px-4 py-3.5 rounded-2xl backdrop-blur-xl border border-white/[0.08]"
                   style={{ background: 'rgba(8,8,8,0.88)', minWidth: 180 }}
                 >
-                  {/* Song info */}
                   <div className="mb-3">
                     <p className="text-[0.6rem] uppercase tracking-[0.25em] text-red-500/70 mb-0.5"
                        style={{ fontFamily: "'Montserrat', sans-serif" }}>
@@ -243,13 +228,11 @@ export default function MusicPlayer() {
                     </p>
                   </div>
 
-                  {/* Volume row */}
                   <div className="flex items-center gap-2.5">
                     <span className="text-white/40 shrink-0">
                       <VolIcon vol={volume} />
                     </span>
                     <div className="flex-1 relative flex items-center">
-                      {/* Track fill overlay */}
                       <div
                         className="absolute left-0 h-[3px] rounded-full bg-red-500/60 pointer-events-none"
                         style={{ width: `${volume * 100}%` }}
@@ -274,9 +257,7 @@ export default function MusicPlayer() {
               )}
             </AnimatePresence>
 
-            {/* ── Main pill button ── */}
             <div className="flex items-center gap-1.5">
-              {/* Volume expand toggle */}
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setExpanded(v => !v)}
@@ -292,7 +273,6 @@ export default function MusicPlayer() {
                 <VolIcon vol={volume} />
               </motion.button>
 
-              {/* Play / pause button */}
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={toggle}
@@ -314,7 +294,6 @@ export default function MusicPlayer() {
                   : <span className="text-[0.6rem] uppercase tracking-[0.18em] font-semibold"
                           style={{ fontFamily: "'Montserrat', sans-serif" }}>BGM</span>
                 }
-                {/* Hover tooltip */}
                 <span className="absolute bottom-full right-0 mb-2 px-2.5 py-1 rounded-lg
                                  text-[0.6rem] font-medium uppercase tracking-widest
                                  bg-black/90 text-white/70 whitespace-nowrap
