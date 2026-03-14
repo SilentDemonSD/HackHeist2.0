@@ -112,7 +112,7 @@ const PARTNERS_DATA = [
     partners: [
       { name: '.XYZ', logo: '/logo/xyz.svg' },
       { name: 'UseQR', logo: '/logo/useqr.svg' },
-      { name: 'BUMP.FM' , logo: 'logo/Logo Light Version Bump fm.png' },
+      { name: 'BUMP.FM', logo: 'logo/Logo Light Version Bump fm.png' },
       { name: 'Sponsor X' },
     ],
   },
@@ -272,8 +272,8 @@ const eventSchema = {
     "availability": "https://schema.org/InStock",
     "validFrom": "2026-01-01"
   },
-  "image": "https://hackheist.dev/og-image.png",
-  "url": "https://hackheist.dev/"
+  "image": "https://www.hackheist2.xyz/og-image.png",
+  "url": "https://www.hackheist2.xyz/"
 };
 
 export default function Landing() {
@@ -433,15 +433,15 @@ export default function Landing() {
                           width={600}
                           height={400}
                           className={`h-full w-full object-cover transition-all duration-700 ease-out ${isActive
-                              ? 'grayscale-0 brightness-105 scale-[1.03]'
-                              : 'grayscale brightness-[0.7]'
+                            ? 'grayscale-0 brightness-105 scale-[1.03]'
+                            : 'grayscale brightness-[0.7]'
                             }`}
                         />
                         <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${isActive ? 'opacity-45' : 'opacity-90'
                           }`} />
                         <div className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${isActive
-                            ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
-                            : 'border-white/[0.06]'
+                          ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
+                          : 'border-white/[0.06]'
                           }`} />
                         <div className="absolute inset-x-0 bottom-0 p-4">
                           <p

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Crawl-delay: 0.5
 
-Sitemap: https://hackheist.dev/sitemap.xml
+Sitemap: https://www.hackheist2.xyz/sitemap.xml
