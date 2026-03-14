@@ -20,6 +20,7 @@ export default function SEO({
       {/* Standard metadata tags */}
       <title>{fullTitle}</title>
       <meta name="description" content={finalDescription} />
+      <meta name="keywords" content="hackheist, hack heist, gdg miet hackathon, meerut hackathon, 36 hour hackathon" />
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Open Graph tags */}
