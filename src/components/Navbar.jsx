@@ -264,7 +264,7 @@ export default function Navbar() {
                   rel="noopener noreferrer"
                   className="hover:scale-105 transition-transform"
                 >
-                  <img src="/logo/ACICMIET.png" alt="ACIC" className="h-6 sm:h-8 lg:h-9 w-auto object-contain rounded-sm" />
+                  <img src="/logo/image.png" alt="ACIC" className="h-6 sm:h-8 lg:h-9 w-auto object-contain rounded-sm" />
                 </a>
               </div>
 
