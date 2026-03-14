@@ -249,7 +249,14 @@ export default function Navbar() {
 
             <div className="flex items-center gap-3 lg:gap-4 flex-shrink-0 z-10">
               <div className="flex items-center gap-1.5 sm:gap-2 bg-white/5 py-1 px-2.5 sm:px-3 rounded-xl border border-white/10 backdrop-blur-md group hover:bg-white/10 transition-colors">
-                <img src="/logo/gdg.png" alt="GDG" className="h-5 sm:h-7 lg:h-8 w-auto object-contain rounded-sm" />
+                <a
+                  href="https://gdg.community.dev/gdg-on-campus-meerut-institute-of-engineering-and-technology-meerut-india/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-105 transition-transform"
+                >
+                  <img src="/logo/gdg.png" alt="GDG" className="h-5 sm:h-7 lg:h-8 w-auto object-contain rounded-sm" />
+                </a>
                 <span className="text-white/40 font-bold text-xs sm:text-sm">x</span>
                 <a
                   href="https://acicmeerut.org/"
