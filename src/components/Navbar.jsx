@@ -28,14 +28,14 @@ function MaskLogo({ className = 'w-8 h-8' }) {
 }
 
 const navLinks = [
-  { href: '#about', label: 'About' },
-  { href: '#timeline', label: 'Timeline' },
-  { href: '#prizes', label: 'Loot' },
-  { href: '#partners', label: 'Partners' },
-  { href: '#tracks', label: 'Tracks' },
-  { href: '#past', label: 'Past Heists' },
-  { href: '#team', label: 'Our Team' },
-  { href: '#faq', label: 'FAQ' }
+  { href: '/#about', label: 'About' },
+  { href: '/#timeline', label: 'Timeline' },
+  { href: '/#prizes', label: 'Loot' },
+  { href: '/#partners', label: 'Partners' },
+  { href: '/#tracks', label: 'Tracks' },
+  { href: '/#past', label: 'Past Heists' },
+  { href: '/#team', label: 'Our Team' },
+  { href: '/#faq', label: 'FAQ' }
 ]
 
 function NavigationLink({ href, label, index }) {
@@ -182,114 +182,129 @@ export default function Navbar() {
             transition={{ duration: 0.3 }}
           />
 
-          <div className="relative flex items-center">
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 text-white font-semibold group">
-              <MaskLogo className="w-7 h-7 sm:w-8 sm:h-8" />
-              <motion.span
-                className="text-lg sm:text-xl font-normal hidden sm:block whitespace-nowrap"
-                style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", letterSpacing: '0.12em', wordSpacing: '0.15em' }}
-                whileHover={{
-                  scale: 1.05,
-                  textShadow: '0 0 8px rgba(179, 0, 0, 0.6)'
+          <div className="relative flex items-center justify-between w-full">
+            <div className="flex items-center flex-shrink-0 z-10">
+              <Link to="/" className="flex items-center gap-2 sm:gap-3 text-white font-semibold group">
+                <MaskLogo className="w-7 h-7 sm:w-8 sm:h-8" />
+                <motion.span
+                  className="text-lg sm:text-xl font-normal hidden sm:block whitespace-nowrap"
+                  style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", letterSpacing: '0.12em', wordSpacing: '0.15em' }}
+                  whileHover={{
+                    scale: 1.05,
+                    textShadow: '0 0 8px rgba(179, 0, 0, 0.6)'
+                  }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                >
+                  {['H', 'a', 'c', 'k', ' ', 'H', 'e', 'i', 's', 't'].map((letter, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.05 * i, duration: 0.3 }}
+                      whileHover={{ y: -2, color: '#ff4444' }}
+                      style={{ display: 'inline-block' }}
+                    >
+                      {letter === ' ' ? '\u00A0' : letter}
+                    </motion.span>
+                  ))}
+                </motion.span>
+                <motion.span
+                  className="text-base font-normal sm:hidden"
+                  style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", letterSpacing: '0.12em', wordSpacing: '0.15em' }}
+                  whileHover={{ scale: 1.08 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                >
+                  HACK HEIST
+                </motion.span>
+              </Link>
+
+              <motion.div
+                className="flex items-center gap-1 sm:gap-1.5 ml-2 sm:ml-3 overflow-hidden"
+                initial={false}
+                animate={{
+                  width: scrolled ? 'auto' : 0,
+                  opacity: scrolled ? 1 : 0,
                 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
               >
-                {['H', 'a', 'c', 'k', ' ', 'H', 'e', 'i', 's', 't'].map((letter, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 * i, duration: 0.3 }}
-                    whileHover={{ y: -2, color: '#ff4444' }}
-                    style={{ display: 'inline-block' }}
-                  >
-                    {letter === ' ' ? '\u00A0' : letter}
-                  </motion.span>
-                ))}
-              </motion.span>
-              <motion.span
-                className="text-base font-normal sm:hidden"
-                style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", letterSpacing: '0.12em', wordSpacing: '0.15em' }}
-                whileHover={{ scale: 1.08 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-              >
-                HACK HEIST
-              </motion.span>
-            </Link>
+                <span
+                  className="text-[0.5rem] sm:text-[0.6rem] text-white/40 tracking-[0.15em] uppercase whitespace-nowrap"
+                  style={{ fontFamily: "'3rdMan', sans-serif" }}
+                >/</span>
+                <img
+                  src="/trae.webp"
+                  alt="Trae"
+                  className="h-3 sm:h-4 w-auto object-contain opacity-50"
+                  onClick={() => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer')}
+                  style={{ cursor: 'pointer' }}
+                />
+              </motion.div>
+            </div>
 
-            <motion.div
-              className="flex items-center gap-1 sm:gap-1.5 ml-2 sm:ml-3 overflow-hidden"
-              initial={false}
-              animate={{
-                width: scrolled ? 'auto' : 0,
-                opacity: scrolled ? 1 : 0,
-              }}
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
-            >
-              <span
-                className="text-[0.5rem] sm:text-[0.6rem] text-white/40 tracking-[0.15em] uppercase whitespace-nowrap"
-                style={{ fontFamily: "'3rdMan', sans-serif" }}
-              >/</span>
-              <img
-                src="/trae.webp"
-                alt="Trae"
-                className="h-3 sm:h-4 w-auto object-contain opacity-50"
-                onClick={() => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer')}
-                style={{ cursor: 'pointer' }}
-              />
-            </motion.div>
-
-            <div className={`hidden lg:block transition-all duration-300 ${scrolled ? 'w-40' : 'w-80'}`} />
-
-            <div className="hidden lg:flex items-center gap-0 ml-auto">
+            <div className="hidden lg:flex items-center justify-center flex-1 mx-2 xl:mx-4 z-10 w-full">
               {navLinks.map((link, index) => (
                 <NavigationLink key={link.href} {...link} index={index} />
               ))}
             </div>
 
-            <motion.button
-              aria-controls="mobile-menu"
-              aria-expanded={open}
-              onClick={() => setOpen(v => !v)}
-              whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-              whileTap={{ scale: 0.95 }}
-              className="lg:hidden inline-flex items-center justify-center rounded-full p-2 text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-heist-red transition-colors ml-auto"
-            >
-              <span className="sr-only">Open main menu</span>
-              <motion.svg
-                className="h-6 w-6"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                animate={{ rotate: open ? 90 : 0 }}
-                transition={{ duration: 0.3 }}
+            <div className="flex items-center gap-3 lg:gap-4 flex-shrink-0 z-10">
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-white/5 py-1 px-2.5 sm:px-3 rounded-xl border border-white/10 backdrop-blur-md group hover:bg-white/10 transition-colors">
+                <img src="/logo/gdg.png" alt="GDG" className="h-5 sm:h-7 lg:h-8 w-auto object-contain rounded-sm" />
+                <span className="text-white/40 font-bold text-xs sm:text-sm">x</span>
+                <a
+                  href="https://acicmeerut.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:scale-105 transition-transform"
+                >
+                  <img src="/logo/ACICMIET.png" alt="ACIC" className="h-6 sm:h-8 lg:h-9 w-auto object-contain rounded-sm" />
+                </a>
+              </div>
+
+              <motion.button
+                aria-controls="mobile-menu"
+                aria-expanded={open}
+                onClick={() => setOpen(v => !v)}
+                whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
+                whileTap={{ scale: 0.95 }}
+                className="lg:hidden inline-flex items-center justify-center rounded-full p-2 text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-heist-red transition-colors"
               >
-                <motion.path
-                  d="M3 6h18"
-                  animate={{
-                    d: open ? 'M6 6L18 18' : 'M3 6h18',
-                    opacity: open ? 1 : 1
-                  }}
+                <span className="sr-only">Open main menu</span>
+                <motion.svg
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  animate={{ rotate: open ? 90 : 0 }}
                   transition={{ duration: 0.3 }}
-                />
-                <motion.path
-                  d="M3 12h18"
-                  animate={{ opacity: open ? 0 : 1 }}
-                  transition={{ duration: 0.2 }}
-                />
-                <motion.path
-                  d="M3 18h18"
-                  animate={{
-                    d: open ? 'M6 18L18 6' : 'M3 18h18',
-                    opacity: open ? 1 : 1
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.svg>
-            </motion.button>
+                >
+                  <motion.path
+                    d="M3 6h18"
+                    animate={{
+                      d: open ? 'M6 6L18 18' : 'M3 6h18',
+                      opacity: open ? 1 : 1
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <motion.path
+                    d="M3 12h18"
+                    animate={{ opacity: open ? 0 : 1 }}
+                    transition={{ duration: 0.2 }}
+                  />
+                  <motion.path
+                    d="M3 18h18"
+                    animate={{
+                      d: open ? 'M6 18L18 6' : 'M3 18h18',
+                      opacity: open ? 1 : 1
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.svg>
+              </motion.button>
+            </div>
           </div>
         </motion.nav>
 

@@ -1,11 +1,13 @@
 import { lazy, Suspense, useState } from 'react'
 import Navbar from '../components/Navbar'
+import SEO from '../components/SEO'
 import Hero from '../components/Hero'
 import LazySection from '../components/LazySection'
 import useIsMobile from '../hooks/useIsMobile'
 import ScrollTitleMarquee from '../components/ScrollTitleMarquee'
 import HorizontalTracks, { MobileTracks } from '../components/HorizontalTracks'
 import { motion } from 'framer-motion'
+
 
 const DevfolioApply = lazy(() => import(/* webpackChunkName: "devfolio" */ '../components/DevfolioApply'))
 const Timeline = lazy(() => import(/* webpackChunkName: "timeline" */ '../components/Timeline'))
@@ -235,12 +237,52 @@ function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading 
   )
 }
 
+const eventSchema = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "Hack Heist 2.0",
+  "description": "A 36-hour hackathon where developers, designers, and innovators assemble to build impactful solutions for real-world problems.",
+  "startDate": "2026-03-28T00:00:00+05:30",
+  "endDate": "2026-03-29T12:00:00+05:30",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": "MIET",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "N.H. 58, Delhi-Roorkee Highway, Baghpat Bypass Road Crossing",
+      "addressLocality": "Meerut",
+      "addressRegion": "Uttar Pradesh",
+      "postalCode": "250005",
+      "addressCountry": "IN"
+    }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "GDG On Campus MIET",
+    "url": "https://gdg.community.dev/",
+    "email": "gdgoncampus@miet.ac.in"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://hack-heist-2.devfolio.co",
+    "price": "0",
+    "priceCurrency": "INR",
+    "availability": "https://schema.org/InStock",
+    "validFrom": "2026-01-01"
+  },
+  "image": "https://hackheist.dev/og-image.png",
+  "url": "https://hackheist.dev/"
+};
+
 export default function Landing() {
   const isMobile = useIsMobile()
   const [activeGalleryIdx, setActiveGalleryIdx] = useState(-1)
 
   return (
     <div className="bg-black text-white relative">
+      <SEO url="/" structuredData={eventSchema} />
       <Navbar />
       <Suspense fallback={null}>
         <HiringBlimp />

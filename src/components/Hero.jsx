@@ -238,12 +238,14 @@ export default function Hero() {
               <span className="sponsor-label">BUILD WITH</span>
               <img
                 src="/trae.webp"
-                alt="Trae"
+                alt="Trae logo"
                 width={90}
                 height={32}
                 className="sponsor-trae-static"
                 onClick={() => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer')}
                 style={{ cursor: 'pointer' }}
+                loading="eager"
+                fetchPriority="high"
               />
             </>
           ) : (

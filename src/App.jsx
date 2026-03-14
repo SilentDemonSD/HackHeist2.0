@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import Landing from './pages/Landing'
 import MusicPlayer from './components/MusicPlayer'
 import useLenis from './hooks/useLenis'
@@ -13,7 +14,11 @@ const PageFallback = () => (
 
 function AppShell({ children }) {
   useLenis()
-  return children
+  return (
+    <HelmetProvider>
+      {children}
+    </HelmetProvider>
+  )
 }
 
 export default function App() {
