@@ -7,7 +7,7 @@ import useParallax from '../hooks/useParallax'
 
 const stats = [
   { value: '36', unit: 'HRS', label: 'Non-stop hackathon' },
-  { value: '50+', unit: '', label: 'Projects showcased' },
+  { value: '80+', unit: '', label: 'Projects showcased' },
   { value: '1500+', unit: 'USERS', label: 'Registered participants' },
 ]
 
@@ -23,11 +23,11 @@ const highlights = [
 ]
 
 const blueprintNodes = [
-  { id: 'vault-core',   label: 'Vault Core',       top: '28%', left: '82%' },
-  { id: 'server-room',  label: 'Server Room',       top: '19%', left: '18%' },
-  { id: 'entry-point',  label: 'Access Shaft',      top: '71%', left: '83%' },
-  { id: 'security',     label: 'Security',          top: '71%', left: '20%' },
-  { id: 'corridor',     label: 'Main Corridor',     top: '52%', left: '50%' },
+  { id: 'vault-core', label: 'Vault Core', top: '28%', left: '82%' },
+  { id: 'server-room', label: 'Server Room', top: '19%', left: '18%' },
+  { id: 'entry-point', label: 'Access Shaft', top: '71%', left: '83%' },
+  { id: 'security', label: 'Security', top: '71%', left: '20%' },
+  { id: 'corridor', label: 'Main Corridor', top: '52%', left: '50%' },
 ]
 
 const fadeUp = {
@@ -141,8 +141,8 @@ export default function AboutHeist() {
             <motion.div className={styles.copyBlock} variants={fadeUp} custom={1}>
               <p className={styles.leadLine}>
                 <strong>Hack Heist 2.0 – The Vault Opens Again</strong>
-                <span className={styles.dot}>·</span>
-                Presented by GDG On Campus MIET
+                <br /><span className={styles.dot}>·</span>
+                Presented by GDG On Campus MIET and ACIC MIET
               </p>
               <p>
                 Hack Heist 2.0 is a 36-hour high-intensity hackathon that brings together
@@ -235,13 +235,13 @@ export default function AboutHeist() {
                   </g>
 
                   <rect x="18" y="32" width="424" height="444" fill="none" stroke="rgba(167,209,255,0.28)" strokeWidth="1" />
-                  {[60,100,140,180,220,260,300,340,380,420].map(x => (
+                  {[60, 100, 140, 180, 220, 260, 300, 340, 380, 420].map(x => (
                     <g key={`xt${x}`}>
                       <line x1={x} y1="28" x2={x} y2="32" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
                       <line x1={x} y1="476" x2={x} y2="480" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
                     </g>
                   ))}
-                  {[60,100,140,180,220,260,300,340,380,420,460].map(y => (
+                  {[60, 100, 140, 180, 220, 260, 300, 340, 380, 420, 460].map(y => (
                     <g key={`yt${y}`}>
                       <line x1="14" y1={y} x2="18" y2={y} stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
                       <line x1="442" y1={y} x2="446" y2={y} stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" />
@@ -257,9 +257,9 @@ export default function AboutHeist() {
                   <rect x="42" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
                   <rect x="62" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
                   <rect x="82" y="64" width="14" height="56" fill="none" stroke="rgba(167,209,255,0.5)" strokeWidth="0.8" rx="1" />
-                  {[0,1,2,3,4,5].map(r => <circle key={r} cx="46" cy={68 + r*8} r="1" fill="rgba(167,209,255,0.7)" />)}
-                  {[0,1,2,3,4,5].map(r => <circle key={r} cx="66" cy={68 + r*8} r="1" fill="rgba(255,77,79,0.7)" />)}
-                  {[0,1,2,3,4,5].map(r => <circle key={r} cx="86" cy={68 + r*8} r="1" fill="rgba(167,209,255,0.7)" />)}
+                  {[0, 1, 2, 3, 4, 5].map(r => <circle key={r} cx="46" cy={68 + r * 8} r="1" fill="rgba(167,209,255,0.7)" />)}
+                  {[0, 1, 2, 3, 4, 5].map(r => <circle key={r} cx="66" cy={68 + r * 8} r="1" fill="rgba(255,77,79,0.7)" />)}
+                  {[0, 1, 2, 3, 4, 5].map(r => <circle key={r} cx="86" cy={68 + r * 8} r="1" fill="rgba(167,209,255,0.7)" />)}
                   <text x="81" y="152" textAnchor="middle" fill="rgba(167,209,255,0.55)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">SERVER</text>
                   <line x1="62" y1="142" x2="100" y2="142" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M62,142 Q62,155 100,142" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
@@ -271,8 +271,8 @@ export default function AboutHeist() {
                   <rect x="167" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
                   <rect x="207" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
                   <rect x="247" y="92" width="30" height="20" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="1" />
-                  {[[167,62],[207,62],[247,62],[167,92],[207,92],[247,92]].map(([dx,dy],i) => (
-                    <rect key={i} x={dx+9} y={dy+5} width="12" height="9" fill="none" stroke="rgba(167,209,255,0.6)" strokeWidth="0.6" rx="0.5" />
+                  {[[167, 62], [207, 62], [247, 62], [167, 92], [207, 92], [247, 92]].map(([dx, dy], i) => (
+                    <rect key={i} x={dx + 9} y={dy + 5} width="12" height="9" fill="none" stroke="rgba(167,209,255,0.6)" strokeWidth="0.6" rx="0.5" />
                   ))}
                   <text x="225" y="138" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="7" fontFamily="monospace" letterSpacing="2">HACK LAB</text>
                   <text x="225" y="149" textAnchor="middle" fill="rgba(167,209,255,0.3)" fontSize="5.5" fontFamily="monospace">RM-02</text>
@@ -289,15 +289,15 @@ export default function AboutHeist() {
                   <circle cx="376" cy="140" r="26" fill="none" stroke="rgba(255,77,79,0.4)" strokeWidth="1" />
                   <circle cx="376" cy="140" r="10" fill="rgba(255,77,79,0.15)" stroke="rgba(255,77,79,0.7)" strokeWidth="1" />
                   <circle cx="376" cy="140" r="3" fill="#ff4d4f" />
-                  {[0,60,120,180,240,300].map(deg => {
+                  {[0, 60, 120, 180, 240, 300].map(deg => {
                     const rad = (deg * Math.PI) / 180
                     const bx = 376 + 33 * Math.cos(rad)
                     const by = 140 + 33 * Math.sin(rad)
                     return <circle key={deg} cx={bx} cy={by} r="2.5" fill="rgba(255,77,79,0.5)" stroke="rgba(255,77,79,0.8)" strokeWidth="0.6" />
                   })}
-                  {[0,90,180,270].map(deg => {
+                  {[0, 90, 180, 270].map(deg => {
                     const rad = (deg * Math.PI) / 180
-                    return <line key={deg} x1={376 + 10*Math.cos(rad)} y1={140 + 10*Math.sin(rad)} x2={376 + 24*Math.cos(rad)} y2={140 + 24*Math.sin(rad)} stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" />
+                    return <line key={deg} x1={376 + 10 * Math.cos(rad)} y1={140 + 10 * Math.sin(rad)} x2={376 + 24 * Math.cos(rad)} y2={140 + 24 * Math.sin(rad)} stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" />
                   })}
                   <text x="376" y="76" textAnchor="middle" fill="rgba(255,77,79,0.8)" fontSize="7.5" fontFamily="monospace" letterSpacing="2.5">VAULT</text>
                   <text x="376" y="87" textAnchor="middle" fill="rgba(255,77,79,0.45)" fontSize="5.5" fontFamily="monospace" letterSpacing="1">B2-CORE</text>
@@ -338,22 +338,22 @@ export default function AboutHeist() {
 
                   <rect x="170" y="302" width="140" height="108" fill="url(#roomFill)" stroke="rgba(167,209,255,0.4)" strokeWidth="1.2" />
                   <rect x="200" y="322" width="80" height="42" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.8" rx="2" />
-                  {[0,1,2,3].map(i => <rect key={i} x={206 + i*18} y="318" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
-                  {[0,1,2,3].map(i => <rect key={i} x={206 + i*18} y="364" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
+                  {[0, 1, 2, 3].map(i => <rect key={i} x={206 + i * 18} y="318" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
+                  {[0, 1, 2, 3].map(i => <rect key={i} x={206 + i * 18} y="364" width="10" height="6" fill="none" stroke="rgba(167,209,255,0.3)" strokeWidth="0.6" rx="1" />)}
                   <text x="240" y="386" textAnchor="middle" fill="rgba(167,209,255,0.5)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">BRIEFING</text>
                   <line x1="210" y1="302" x2="270" y2="302" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M210,302 Q210,291 270,302" fill="none" stroke="rgba(167,209,255,0.4)" strokeWidth="0.7" strokeDasharray="2 3" />
 
                   <rect x="330" y="302" width="102" height="108" fill="rgba(255,77,79,0.04)" stroke="rgba(167,209,255,0.5)" strokeWidth="1.2" />
-                  {[0,1,2,3,4,5].map(i => (
-                    <line key={i} x1={330 + i*17} y1="302" x2={330} y2={302 + i*17} stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
+                  {[0, 1, 2, 3, 4, 5].map(i => (
+                    <line key={i} x1={330 + i * 17} y1="302" x2={330} y2={302 + i * 17} stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
                   ))}
-                  {[1,2,3,4,5,6].map(i => (
-                    <line key={i} x1={432} y1={302 + i*17} x2={432 - i*17 + (i>6?0:0)} y2="302" stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
+                  {[1, 2, 3, 4, 5, 6].map(i => (
+                    <line key={i} x1={432} y1={302 + i * 17} x2={432 - i * 17 + (i > 6 ? 0 : 0)} y2="302" stroke="rgba(167,209,255,0.12)" strokeWidth="0.7" />
                   ))}
                   <line x1="370" y1="316" x2="370" y2="396" stroke="rgba(167,209,255,0.5)" strokeWidth="1" />
                   <line x1="385" y1="316" x2="385" y2="396" stroke="rgba(167,209,255,0.5)" strokeWidth="1" />
-                  {[0,1,2,3,4,5,6].map(i => <line key={i} x1="370" y1={320+i*12} x2="385" y2={320+i*12} stroke="rgba(167,209,255,0.45)" strokeWidth="0.8" />)}
+                  {[0, 1, 2, 3, 4, 5, 6].map(i => <line key={i} x1="370" y1={320 + i * 12} x2="385" y2={320 + i * 12} stroke="rgba(167,209,255,0.45)" strokeWidth="0.8" />)}
                   <text x="381" y="408" textAnchor="middle" fill="rgba(167,209,255,0.55)" fontSize="6.5" fontFamily="monospace" letterSpacing="1.5">ACCESS</text>
                   <line x1="356" y1="302" x2="406" y2="302" stroke="#050c13" strokeWidth="2.5" />
                   <path d="M356,302 Q356,291 406,302" fill="none" stroke="rgba(255,77,79,0.5)" strokeWidth="0.8" strokeDasharray="2 3" />

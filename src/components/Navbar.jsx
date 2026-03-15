@@ -36,10 +36,40 @@ const navLinks = [
   { href: '/#faq', label: 'FAQ' }
 ]
 
+/**
+ * Scroll to a hash target, retrying if the element hasn't been lazy-loaded yet.
+ * Forces visibility by scrolling down incrementally so IntersectionObserver
+ * triggers the LazySection to render.
+ */
+function scrollToHash(e, hash) {
+  e.preventDefault()
+  const id = hash.replace(/^#/, '')
+  if (!id) return
+
+  const tryScroll = (attempts = 0) => {
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Update URL hash without jumping
+      window.history.pushState(null, '', `/#${id}`)
+      return
+    }
+    if (attempts >= 15) return // give up after ~3s
+
+    // Scroll down a chunk to trigger LazySection observers
+    window.scrollBy({ top: window.innerHeight, behavior: 'instant' })
+    requestAnimationFrame(() => setTimeout(() => tryScroll(attempts + 1), 200))
+  }
+
+  tryScroll()
+}
+
 function NavigationLink({ href, label, index }) {
+  const hash = href.replace(/^\/?/, '')
   return (
     <a
       href={href}
+      onClick={(e) => scrollToHash(e, hash)}
       className="nav-link-entry nav-link-hover relative text-sm font-semibold text-gray-300 hover:text-white px-2.5 py-2 rounded-full transition-colors group whitespace-nowrap"
       style={{
         fontFamily: "'Montserrat', sans-serif",
@@ -53,10 +83,11 @@ function NavigationLink({ href, label, index }) {
 }
 
 function MobileNavLink({ href, label, onClick, index }) {
+  const hash = href.replace(/^\/?/, '')
   return (
     <a
       href={href}
-      onClick={onClick}
+      onClick={(e) => { scrollToHash(e, hash); onClick?.() }}
       className="mobile-nav-link block rounded-2xl px-4 py-3 text-gray-200 hover:text-white transition-colors font-medium"
       style={{
         fontFamily: "'Montserrat', sans-serif",

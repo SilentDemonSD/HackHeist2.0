@@ -8,17 +8,22 @@ const TIER_STYLES = {
 const FALLBACK = { accent: '#888', accentRgb: '136,136,136' };
 
 /* ── Single partner card ── */
-function PartnerCard({ name, logo, accent, accentRgb }) {
+function PartnerCard({ name, logo, link, accent, accentRgb }) {
+  const Wrapper = link ? 'a' : 'div';
+  const wrapperProps = link ? { href: link, target: '_blank', rel: 'noopener noreferrer' } : {};
   return (
-    <div
+    <Wrapper
+      {...wrapperProps}
       className="partner-card group relative flex flex-col items-center justify-center
                  gap-3 rounded-2xl border px-5 py-6 sm:px-7 sm:py-8
-                 transition-all duration-300 hover:scale-[1.04] flex-shrink-0"
+                 transition-all duration-300 hover:scale-[1.04] flex-shrink-0 no-underline"
       style={{
         borderColor: `rgba(${accentRgb},0.12)`,
         background: `linear-gradient(160deg, rgba(${accentRgb},0.06) 0%, rgba(10,10,10,0.85) 100%)`,
         width: 160,
         minWidth: 160,
+        cursor: link ? 'pointer' : 'default',
+        textDecoration: 'none',
       }}
     >
       {/* Hover glow */}
@@ -36,7 +41,7 @@ function PartnerCard({ name, logo, accent, accentRgb }) {
             src={logo}
             alt={name}
             loading="lazy"
-            className="h-10 sm:h-12 w-auto max-w-[110px] sm:max-w-[130px] object-contain
+            className="h-14 sm:h-16 w-auto max-w-[130px] sm:max-w-[150px] object-contain
                        opacity-90 group-hover:opacity-100 transition-opacity duration-300"
           />
         ) : (
@@ -61,7 +66,7 @@ function PartnerCard({ name, logo, accent, accentRgb }) {
       >
         {name}
       </span>
-    </div>
+    </Wrapper>
   );
 }
 
@@ -129,6 +134,7 @@ function MarqueeRow({ tier, partners, style, reverse }) {
               key={`a-${p.name}-${i}`}
               name={p.name}
               logo={p.logo}
+              link={p.link}
               accent={accent}
               accentRgb={accentRgb}
             />
@@ -139,6 +145,7 @@ function MarqueeRow({ tier, partners, style, reverse }) {
               key={`b-${p.name}-${i}`}
               name={p.name}
               logo={p.logo}
+              link={p.link}
               accent={accent}
               accentRgb={accentRgb}
             />
