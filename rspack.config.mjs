@@ -31,9 +31,10 @@ export default defineConfig({
 
   experiments: {
     css: true,
-    // Defer compilation of async chunks until first request — speeds up dev cold start
-    ...(isDev && { lazyCompilation: true }),
   },
+
+  // Defer compilation of async chunks until first request — speeds up dev cold start
+  ...(isDev && { lazyCompilation: true }),
 
   module: {
     parser: {

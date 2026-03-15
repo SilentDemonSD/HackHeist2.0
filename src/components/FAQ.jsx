@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import useInView from '../hooks/useInView'
+
+/* Only AnimatePresence + motion kept for accordion height animation */
 
 const faqs = [
   {
@@ -26,10 +29,9 @@ const faqs = [
 
 function Cursor() {
   return (
-    <motion.span
-      animate={{ opacity: [1, 0] }}
-      transition={{ duration: 0.7, repeat: Infinity, repeatType: 'reverse' }}
+    <span
       className="inline-block w-[2px] h-[1em] bg-red-500 ml-1 align-middle"
+      style={{ animation: 'cursorBlink 0.7s ease-in-out infinite alternate' }}
       aria-hidden
     />
   )
@@ -37,20 +39,17 @@ function Cursor() {
 
 function FAQItem({ item, idx, isOpen, toggle }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ delay: idx * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      className="reveal-section revealed"
+      style={{ '--delay': `${idx * 60}ms` }}
     >
-      <motion.button
+      <button
         onClick={() => toggle(idx)}
-        whileHover={{ x: 4 }}
-        whileTap={{ scale: 0.985 }}
         className="w-full flex items-center gap-3 text-left group
                    px-5 py-4 rounded-2xl rounded-bl-sm
                    bg-white/[0.03] border border-white/[0.06]
-                   hover:border-red-500/30 transition-colors"
+                   hover:border-red-500/30 hover:translate-x-1
+                   active:scale-[0.985] transition-all duration-200"
       >
         <span
           className="shrink-0 text-red-500/70 text-xs font-mono select-none"
@@ -66,17 +65,16 @@ function FAQItem({ item, idx, isOpen, toggle }) {
           {item.q}
         </span>
 
-        <motion.span
-          animate={{ rotate: isOpen ? 45 : 0 }}
-          transition={{ duration: 0.25 }}
+        <span
           className="shrink-0 w-7 h-7 flex items-center justify-center
                      rounded-full border border-white/10
                      text-red-500 text-lg leading-none select-none
-                     group-hover:border-red-500/40 transition-colors"
+                     group-hover:border-red-500/40 transition-all duration-250"
+          style={{ transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)' }}
         >
           +
-        </motion.span>
-      </motion.button>
+        </span>
+      </button>
 
       <AnimatePresence initial={false}>
         {isOpen && (
@@ -119,7 +117,53 @@ function FAQItem({ item, idx, isOpen, toggle }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
+  )
+}
+
+function HeadingBlock() {
+  const [ref, inView] = useInView({ threshold: 0.3 })
+  const cls = inView ? 'revealed' : ''
+
+  return (
+    <div ref={ref} className={`reveal-section ${cls} text-center mb-12`}>
+      <span
+        className="block text-[0.65rem] font-semibold tracking-[0.45em] uppercase mb-2"
+        style={{ fontFamily: "'Montserrat', sans-serif", color: 'rgba(255,77,79,0.75)' }}
+      >
+        Intel Briefing
+      </span>
+
+      <h2
+        style={{
+          fontFamily: "'3rdMan', 'Montserrat', sans-serif",
+          fontSize: 'clamp(1.9rem, 4.5vw, 3.6rem)',
+          fontWeight: 'normal',
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          color: '#fff',
+          margin: 0,
+          lineHeight: 1.1,
+        }}
+      >
+        {"FAQ's".split('').map((ch, i) => (
+          <span
+            key={i}
+            className={`letter-char ${cls}`}
+            style={{ '--i': i }}
+          >
+            {ch === ' ' ? '\u00A0' : ch}
+          </span>
+        ))}
+      </h2>
+
+      <p
+        className="mt-2 text-sm tracking-wide"
+        style={{ fontFamily: "'Montserrat', sans-serif", color: 'rgba(200,200,200,0.5)' }}
+      >
+        Laser-scanned intel for your heist questions.
+      </p>
+    </div>
   )
 }
 
@@ -167,54 +211,7 @@ export default function FAQ() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-red-500/[0.06] rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-12"
-        >
-          <span
-            className="block text-[0.65rem] font-semibold tracking-[0.45em] uppercase mb-2"
-            style={{ fontFamily: "'Montserrat', sans-serif", color: 'rgba(255,77,79,0.75)' }}
-          >
-            Intel Briefing
-          </span>
-
-          <h2
-            style={{
-              fontFamily: "'3rdMan', 'Montserrat', sans-serif",
-              fontSize: 'clamp(1.9rem, 4.5vw, 3.6rem)',
-              fontWeight: 'normal',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              color: '#fff',
-              margin: 0,
-              lineHeight: 1.1,
-            }}
-          >
-            {"FAQ's".split('').map((ch, i) => (
-              <motion.span
-                key={i}
-                className="inline-block"
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.028 * i, duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -5, color: '#ff4d4f', transition: { duration: 0.15 } }}
-              >
-                {ch === ' ' ? '\u00A0' : ch}
-              </motion.span>
-            ))}
-          </h2>
-
-          <p
-            className="mt-2 text-sm tracking-wide"
-            style={{ fontFamily: "'Montserrat', sans-serif", color: 'rgba(200,200,200,0.5)' }}
-          >
-            Laser-scanned intel for your heist questions.
-          </p>
-        </motion.div>
+        <HeadingBlock />
 
         <div className="flex justify-center mb-8">
           <button

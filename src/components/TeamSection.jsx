@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { motion, useMotionValue, AnimatePresence } from 'framer-motion'
 import useIsMobile from '../hooks/useIsMobile'
 
+/* Individual static imports — Rspack requires statically analyzable paths */
 import imgHimanshu from '../assets/team/Himanshu.webp'
 import imgPalak from '../assets/team/Palak.webp'
 import imgTanishq from '../assets/team/Tanishq.webp'

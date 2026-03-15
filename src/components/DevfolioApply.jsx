@@ -80,7 +80,7 @@ export default function DevfolioApply() {
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       style={{
-        padding: isMobile ? '8px 16px' : '16px 200px',
+        padding: isMobile ? '8px 16px' : '16px max(2rem, 10vw)',
         touchAction: 'manipulation',
         display: 'flex',
         alignItems: 'center',

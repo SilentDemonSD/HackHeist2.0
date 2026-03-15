@@ -221,7 +221,37 @@
   }
 
   .cinematic-tagline {
-    font-size: 0.55rem;
+    font-size: clamp(0.6rem, 2.5vw, 0.85rem);
     letter-spacing: 0.06em;
+  }
+}
+
+/* Hero entry animations (CSS replacement for framer-motion) */
+@keyframes heroSlideUp {
+  from { opacity: 0; transform: translateY(var(--hero-y, 30px)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-entry {
+  opacity: 0;
+  animation: heroSlideUp var(--hero-dur, 0.8s) cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s) forwards;
+}
+
+.hero-tagline {
+  opacity: 0;
+  transition: opacity 0.9s ease-out;
+}
+.hero-tagline.visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-entry {
+    opacity: 1;
+    animation: none;
+  }
+  .hero-tagline {
+    opacity: 1;
+    transition: none;
   }
 }

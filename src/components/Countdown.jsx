@@ -1,25 +1,154 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import useInView from "../hooks/useInView";
+import useIsMobile from "../hooks/useIsMobile";
 
-const COUNTDOWN_FROM = "2026-03-28T00:00:00";
+/* motion kept ONLY for AnimatePresence popLayout digit flip in CountdownItem */
 
+const COUNTDOWN_FROM = "2026-03-28T09:00:00+05:30";
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
-
 const UNITS = [
-  { unit: "Day",    label: "DAYS" },
-  { unit: "Hour",   label: "HRS"  },
-  { unit: "Minute", label: "MIN"  },
-  { unit: "Second", label: "SEC"  },
+  { unit: "Day", label: "Days" },
+  { unit: "Hour", label: "Hours" },
+  { unit: "Minute", label: "Minutes" },
+  { unit: "Second", label: "Seconds" },
 ];
 
+function CountdownHeading() {
+  const [ref, inView] = useInView({ threshold: 0.3 });
+  const cls = inView ? "revealed" : "";
+
+  return (
+    <div
+      ref={ref}
+      className={`reveal-section ${cls} relative flex flex-col items-center text-center`}
+      style={{ marginBottom: "2.2rem", zIndex: 2 }}
+    >
+      <span style={{ display: "block", marginBottom: "0.55rem" }}>
+        {"OPERATION: THIRD MAN".split("").map((char, i) =>
+          char === " " ? (
+            <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.38em" }} />
+          ) : (
+            <span
+              key={i}
+              className={`letter-eyebrow-char ${cls}`}
+              style={{
+                "--i": i,
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: "0.58rem",
+                fontWeight: 700,
+                letterSpacing: "0.48em",
+                textTransform: "uppercase",
+                color: "rgba(255,77,79,0.7)",
+              }}
+            >
+              {char}
+            </span>
+          )
+        )}
+      </span>
+
+      <h2
+        style={{
+          fontFamily: "'3rdMan', sans-serif",
+          fontSize: "clamp(2.2rem, 5.5vw, 4.2rem)",
+          color: "#ffffff",
+          textTransform: "uppercase",
+          fontWeight: "normal",
+          margin: 0,
+          lineHeight: 1,
+          perspective: "600px",
+          cursor: "default",
+        }}
+      >
+        {"Commences In".split("").map((char, i) =>
+          char === " " ? (
+            <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.28em" }} />
+          ) : (
+            <span
+              key={i}
+              className={`letter-char-flip ${cls}`}
+              style={{ "--i": i }}
+            >
+              {char}
+            </span>
+          )
+        )}
+      </h2>
+
+      <div
+        style={{
+          width: 64,
+          height: 2,
+          marginTop: "1rem",
+          background:
+            "linear-gradient(90deg, transparent, #ff4d4f 40%, #ff4d4f 60%, transparent)",
+          borderRadius: 2,
+        }}
+      />
+    </div>
+  );
+}
+
+function CountdownGrid({ isMobile }) {
+  const [ref, inView] = useInView({ threshold: 0.2 });
+  const cls = inView ? "revealed" : "";
+
+  return (
+    <div
+      ref={ref}
+      className={`reveal-section ${cls}`}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: "clamp(0.5rem, 1.5vw, 1.25rem)",
+        width: "100%",
+        maxWidth: 900,
+        zIndex: 2,
+        position: "relative",
+      }}
+    >
+      {UNITS.map(({ unit, label }, i) => (
+        <CountdownItem key={unit} unit={unit} label={label} index={i} isMobile={isMobile} />
+      ))}
+    </div>
+  );
+}
+
+function CountdownFooter() {
+  const [ref, inView] = useInView({ threshold: 0.5 });
+
+  return (
+    <p
+      ref={ref}
+      className={`reveal-section ${inView ? "revealed" : ""}`}
+      style={{
+        "--delay": "200ms",
+        fontFamily: "'Montserrat', sans-serif",
+        fontSize: "clamp(0.55rem, 1.2vw, 0.62rem)",
+        letterSpacing: "0.3em",
+        textTransform: "uppercase",
+        color: "rgba(255,255,255,0.18)",
+        marginTop: "2rem",
+        zIndex: 2,
+        position: "relative",
+      }}
+    >
+      28 March 2026 &nbsp;·&nbsp; The Heist Begins
+    </p>
+  );
+}
+
 export default function Countdown() {
+  const isMobile = useIsMobile();
+
   return (
     <section
       className="relative w-full flex flex-col items-center justify-center overflow-hidden"
-      style={{ padding: "4rem 1.5rem 4.5rem", background: "#06070b" }}
+      style={{ padding: "clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 1.5rem) clamp(3rem, 5vw, 4.5rem)", background: "#06070b" }}
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -41,8 +170,8 @@ export default function Countdown() {
       <div
         className="absolute pointer-events-none"
         style={{
-          width: 640,
-          height: 640,
+          width: 'min(640px, 90vw)',
+          height: 'min(640px, 90vw)',
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
@@ -53,158 +182,35 @@ export default function Countdown() {
         }}
       />
 
-      <motion.div
-        className="relative flex flex-col items-center text-center"
-        style={{ marginBottom: "2.2rem", zIndex: 2 }}
-        initial={{ y: 24 }}
-        whileInView={{ y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.75 }}
-      >
-        <span
-          style={{
-            display: "block",
-            marginBottom: "0.55rem",
-          }}
-        >
-          {"OPERATION: THIRD MAN".split("").map((char, i) =>
-            char === " " ? (
-              <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.38em" }} />
-            ) : (
-              <motion.span
-                key={i}
-                style={{
-                  display: "inline-block",
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontSize: "0.58rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.48em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,77,79,0.7)",
-                }}
-                initial={{ opacity: 0, y: 8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: i * 0.03,
-                  duration: 0.4,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                {char}
-              </motion.span>
-            )
-          )}
-        </span>
+      <CountdownHeading />
 
-        <h2
-          style={{
-            fontFamily: "'3rdMan', sans-serif",
-            fontSize: "clamp(2.2rem, 5.5vw, 4.2rem)",
-            color: "#ffffff",
-            textTransform: "uppercase",
-            fontWeight: "normal",
-            margin: 0,
-            lineHeight: 1,
-            perspective: "600px",
-            cursor: "default",
-          }}
-        >
-          {"Commences In".split("").map((char, i) =>
-            char === " " ? (
-              <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.28em" }} />
-            ) : (
-              <motion.span
-                key={i}
-                style={{
-                  display: "inline-block",
-                  letterSpacing: "0.07em",
-                }}
-                initial={{ opacity: 0, y: 28, rotateX: -70 }}
-                whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: i * 0.055,
-                  type: "spring",
-                  stiffness: 280,
-                  damping: 24,
-                  mass: 0.9,
-                }}
-                whileHover={{ color: "#ff4d4f", y: -6, transition: { duration: 0.14 } }}
-              >
-                {char}
-              </motion.span>
-            )
-          )}
-        </h2>
+      <CountdownGrid isMobile={isMobile} />
 
-        <div
-          style={{
-            width: 64,
-            height: 2,
-            marginTop: "1rem",
-            background:
-              "linear-gradient(90deg, transparent, #ff4d4f 40%, #ff4d4f 60%, transparent)",
-            borderRadius: 2,
-          }}
-        />
-      </motion.div>
-
-      <motion.div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "clamp(0.5rem, 1.5vw, 1.25rem)",
-          width: "100%",
-          maxWidth: 900,
-          zIndex: 2,
-          position: "relative",
-        }}
-        initial={{ opacity: 0, scale: 0.96 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.75, delay: 0.1 }}
-      >
-        {UNITS.map(({ unit, label }, i) => (
-          <CountdownItem key={unit} unit={unit} label={label} index={i} />
-        ))}
-      </motion.div>
-
-      <motion.p
-        style={{
-          fontFamily: "'Montserrat', sans-serif",
-          fontSize: "0.62rem",
-          letterSpacing: "0.3em",
-          textTransform: "uppercase",
-          color: "rgba(255,255,255,0.18)",
-          marginTop: "2rem",
-          zIndex: 2,
-          position: "relative",
-        }}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 0.4 }}
-      >
-        28 March 2026 &nbsp;·&nbsp; The Heist Begins
-      </motion.p>
+      <CountdownFooter />
     </section>
   );
 }
 
-function CountdownItem({ unit, label, index }) {
+function CountdownItem({ unit, label, index, isMobile }) {
   const time = useTimer(unit);
   const display = String(time).padStart(2, "0");
 
+  const digitStyle = {
+    position: "absolute",
+    fontFamily: "'3rdMan', sans-serif",
+    fontSize: "clamp(2rem, 6vw, 5rem)",
+    color: "#ffffff",
+    lineHeight: 1,
+    textShadow:
+      "0 0 18px rgba(255,77,79,0.55), 0 0 50px rgba(200,0,0,0.3)",
+    letterSpacing: "0.04em",
+  };
+
   return (
-    <motion.div
-      className="group"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, delay: index * 0.08 }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+    <div
+      className="group reveal-section revealed"
       style={{
+        "--delay": `${index * 80}ms`,
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -220,8 +226,10 @@ function CountdownItem({ unit, label, index }) {
           "0 4px 24px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)",
         overflow: "hidden",
         cursor: "default",
-        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+        transition: "border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease",
       }}
+      onMouseEnter={isMobile ? undefined : (e) => (e.currentTarget.style.transform = "translateY(-4px)")}
+      onMouseLeave={isMobile ? undefined : (e) => (e.currentTarget.style.transform = "")}
     >
       <span
         style={{
@@ -261,27 +269,31 @@ function CountdownItem({ unit, label, index }) {
           overflow: "hidden",
         }}
       >
-        <AnimatePresence mode="popLayout">
-          <motion.span
+        {isMobile ? (
+          /* Mobile: simple CSS transition instead of spring AnimatePresence every second */
+          <span
             key={display}
-            initial={{ y: "55%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
-            exit={{ y: "-55%", opacity: 0 }}
-            transition={{ type: "spring", stiffness: 180, damping: 18 }}
             style={{
-              position: "absolute",
-              fontFamily: "'3rdMan', sans-serif",
-              fontSize: "clamp(2rem, 6vw, 5rem)",
-              color: "#ffffff",
-              lineHeight: 1,
-              textShadow:
-                "0 0 18px rgba(255,77,79,0.55), 0 0 50px rgba(200,0,0,0.3)",
-              letterSpacing: "0.04em",
+              ...digitStyle,
+              transition: 'opacity 0.2s ease-out',
             }}
           >
             {display}
-          </motion.span>
-        </AnimatePresence>
+          </span>
+        ) : (
+          <AnimatePresence mode="popLayout">
+            <motion.span
+              key={display}
+              initial={{ y: "55%", opacity: 0 }}
+              animate={{ y: "0%", opacity: 1 }}
+              exit={{ y: "-55%", opacity: 0 }}
+              transition={{ type: "spring", stiffness: 180, damping: 18 }}
+              style={digitStyle}
+            >
+              {display}
+            </motion.span>
+          </AnimatePresence>
+        )}
       </div>
 
       <div
@@ -306,7 +318,7 @@ function CountdownItem({ unit, label, index }) {
       >
         {label}
       </span>
-    </motion.div>
+    </div>
   );
 }
 

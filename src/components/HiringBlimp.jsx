@@ -79,11 +79,12 @@ export default function HiringBlimp() {
   const getDragBounds = useCallback(() => {
     const vw = window.innerWidth
     const vh = window.innerHeight
+    const hitW = vw <= 768 ? 180 : 260
     return {
       top: -20,
       bottom: vh - 120,
       left: -(vw * 0.05),
-      right: vw - 280,
+      right: vw - hitW - 20,
     }
   }, [])
 

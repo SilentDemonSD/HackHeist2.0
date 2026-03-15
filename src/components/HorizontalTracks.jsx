@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import useInView from '../hooks/useInView';
 
 const BrainIcon = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" /><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" /><path d="M17.599 6.5a3 3 0 0 0 .399-1.375" /></svg>;
 const LayersIcon = ({ className }) => <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></svg>;
@@ -65,7 +66,7 @@ const TRACKS = [
   },
 ];
 
-const CARD_W = 500;          // px — card width on desktop
+const CARD_W = 500;          // px — card width on desktop (also used in scroll math)
 const CARD_GAP = 40;         // px — gap between cards
 const N = 6;                 // total number of tracks
 
@@ -109,6 +110,7 @@ function TrackCard({ track, index, scrollYProgress }) {
       className="relative flex-none"
       style={{
         width: CARD_W,
+        maxWidth: 'min(500px, 85vw)',
         scale,
         opacity,
         filter,
@@ -197,6 +199,8 @@ function TrackCard({ track, index, scrollYProgress }) {
 }
 
 function SectionHeader({ className = '' }) {
+  const [headRef, headInView] = useInView({ margin: '-40px' });
+
   return (
     <div className={`text-center ${className}`}>
       <span
@@ -206,6 +210,7 @@ function SectionHeader({ className = '' }) {
         The Challenges
       </span>
       <h2
+        ref={headRef}
         className="text-[clamp(2rem,5vw,3.5rem)] uppercase tracking-[0.06em] text-white mb-3"
         style={{
           fontFamily: "'3rdMan', 'Montserrat', sans-serif",
@@ -215,17 +220,13 @@ function SectionHeader({ className = '' }) {
         }}
       >
         {'Hackathon Tracks'.split('').map((char, i) => (
-          <motion.span
+          <span
             key={i}
-            style={{ display: 'inline-block' }}
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.028 * i, duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-            whileHover={{ y: -5, color: '#ff4d4f', transition: { duration: 0.15 } }}
+            className={`letter-char${headInView ? ' revealed' : ''}`}
+            style={{ '--i': i }}
           >
             {char === ' ' ? '\u00A0' : char}
-          </motion.span>
+          </span>
         ))}
       </h2>
       <p
@@ -297,77 +298,78 @@ const HorizontalTracks = () => {
   );
 };
 
-export const MobileTracks = () => (
-  <section className="relative bg-[#050505] py-16 px-5 md:hidden">
-    <SectionHeader className="mb-10" />
+export const MobileTracks = () => {
+  const [mobRef, mobInView] = useInView({ margin: '-40px' });
 
-    <div className="flex flex-col gap-4">
-      {TRACKS.map((track, index) => (
-        <motion.div
-          key={track.id}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.35, delay: index * 0.06 }}
-          className="relative rounded-2xl border overflow-hidden"
-          style={{
-            borderColor: `${track.accent}12`,
-            background: '#0a0a0a',
-          }}
-        >
+  return (
+    <section className="relative bg-[#050505] py-16 px-5 md:hidden">
+      <SectionHeader className="mb-10" />
+
+      <div ref={mobRef} className="flex flex-col gap-4">
+        {TRACKS.map((track, index) => (
           <div
-            className="absolute top-0 left-0 right-0 h-px"
-            style={{ background: `linear-gradient(90deg, transparent, ${track.accent}30, transparent)` }}
-          />
+            key={track.id}
+            className={`reveal-section${mobInView ? ' revealed' : ''} relative rounded-2xl border overflow-hidden`}
+            style={{
+              '--delay': `${index * 60}ms`,
+              borderColor: `${track.accent}12`,
+              background: '#0a0a0a',
+            }}
+          >
+            <div
+              className="absolute top-0 left-0 right-0 h-px"
+              style={{ background: `linear-gradient(90deg, transparent, ${track.accent}30, transparent)` }}
+            />
 
-          <div className="p-5 flex flex-col gap-3.5">
-            <div className="flex items-center justify-between">
-              <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center"
-                style={{
-                  background: `${track.accent}08`,
-                  border: `1px solid ${track.accent}15`,
-                  color: track.accent,
-                }}
-              >
-                {track.icon}
+            <div className="p-5 flex flex-col gap-3.5">
+              <div className="flex items-center justify-between">
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center"
+                  style={{
+                    background: `${track.accent}08`,
+                    border: `1px solid ${track.accent}15`,
+                    color: track.accent,
+                  }}
+                >
+                  {track.icon}
+                </div>
+                <span
+                  className="text-[0.5rem] tracking-[0.2em] font-semibold uppercase"
+                  style={{ color: `${track.accent}50` }}
+                >
+                  Track {String(index + 1).padStart(2, '0')}
+                </span>
               </div>
-              <span
-                className="text-[0.5rem] tracking-[0.2em] font-semibold uppercase"
-                style={{ color: `${track.accent}50` }}
-              >
-                Track {String(index + 1).padStart(2, '0')}
-              </span>
-            </div>
 
-            <div>
-              <h3
-                className="text-[1.05rem] uppercase tracking-[0.06em] text-white leading-tight"
-                style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", fontWeight: 'normal' }}
-              >
-                {track.title}
-              </h3>
+              <div>
+                <h3
+                  className="text-[1.05rem] uppercase tracking-[0.06em] text-white leading-tight"
+                  style={{ fontFamily: "'3rdMan', 'Montserrat', sans-serif", fontWeight: 'normal' }}
+                >
+                  {track.title}
+                </h3>
+                <p
+                  className="text-[0.55rem] uppercase tracking-[0.15em] mt-1"
+                  style={{ color: track.accent, fontFamily: "'Montserrat', sans-serif", fontWeight: 600, opacity: 0.7 }}
+                >
+                  {track.tagline}
+                </p>
+              </div>
+
+              <div className="h-px w-full" style={{ background: `${track.accent}0a` }} />
+
               <p
-                className="text-[0.55rem] uppercase tracking-[0.15em] mt-1"
-                style={{ color: track.accent, fontFamily: "'Montserrat', sans-serif", fontWeight: 600, opacity: 0.7 }}
+                className="text-[0.75rem] leading-[1.6] text-white/50"
+                style={{ fontFamily: "'Montserrat', sans-serif" }}
               >
-                {track.tagline}
+                {track.description}
               </p>
             </div>
-
-            <div className="h-px w-full" style={{ background: `${track.accent}0a` }} />
-
-            <p
-              className="text-[0.75rem] leading-[1.6] text-white/50"
-              style={{ fontFamily: "'Montserrat', sans-serif" }}
-            >
-              {track.description}
-            </p>
           </div>
-        </motion.div>
-      ))}
-    </div>
-  </section>
-);
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export default HorizontalTracks;

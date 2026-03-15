@@ -4,9 +4,9 @@ import SEO from '../components/SEO'
 import Hero from '../components/Hero'
 import LazySection from '../components/LazySection'
 import useIsMobile from '../hooks/useIsMobile'
+import useInView from '../hooks/useInView'
 import ScrollTitleMarquee from '../components/ScrollTitleMarquee'
 import HorizontalTracks, { MobileTracks } from '../components/HorizontalTracks'
-import { motion } from 'framer-motion'
 
 
 const DevfolioApply = lazy(() => import(/* webpackChunkName: "devfolio" */ '../components/DevfolioApply'))
@@ -23,7 +23,7 @@ const HiringBlimp = lazy(() => import(/* webpackChunkName: "hiring-blimp" */ '..
 
 
 const SectionFallback = () => (
-  <div style={{ minHeight: '40vh', background: '#000' }} />
+  <div className="section-skeleton" aria-hidden="true" />
 )
 
 const gallerySources = [
@@ -112,7 +112,7 @@ const PARTNERS_DATA = [
     partners: [
       { name: '.XYZ', logo: '/logo/xyz.svg' },
       { name: 'UseQR', logo: '/logo/useqr.svg' },
-      { name: 'BUMP.FM', logo: 'logo/Logo Light Version Bump fm.png' },
+      { name: 'BUMP.FM', logo: '/logo/Logo Light Version Bump fm.png' },
       { name: 'Sponsor X' },
     ],
   },
@@ -124,17 +124,12 @@ const PARTNERS_DATA = [
       { name: 'Community X' },
     ],
   },
-  {
-    tier: 'Media Partners',
-    partners: [
-      { name: 'Media X' },
-      { name: 'Media X' },
-    ],
-  },
 ]
 
-/* Per-letter animated heading (single fade on mobile) */
+/* Per-letter animated heading (CSS animations, no framer-motion) */
 function LetterHeading({ text, centered = false, isMobile = false }) {
+  const [ref, inView] = useInView({ margin: '0px', once: true })
+
   const headingStyle = {
     fontFamily: "'3rdMan', 'Montserrat', sans-serif",
     fontSize: 'clamp(1.9rem, 4.5vw, 3.6rem)',
@@ -148,49 +143,44 @@ function LetterHeading({ text, centered = false, isMobile = false }) {
     cursor: 'default',
   }
 
-  // Mobile: single motion.h2 instead of N motion.span per letter
+  // Mobile: single fade-up
   if (isMobile) {
     return (
-      <motion.h2
+      <h2
+        ref={ref}
         style={headingStyle}
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4 }}
+        className={`reveal-section ${inView ? 'revealed' : ''}`}
       >
         {text}
-      </motion.h2>
+      </h2>
     )
   }
 
   const chars = text.split('')
   return (
-    <h2 style={headingStyle}>
+    <h2 ref={ref} style={headingStyle}>
       {chars.map((char, i) => (
-        <motion.span
+        <span
           key={i}
-          style={{ display: 'inline-block' }}
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.028 * i, duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-          whileHover={{ y: -5, color: '#ff4d4f', transition: { duration: 0.15 } }}
+          className={`letter-char ${inView ? 'revealed' : ''}`}
+          style={{ '--i': i }}
         >
           {char === ' ' ? '\u00A0' : char}
-        </motion.span>
+        </span>
       ))}
     </h2>
   )
 }
 
 function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading = false, isMobile = false }) {
+  const [headRef, headInView] = useInView({ once: true })
+  const [bodyRef, bodyInView] = useInView({ once: true })
+
   return (
     <section id={id} className="container my-16">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.4 }}
+      <div
+        ref={headRef}
+        className={`reveal-section ${headInView ? 'revealed' : ''}`}
         style={{ textAlign: centeredHeading ? 'center' : 'left', marginBottom: '1.5rem' }}
       >
         {eyebrow && (
@@ -209,12 +199,10 @@ function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading 
         )}
         <LetterHeading text={title} centered={centeredHeading} isMobile={isMobile} />
         {subtitle && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.35, delay: 0.12 }}
+          <p
+            className={`reveal-section ${headInView ? 'revealed' : ''}`}
             style={{
+              '--delay': '120ms',
               fontFamily: "'Montserrat', sans-serif",
               fontSize: '0.88rem',
               color: 'rgba(200,200,200,0.6)',
@@ -223,17 +211,152 @@ function SectionShell({ id, title, eyebrow, subtitle, children, centeredHeading 
               maxWidth: centeredHeading ? '520px' : 'none',
               margin: centeredHeading ? '0.6rem auto 0' : '0.6rem 0 0',
             }}
-          >{subtitle}</motion.p>
+          >{subtitle}</p>
         )}
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.45, delay: 0.05 }}
-        className="mt-6"
-      >{children}</motion.div>
+      </div>
+      <div
+        ref={bodyRef}
+        className={`reveal-section ${bodyInView ? 'revealed' : ''} mt-6`}
+        style={{ '--delay': '50ms' }}
+      >{children}</div>
     </section>
+  )
+}
+
+function CtaSection() {
+  const [ref, inView] = useInView({ once: true })
+  return (
+    <section
+      ref={ref}
+      className={`cinematic-cta reveal-section ${inView ? 'revealed' : ''}`}
+      style={{ '--delay': '200ms' }}
+    >
+      <p className="cinematic-cta-text" style={{ fontFamily: '3rdMan, sans-serif' }}>
+        Ready to join the heist?
+      </p>
+      <Suspense fallback={<div style={{ height: 44 }} />}>
+        <DevfolioApply />
+      </Suspense>
+    </section>
+  )
+}
+
+function GalleryGrid({ items, layout }) {
+  const [ref, inView] = useInView({ margin: '-50px', once: true })
+  return (
+    <div
+      ref={ref}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridAutoRows: 'clamp(120px, 18vw, 220px)',
+        gap: '10px',
+      }}
+    >
+      {items.map((item, idx) => (
+        <article
+          key={idx}
+          className={`group relative overflow-hidden rounded-2xl cursor-pointer bg-neutral-900 reveal-gallery ${inView ? 'revealed' : ''}`}
+          style={{
+            gridColumn: layout[idx].col,
+            gridRow: layout[idx].row,
+            '--delay': `${idx * 55}ms`,
+          }}
+        >
+          <img
+            src={item.src}
+            alt={item.caption}
+            loading="lazy"
+            decoding="async"
+            width={600}
+            height={400}
+            className="h-full w-full object-cover grayscale brightness-[0.7] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.06]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-50 pointer-events-none" />
+          <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/[0.06] transition-all duration-300 group-hover:border-red-500/40 group-hover:shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]" />
+          <div className="absolute inset-x-0 bottom-0 p-4 translate-y-1 opacity-80 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+            <p
+              className="text-[0.82rem] md:text-[0.88rem] font-medium tracking-wide text-white/90 group-hover:text-white leading-snug"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
+            >
+              {item.caption}
+            </p>
+          </div>
+          <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500/70 transition-all duration-300" />
+        </article>
+      ))}
+    </div>
+  )
+}
+
+const MOBILE_GALLERY_INITIAL = 6
+
+function MobileGallery({ items, activeIdx, setActiveIdx }) {
+  const [showAll, setShowAll] = useState(false)
+  const visible = showAll ? items : items.slice(0, MOBILE_GALLERY_INITIAL)
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      {visible.map((item, idx) => {
+        const isActive = activeIdx === idx
+        return (
+          <article
+            key={idx}
+            onClick={() => setActiveIdx(isActive ? -1 : idx)}
+            className="relative overflow-hidden rounded-2xl bg-neutral-900 cursor-pointer reveal-section revealed"
+            style={{
+              aspectRatio: '16 / 10',
+              '--delay': '40ms',
+              transform: isActive ? 'scale(1.01)' : 'scale(1)',
+              transition: 'transform 0.3s ease-out',
+            }}
+          >
+            <img
+              src={item.src}
+              alt={item.caption}
+              loading="lazy"
+              decoding="async"
+              width={600}
+              height={400}
+              className={`h-full w-full object-cover transition-all duration-700 ease-out ${isActive
+                ? 'grayscale-0 brightness-105 scale-[1.03]'
+                : 'grayscale brightness-[0.7]'
+              }`}
+            />
+            <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${isActive ? 'opacity-45' : 'opacity-90'}`} />
+            <div className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${isActive
+              ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
+              : 'border-white/[0.06]'
+            }`} />
+            <div className="absolute inset-x-0 bottom-0 p-4">
+              <p
+                className="text-[0.82rem] font-medium tracking-wide text-white/90 leading-snug"
+                style={{ fontFamily: "'Montserrat', sans-serif" }}
+              >
+                {item.caption}
+              </p>
+              {!isActive && (
+                <span
+                  className="text-[0.6rem] text-white/35 mt-1.5 block tracking-widest uppercase"
+                  style={{ fontFamily: "'Montserrat', sans-serif" }}
+                >
+                  Tap to reveal
+                </span>
+              )}
+            </div>
+          </article>
+        )
+      })}
+      {!showAll && items.length > MOBILE_GALLERY_INITIAL && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="mx-auto mt-2 rounded-full border border-white/10 px-6 py-2.5 text-[0.72rem] font-semibold tracking-[0.25em] uppercase text-white/50 transition-all duration-300 hover:border-red-500/40 hover:text-white/80"
+          style={{ fontFamily: "'Montserrat', sans-serif", background: 'rgba(255,255,255,0.03)' }}
+        >
+          Show all photos
+        </button>
+      )}
+    </div>
   )
 }
 
@@ -290,20 +413,7 @@ export default function Landing() {
       <main>
         <Hero />
 
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="cinematic-cta"
-        >
-          <p className="cinematic-cta-text" style={{ fontFamily: '3rdMan, sans-serif' }}>
-            Ready to join the heist?
-          </p>
-          <Suspense fallback={<div style={{ height: 44 }} />}>
-            <DevfolioApply />
-          </Suspense>
-        </motion.section>
+        <CtaSection />
 
         <LazySection>
           <section className="container my-16">
@@ -358,111 +468,15 @@ export default function Landing() {
               <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(255,77,79,0.05) 0%, transparent 65%)' }} />
 
               {!isMobile && (
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gridAutoRows: '200px',
-                    gap: '10px',
-                  }}
-                >
-                  {pastGallery.map((item, idx) => (
-                    <motion.article
-                      key={idx}
-                      initial={{ opacity: 0, y: 38, scale: 0.92 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      viewport={{ once: true, margin: '-50px' }}
-                      transition={{
-                        duration: 0.6,
-                        delay: idx * 0.055,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                      whileHover={{ y: -5, transition: { duration: 0.3, ease: 'easeOut' } }}
-                      style={{
-                        gridColumn: galleryLayout[idx].col,
-                        gridRow: galleryLayout[idx].row,
-                      }}
-                      className="group relative overflow-hidden rounded-2xl cursor-pointer bg-neutral-900"
-                    >
-                      <img
-                        src={item.src}
-                        alt={item.caption}
-                        loading="lazy"
-                        decoding="async"
-                        width={600}
-                        height={400}
-                        className="h-full w-full object-cover grayscale brightness-[0.7] transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:brightness-105 group-hover:scale-[1.06]"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-50 pointer-events-none" />
-                      <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/[0.06] transition-all duration-300 group-hover:border-red-500/40 group-hover:shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]" />
-                      <div className="absolute inset-x-0 bottom-0 p-4 translate-y-1 opacity-80 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                        <p
-                          className="text-[0.82rem] md:text-[0.88rem] font-medium tracking-wide text-white/90 group-hover:text-white leading-snug"
-                          style={{ fontFamily: "'Montserrat', sans-serif" }}
-                        >
-                          {item.caption}
-                        </p>
-                      </div>
-                      <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-red-500/0 group-hover:bg-red-500/70 transition-all duration-300" />
-                    </motion.article>
-                  ))}
-                </div>
+                <GalleryGrid items={pastGallery} layout={galleryLayout} />
               )}
 
               {isMobile && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {pastGallery.map((item, idx) => {
-                    const isActive = activeGalleryIdx === idx
-                    return (
-                      <motion.article
-                        key={idx}
-                        initial={{ opacity: 0, y: 28 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: '-30px' }}
-                        transition={{ duration: 0.5, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
-                        onClick={() => setActiveGalleryIdx(isActive ? -1 : idx)}
-                        className="relative overflow-hidden rounded-2xl bg-neutral-900 cursor-pointer"
-                        style={{ aspectRatio: '16 / 10' }}
-                        animate={isActive ? { scale: 1.01 } : { scale: 1 }}
-                      >
-                        <img
-                          src={item.src}
-                          alt={item.caption}
-                          loading="lazy"
-                          decoding="async"
-                          width={600}
-                          height={400}
-                          className={`h-full w-full object-cover transition-all duration-700 ease-out ${isActive
-                            ? 'grayscale-0 brightness-105 scale-[1.03]'
-                            : 'grayscale brightness-[0.7]'
-                            }`}
-                        />
-                        <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${isActive ? 'opacity-45' : 'opacity-90'
-                          }`} />
-                        <div className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${isActive
-                          ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
-                          : 'border-white/[0.06]'
-                          }`} />
-                        <div className="absolute inset-x-0 bottom-0 p-4">
-                          <p
-                            className="text-[0.82rem] font-medium tracking-wide text-white/90 leading-snug"
-                            style={{ fontFamily: "'Montserrat', sans-serif" }}
-                          >
-                            {item.caption}
-                          </p>
-                          {!isActive && (
-                            <span
-                              className="text-[0.6rem] text-white/35 mt-1.5 block tracking-widest uppercase"
-                              style={{ fontFamily: "'Montserrat', sans-serif" }}
-                            >
-                              Tap to reveal
-                            </span>
-                          )}
-                        </div>
-                      </motion.article>
-                    )
-                  })}
-                </div>
+                <MobileGallery
+                  items={pastGallery}
+                  activeIdx={activeGalleryIdx}
+                  setActiveIdx={setActiveGalleryIdx}
+                />
               )}
             </div>
           </SectionShell>

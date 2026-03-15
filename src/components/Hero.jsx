@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
-import { motion } from "framer-motion";
 import useIsMobile from "../hooks/useIsMobile";
 import useReducedMotion from "../hooks/useReducedMotion";
 import TraeDistortion from "./TraeDistortion";
@@ -121,58 +120,24 @@ function useCipherReveal(text, startDelay = 380) {
 
 function HeroVideo({ src }) {
   const videoRef = useRef(null);
-  const loadedRef = useRef(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    let obs;
-
-    function loadVideo() {
-      if (loadedRef.current) return;
-      loadedRef.current = true;
-      video.src = src;
-      video.load();
-      video.play().catch(() => {});
-    }
-
-    function scheduleLoad() {
-      obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            loadVideo();
-            obs.disconnect();
-          }
-        },
-        { rootMargin: "0px" }
-      );
-      obs.observe(video);
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", () => {
-        setTimeout(scheduleLoad, 800);
-      }, { once: true });
-    } else {
-      setTimeout(scheduleLoad, 800);
-    }
-
-    return () => {
-      obs?.disconnect();
-    };
+    // Ensure playback starts even if autoPlay attribute is blocked
+    video.play().catch(() => {});
   }, [src]);
 
   return (
     <video
       ref={videoRef}
+      src={src}
       muted
       autoPlay
       playsInline
-      preload="metadata"
+      preload="auto"
       aria-hidden="true"
     >
-      <source data-src={src} type="video/mp4" />
       <track kind="captions" />
     </video>
   );
@@ -223,15 +188,9 @@ export default function Hero() {
 
       <div className="cinematic-title-block">
 
-        <motion.div
-          className="sponsor-row"
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={
-            prefersReducedMotion
-              ? { duration: 0 }
-              : { duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }
-          }
+        <div
+          className="sponsor-row hero-entry"
+          style={{ '--hero-y': '-12px', '--hero-dur': '0.7s', '--hero-delay': '0.1s' }}
         >
           {isMobile ? (
             <>
@@ -251,20 +210,16 @@ export default function Hero() {
           ) : (
             <TraeDistortion src="/trae.webp" className="sponsor-canvas" />
           )}
-        </motion.div>
+        </div>
 
-        <motion.h1
-          className="cinematic-title"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={
-            prefersReducedMotion
-              ? { duration: 0 }
-              : { duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }
-          }
+        <h1
+          className="cinematic-title hero-entry"
           style={{
             cursor: "default",
-            willChange: "transform, opacity",
+            willChange: "auto",
+            '--hero-y': '30px',
+            '--hero-dur': '0.8s',
+            '--hero-delay': '0.25s',
           }}
         >
           {chars.map((char, i) =>
@@ -279,23 +234,16 @@ export default function Hero() {
               />
             )
           )}
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          className="cinematic-tagline"
-          initial={{ opacity: 0 }}
-          animate={allDone ? { opacity: 1 } : { opacity: 0 }}
-          transition={
-            prefersReducedMotion
-              ? { duration: 0 }
-              : { duration: 0.9, ease: "easeOut" }
-          }
-          style={{ willChange: "opacity" }}
+        <p
+          className={`cinematic-tagline hero-tagline${allDone ? ' visible' : ''}`}
+          style={{ willChange: "auto" }}
         >
           <span className="accent">28–29 March, 2026</span>
           <span className="separator">·</span>
           Assemble your crew. Crack the code. Pull off the perfect build.
-        </motion.p>
+        </p>
       </div>
     </section>
   );

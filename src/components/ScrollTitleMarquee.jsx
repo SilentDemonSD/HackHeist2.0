@@ -1,162 +1,194 @@
-import React, { useRef, useMemo } from 'react';
-import { motion, useInView } from 'framer-motion';
+import React, { useRef, useEffect, useState } from 'react';
+import useInView from '../hooks/useInView';
 
-const TIER_PRESETS = {
-  'Title Sponsors': { accent: '#FFD700', accentRgb: '255,215,0', baseDuration: 28 },
-  'Gold Sponsors':  { accent: '#FFB90F', accentRgb: '255,185,15', baseDuration: 32 },
-  'Silver Sponsors':{ accent: '#C0C0C0', accentRgb: '192,192,192', baseDuration: 36 },
-  'Community Partners': { accent: '#DC2626', accentRgb: '220,38,38', baseDuration: 30 },
-  'Media Partners': { accent: '#B91C1C', accentRgb: '185,28,28', baseDuration: 34 },
+const TIER_STYLES = {
+  Sponsors: { accent: '#FFD700', accentRgb: '255,215,0' },
+  'Community Partners': { accent: '#DC2626', accentRgb: '220,38,38' },
 };
-const FALLBACK = { accent: '#888', accentRgb: '136,136,136', baseDuration: 30 };
+const FALLBACK = { accent: '#888', accentRgb: '136,136,136' };
 
-/* Minimum pills that must appear in ONE half of the ribbon so it
-   always overflows and the blur-fade edges look correct. */
-const MIN_PILLS = 16;
-
-function PartnerPill({ name, logo, accent, accentRgb }) {
+/* ── Single partner card ── */
+function PartnerCard({ name, logo, accent, accentRgb }) {
   return (
     <div
-      className="partner-pill flex-shrink-0 flex items-center gap-2.5 h-10 md:h-11
-                 px-4 md:px-5 rounded-full border whitespace-nowrap
-                 transition-all duration-300"
+      className="partner-card group relative flex flex-col items-center justify-center
+                 gap-3 rounded-2xl border px-5 py-6 sm:px-7 sm:py-8
+                 transition-all duration-300 hover:scale-[1.04] flex-shrink-0"
       style={{
-        borderColor: `rgba(${accentRgb},0.15)`,
-        background: `linear-gradient(135deg, rgba(${accentRgb},0.06) 0%, rgba(10,10,10,0.7) 100%)`,
+        borderColor: `rgba(${accentRgb},0.12)`,
+        background: `linear-gradient(160deg, rgba(${accentRgb},0.06) 0%, rgba(10,10,10,0.85) 100%)`,
+        width: 160,
+        minWidth: 160,
       }}
     >
-      {logo ? (
-        <img
-          src={logo}
-          alt={name}
-          loading="lazy"
-          className="h-5 md:h-6 w-auto object-contain flex-shrink-0 opacity-85"
-        />
-      ) : (
-        <span
-          className="w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center
-                     text-[0.55rem] md:text-[0.6rem] font-bold flex-shrink-0"
-          style={{
-            background: `rgba(${accentRgb},0.12)`,
-            color: accent,
-            border: `1px solid rgba(${accentRgb},0.2)`,
-          }}
-        >
-          {name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
-        </span>
-      )}
-      <span className="text-[0.72rem] md:text-[0.8rem] font-medium text-white/70 tracking-wide">
+      {/* Hover glow */}
+      <div
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{
+          boxShadow: `0 0 30px rgba(${accentRgb},0.1), inset 0 0 30px rgba(${accentRgb},0.03)`,
+        }}
+      />
+
+      {/* Logo area */}
+      <div className="flex items-center justify-center h-16 sm:h-20 w-full">
+        {logo ? (
+          <img
+            src={logo}
+            alt={name}
+            loading="lazy"
+            className="h-10 sm:h-12 w-auto max-w-[110px] sm:max-w-[130px] object-contain
+                       opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+          />
+        ) : (
+          <span
+            className="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20
+                       rounded-xl text-xl sm:text-2xl font-bold"
+            style={{
+              background: `rgba(${accentRgb},0.1)`,
+              color: accent,
+              border: `1px solid rgba(${accentRgb},0.18)`,
+            }}
+          >
+            {name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
+          </span>
+        )}
+      </div>
+
+      {/* Name */}
+      <span
+        className="text-xs sm:text-sm font-semibold tracking-wider uppercase text-center whitespace-nowrap"
+        style={{ color: `rgba(${accentRgb},0.7)` }}
+      >
         {name}
       </span>
     </div>
   );
 }
 
-function InfiniteRibbon({ partners, accent, accentRgb, duration, reverse }) {
-  const dir = reverse ? 'reverse' : 'normal';
+/* ── Infinite marquee row ── */
+function MarqueeRow({ tier, partners, style, reverse }) {
+  const { accent, accentRgb } = style;
+  const trackRef = useRef(null);
+  const [animDuration, setAnimDuration] = useState(30);
 
-  /* Build a "half" of the ribbon that is guaranteed to be wider
-     than any viewport by repeating the partner list. */
-  const reps = Math.max(1, Math.ceil(MIN_PILLS / Math.max(partners.length, 1)));
-  const halfPills = useMemo(() => {
-    const out = [];
-    for (let r = 0; r < reps; r++) {
-      partners.forEach((p, i) => out.push({ ...p, _k: `${r}-${i}` }));
-    }
-    return out;
-  }, [partners, reps]);
+  /* Duplicate partners enough times to fill viewport + extra */
+  const repeated = partners.length < 4
+    ? [...partners, ...partners, ...partners, ...partners]
+    : [...partners, ...partners];
+
+  useEffect(() => {
+    if (!trackRef.current) return;
+    /* Measure one "set" width to determine speed. ~50px/s feels right. */
+    const halfW = trackRef.current.scrollWidth / 2;
+    setAnimDuration(Math.max(halfW / 50, 12));
+  }, [partners.length]);
+
+  const direction = reverse ? 'marquee-reverse' : 'marquee-forward';
 
   return (
-    <div className="overflow-hidden flex" aria-hidden="true">
-      <div
-        className="flex gap-3 md:gap-4 w-max"
-        style={{
-          animation: `partnerMarquee ${duration}s linear infinite`,
-          animationDirection: dir,
-        }}
-      >
-        {halfPills.map((p) => (
-          <PartnerPill key={`a-${p._k}`} name={p.name} logo={p.logo} accent={accent} accentRgb={accentRgb} />
-        ))}
-        {halfPills.map((p) => (
-          <PartnerPill key={`b-${p._k}`} name={p.name} logo={p.logo} accent={accent} accentRgb={accentRgb} />
-        ))}
+    <div className="flex flex-col items-center gap-5 sm:gap-6">
+      {/* Tier label */}
+      <div className="flex items-center gap-3 w-full max-w-md px-4">
+        <div className="flex-1 h-px" style={{ background: `rgba(${accentRgb},0.1)` }} />
+        <div className="flex items-center gap-2">
+          <span
+            className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+            style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
+          />
+          <span
+            className="text-[0.65rem] sm:text-xs uppercase tracking-[0.25em] font-semibold"
+            style={{ color: accent, opacity: 0.9 }}
+          >
+            {tier}
+          </span>
+        </div>
+        <div className="flex-1 h-px" style={{ background: `rgba(${accentRgb},0.1)` }} />
       </div>
-    </div>
-  );
-}
 
-function TierRow({ tier, partners, preset, reverse, alignRight }) {
-  const { accent, accentRgb, baseDuration } = preset;
+      {/* Marquee track with blur-fade edges */}
+      <div className="relative w-full overflow-hidden py-2">
+        {/* Left fade */}
+        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 z-10 pointer-events-none"
+             style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }} />
+        {/* Right fade */}
+        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 z-10 pointer-events-none"
+             style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }} />
 
-  return (
-    <div className="flex flex-col gap-2">
-      <div className={`flex items-center gap-3 px-1 ${alignRight ? 'flex-row-reverse' : ''}`}>
-        <span
-          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-          style={{ background: accent, boxShadow: `0 0 6px ${accent}` }}
-        />
-        <span
-          className="text-[0.6rem] md:text-[0.65rem] uppercase tracking-[0.22em] font-semibold"
-          style={{ color: accent, opacity: 0.9 }}
+        <div
+          ref={trackRef}
+          className="flex w-max gap-4 sm:gap-5 marquee-track"
+          style={{
+            animation: `${direction} ${animDuration}s linear infinite`,
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.animationPlayState = 'paused'}
+          onMouseLeave={(e) => e.currentTarget.style.animationPlayState = 'running'}
         >
-          {tier}
-        </span>
-        <div className="flex-1 h-px" style={{ background: `rgba(${accentRgb},0.08)` }} />
+          {/* First set */}
+          {repeated.map((p, i) => (
+            <PartnerCard
+              key={`a-${p.name}-${i}`}
+              name={p.name}
+              logo={p.logo}
+              accent={accent}
+              accentRgb={accentRgb}
+            />
+          ))}
+          {/* Duplicate set for seamless loop */}
+          {repeated.map((p, i) => (
+            <PartnerCard
+              key={`b-${p.name}-${i}`}
+              name={p.name}
+              logo={p.logo}
+              accent={accent}
+              accentRgb={accentRgb}
+            />
+          ))}
+        </div>
       </div>
-
-      <InfiniteRibbon
-        partners={partners}
-        accent={accent}
-        accentRgb={accentRgb}
-        duration={baseDuration}
-        reverse={reverse}
-      />
     </div>
   );
 }
 
+/* ── Main component ── */
 export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: false, margin: '-10% 0px' });
+  const [ref, inView] = useInView({ margin: '0px', once: true });
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0 }}
-      animate={inView ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.6 }}
-      className="relative w-full select-none"
+      className={`relative w-full select-none transition-opacity duration-700 ${
+        inView ? 'opacity-100' : 'opacity-0'
+      }`}
     >
-      <div
-        className="absolute left-0 top-0 bottom-0 w-16 md:w-28 z-10 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.55) 50%, transparent 100%)',
-        }}
-      />
-      <div
-        className="absolute right-0 top-0 bottom-0 w-16 md:w-28 z-10 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.55) 50%, transparent 100%)',
-        }}
-      />
+      <style>{`
+        @keyframes marquee-forward {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marquee-reverse {
+          0%   { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
 
-      <div className="flex flex-col gap-5 md:gap-6 py-4">
+      <div className="flex flex-col gap-10 sm:gap-14 py-4">
         {rows.map((row, idx) => {
-          const preset = TIER_PRESETS[row.tier] || FALLBACK;
+          const style = TIER_STYLES[row.tier] || FALLBACK;
+          /* Sponsors: right-to-left (forward), Community Partners: left-to-right (reverse) */
+          const reverse = idx % 2 === 1;
           return (
-            <TierRow
+            <MarqueeRow
               key={row.tier || idx}
               tier={row.tier}
               partners={row.partners || []}
-              preset={preset}
-              reverse={idx % 2 !== 0}
-              alignRight={idx % 2 !== 0}
+              style={style}
+              reverse={reverse}
             />
           );
         })}
       </div>
 
+      {/* CTA button */}
       <div className="flex justify-center mt-8 mb-2">
         <a
           href={partnerCta}
@@ -164,7 +196,7 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
                      text-[0.75rem] md:text-[0.82rem] font-semibold tracking-wider uppercase
                      border border-red-800/40 text-red-400/80
                      hover:border-red-600/60 hover:text-red-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.15)]
-                     transition-all duration-300 pointer-events-auto"
+                     transition-all duration-300"
           style={{ background: 'rgba(220,38,38,0.05)' }}
         >
           Why Sponsor Us?
@@ -176,18 +208,6 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
           </svg>
         </a>
       </div>
-
-      <style>{`
-        @keyframes partnerMarquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .partner-pill:hover {
-          border-color: rgba(255,255,255,0.18) !important;
-          background: rgba(255,255,255,0.06) !important;
-          box-shadow: 0 0 16px rgba(255,255,255,0.04);
-        }
-      `}</style>
-    </motion.div>
+    </div>
   );
 }

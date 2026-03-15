@@ -230,10 +230,11 @@
 @media (max-width: 768px) {
   .hb-entry {
     top: 6px;
-    left: 1%;
+    left: auto;
+    right: 3%;
   }
   .hb-entry:not(.hb-entered) {
-    transform: translate(80vw, 100vh);
+    transform: translate(-80vw, 100vh);
   }
   .hb-hitarea {
     width: 180px;

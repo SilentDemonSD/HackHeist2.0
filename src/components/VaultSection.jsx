@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import useInView from "../hooks/useInView";
 import "./VaultSection.css";
 const VAULTS = [
   {
@@ -48,6 +49,7 @@ const GRANT_PROBABILITY = 0.70;
 
 function VaultDoor({ scanning, granted, denied, color }) {
   const ringColor = granted ? color : denied ? "#ff4d4f" : "rgba(255,60,60,0.5)";
+  const comboNumbers = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
   return (
     <motion.div
@@ -67,6 +69,10 @@ function VaultDoor({ scanning, granted, denied, color }) {
           : {}
       }
     >
+      {/* Outer beveled rim */}
+      <div className="vcard__rim" style={{ borderColor: `${ringColor}30` }} />
+
+      {/* Outer ring with bolt holes */}
       <motion.div
         className="vcard__ring vcard__ring--outer"
         style={{ borderColor: ringColor, boxShadow: `0 0 16px ${ringColor}50` }}
@@ -78,7 +84,52 @@ function VaultDoor({ scanning, granted, denied, color }) {
             ? { duration: 0.6, ease: "easeOut" }
             : { duration: 28, repeat: Infinity, ease: "linear" }
         }
-      />
+      >
+        {/* 12 bolt holes around outer ring */}
+        {comboNumbers.map((_, i) => (
+          <div
+            key={`bolt-${i}`}
+            className="vcard__bolthole"
+            style={{ transform: `rotate(${i * 30}deg)` }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Combination numbers ring - rotates opposite to outer */}
+      <motion.div
+        className="vcard__combo-ring"
+        animate={{ rotate: scanning ? [360, 0] : granted ? -360 : [360, 0] }}
+        transition={
+          scanning
+            ? { duration: 3, repeat: Infinity, ease: "linear" }
+            : granted
+            ? { duration: 0.8, ease: "easeOut" }
+            : { duration: 36, repeat: Infinity, ease: "linear" }
+        }
+      >
+        {comboNumbers.map((num, i) => (
+          <span
+            key={`num-${i}`}
+            className="vcard__combo-num"
+            style={{ transform: `rotate(${i * 30}deg)` }}
+          >
+            <span style={{ transform: `translateY(-58px) rotate(-${i * 30}deg)` }}>{num}</span>
+          </span>
+        ))}
+      </motion.div>
+
+      {/* Segmented detail ring */}
+      <div className="vcard__seg-ring" style={{ borderColor: `${ringColor}25` }}>
+        {[0, 60, 120, 180, 240, 300].map((deg) => (
+          <div
+            key={`seg-${deg}`}
+            className="vcard__seg-notch"
+            style={{ transform: `rotate(${deg}deg)` }}
+          />
+        ))}
+      </div>
+
+      {/* Mid ring with locking lugs */}
       <motion.div
         className="vcard__ring vcard__ring--mid"
         style={{ borderColor: scanning ? color : ringColor }}
@@ -90,12 +141,34 @@ function VaultDoor({ scanning, granted, denied, color }) {
             ? { duration: 0.5, ease: "easeOut" }
             : { duration: 20, repeat: Infinity, ease: "linear" }
         }
-      />
+      >
+        {/* 4 locking lugs on mid ring */}
+        {[0, 90, 180, 270].map((deg) => (
+          <div
+            key={`lug-${deg}`}
+            className="vcard__lug"
+            style={{ transform: `rotate(${deg}deg)` }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Inner ring */}
       <motion.div
         className="vcard__ring vcard__ring--inner"
         animate={{ rotate: [0, 360] }}
         transition={{ duration: scanning ? 1 : 8, repeat: Infinity, ease: "linear" }}
-      />
+      >
+        {/* Inner rivets */}
+        {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+          <div
+            key={`rivet-${deg}`}
+            className="vcard__rivet"
+            style={{ transform: `rotate(${deg}deg)` }}
+          />
+        ))}
+      </motion.div>
+
+      {/* Central bolt with keyhole detail */}
       <motion.div
         className="vcard__bolt"
         animate={
@@ -107,11 +180,22 @@ function VaultDoor({ scanning, granted, denied, color }) {
         }
         style={granted ? { background: color, boxShadow: `0 0 24px ${color}` } : {}}
         transition={{ duration: 0.5 }}
-      />
+      >
+        <div className="vcard__bolt-inner" />
+        <div className="vcard__keyhole" />
+      </motion.div>
+
+      {/* Crosshair lines */}
       <div className="vcard__line vcard__line--h" />
       <div className="vcard__line vcard__line--v" />
-      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
-        <div key={deg} className="vcard__tick" style={{ transform: `rotate(${deg}deg)` }} />
+
+      {/* 24 tick marks (major every 30°, minor every 15°) */}
+      {Array.from({ length: 24 }, (_, i) => i * 15).map((deg) => (
+        <div
+          key={deg}
+          className={`vcard__tick ${deg % 30 === 0 ? "vcard__tick--major" : ""}`}
+          style={{ transform: `rotate(${deg}deg)` }}
+        />
       ))}
 
       <AnimatePresence>
@@ -201,14 +285,17 @@ function HoldButton({ vaultColor, onResult, disabled }) {
   useEffect(() => () => cancelAnimationFrame(raf.current), []);
 
   const progressDeg = (progress / 100) * 360;
+  const pctDisplay = Math.round(progress);
 
   return (
     <div className="vcard__hold-wrap">
       <motion.button
-        className="vcard__hold-btn"
+        className={`vcard__hold-btn ${holding ? 'vcard__hold-btn--active' : ''}`}
         style={{
           borderColor: holding ? vaultColor : "rgba(255,77,79,0.38)",
-          boxShadow: holding ? `0 0 20px ${vaultColor}44` : "none",
+          boxShadow: holding
+            ? `0 0 24px ${vaultColor}55, 0 0 60px ${vaultColor}18`
+            : "none",
         }}
         onMouseDown={startHold}
         onMouseUp={stopHold}
@@ -219,17 +306,44 @@ function HoldButton({ vaultColor, onResult, disabled }) {
         disabled={disabled}
         whileTap={disabled ? {} : { scale: 0.97 }}
       >
+        {/* Progress fill */}
         {holding && (
           <span
             className="vcard__hold-ring"
             style={{
-              background: `conic-gradient(${vaultColor} ${progressDeg}deg, rgba(255,255,255,0.05) ${progressDeg}deg)`,
+              background: `linear-gradient(to right, ${vaultColor} ${progress}%, rgba(255,255,255,0.05) ${progress}%)`,
             }}
           />
         )}
+
+        {/* Scan line sweep */}
+        {holding && <span className="vcard__scan-line" style={{ '--scan-color': vaultColor }} />}
+
+        {/* Pulse glow underlay */}
+        {holding && <span className="vcard__scan-pulse" style={{ '--scan-color': vaultColor }} />}
+
+        {/* Label */}
         <span className="vcard__hold-label">
-          {holding ? "SCANNING…" : "HOLD TO AUTHENTICATE"}
+          {holding ? (
+            <>
+              <span className="vcard__scan-text">SCANNING</span>
+              <span className="vcard__scan-dots" />
+            </>
+          ) : (
+            "HOLD TO AUTHENTICATE"
+          )}
         </span>
+
+        {/* Inline progress bar (bottom edge) */}
+        {holding && (
+          <span
+            className="vcard__hold-progress-bar"
+            style={{
+              width: `${progress}%`,
+              background: `linear-gradient(90deg, transparent, ${vaultColor})`,
+            }}
+          />
+        )}
       </motion.button>
 
       <AnimatePresence>
@@ -237,11 +351,13 @@ function HoldButton({ vaultColor, onResult, disabled }) {
           <motion.span
             className="vcard__progress-pct"
             style={{ color: vaultColor }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
           >
-            {Math.round(progress)}%
+            <span className="vcard__pct-value">{pctDisplay}</span>
+            <span className="vcard__pct-sign">%</span>
+            <span className="vcard__pct-label"> VERIFIED</span>
           </motion.span>
         )}
       </AnimatePresence>
@@ -396,6 +512,35 @@ function ScanLine() {
   );
 }
 
+function VaultHeading() {
+  const [ref, inView] = useInView({ threshold: 0.3 });
+  const cls = inView ? "revealed" : "";
+
+  return (
+    <div ref={ref} className={`vault-heading-group reveal-section ${cls}`}>
+      <p className="vault-eyebrow">Secured Intelligence</p>
+      <h2 className="vault-title" style={{ cursor: "default" }}>
+        {"THE VAULT".split("").map((char, i) =>
+          char === " " ? (
+            <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.2em" }} />
+          ) : (
+            <span
+              key={i}
+              className={`letter-char ${cls}`}
+              style={{ "--i": i }}
+            >
+              {char}
+            </span>
+          )
+        )}
+      </h2>
+      <p className="vault-sub">
+        Three classified war chests. Hold to authenticate — breach at your own risk.
+      </p>
+    </div>
+  );
+}
+
 export default function VaultSection() {
   return (
     <section className="vault-section" id="prizes">
@@ -407,37 +552,7 @@ export default function VaultSection() {
       </div>
 
       <div className="vault-inner">
-        <motion.div
-          className="vault-heading-group"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <p className="vault-eyebrow">Secured Intelligence</p>
-          <h2 className="vault-title" style={{ cursor: "default" }}>
-            {"THE VAULT".split("").map((char, i) =>
-              char === " " ? (
-                <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.2em" }} />
-              ) : (
-                <motion.span
-                  key={i}
-                  style={{ display: "inline-block" }}
-                  initial={{ opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.05, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={{ color: "#ff4d4f", y: -7, transition: { duration: 0.13 } }}
-                >
-                  {char}
-                </motion.span>
-              )
-            )}
-          </h2>
-          <p className="vault-sub">
-            Three classified war chests. Hold to authenticate — breach at your own risk.
-          </p>
-        </motion.div>
+        <VaultHeading />
 
         <div className="vault-cards">
           {VAULTS.map((vault, i) => (

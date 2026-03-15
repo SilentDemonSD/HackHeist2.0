@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import instagramIcon from '../assets/links/instagram.webp'
+import useIsMobile from '../hooks/useIsMobile'
 
 const socialLinks = [
   {
@@ -104,6 +106,9 @@ function SocialIcon({ icon, href, name, type }) {
 }
 
 export default function Footer() {
+  const isMobile = useIsMobile()
+  const [mapLoaded, setMapLoaded] = useState(false)
+
   return (
     <footer className="relative border-t border-white/[0.06] bg-[#060606]">
       <div
@@ -117,7 +122,7 @@ export default function Footer() {
 
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
 
-      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[180px] bg-red-500/[0.04] rounded-full blur-[100px]" />
+      <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[min(700px,100vw)] h-[180px] bg-red-500/[0.04] rounded-full blur-[100px]" />
 
       <motion.div
         className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 py-14 md:py-20"
@@ -126,7 +131,7 @@ export default function Footer() {
         viewport={{ once: true, amount: 0.15 }}
         variants={stagger}
       >
-        <div className="grid gap-12 sm:gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-4">
 
           <motion.div variants={rise} className="space-y-5">
             <div className="flex items-center gap-1.5 select-none">
@@ -223,10 +228,23 @@ export default function Footer() {
               Location
             </h4>
             <div className="overflow-hidden rounded-xl border border-white/[0.06] ring-1 ring-white/[0.03]">
+              {isMobile && !mapLoaded ? (
+                <button
+                  onClick={() => setMapLoaded(true)}
+                  className="w-full flex flex-col items-center justify-center gap-2 text-gray-500 hover:text-gray-300 transition-colors"
+                  style={{ height: 140, background: '#0a0a0a', fontFamily: "'Montserrat', sans-serif", fontSize: '0.75rem' }}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                  Tap to load map
+                </button>
+              ) : (
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3490.4832773303665!2d77.63842827582299!3d28.97304697548051!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390c668fdea4d87f%3A0x8795def814a486e7!2sMeerut%20Institute%20of%20Engineering%20and%20Technology!5e0!3m2!1sen!2sin!4v1763614696904!5m2!1sen!2sin"
                 width="100%"
-                height="180"
+                height={isMobile ? 140 : 180}
                 style={{ border: 0, filter: 'grayscale(0.85) contrast(1.1) brightness(0.55)' }}
                 allowFullScreen
                 loading="lazy"
@@ -234,6 +252,7 @@ export default function Footer() {
                 className="w-full"
                 title="MIET Location"
               />
+              )}
             </div>
           </motion.div>
         </div>
