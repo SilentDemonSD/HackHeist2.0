@@ -45,7 +45,7 @@ const TIERS = [
     isMarquee: true,
     headingSize: 'text-[0.7rem] sm:text-[0.8rem]',
     partners: [
-      { name: 'Technovators', logo: '/logo/techInnovators.jpeg' },
+      { name: 'Technovators', logo: '/logo/Technovators.png' },
       { name: 'Cloud Hustlers', logo: '/logo/cloud.png' },
       { name: 'Hackholt', logo: '/logo/holt.png' },
       { name: 'Code Crafters', logo: '/logo/CodeCrafters.png' },
