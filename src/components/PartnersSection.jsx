@@ -45,14 +45,14 @@ const TIERS = [
     isMarquee: true,
     headingSize: 'text-[0.7rem] sm:text-[0.8rem]',
     partners: [
-      { name: 'Mystery Partner', revealingSoon: true },
-      { name: 'Mystery Partner', revealingSoon: true },
-      { name: 'Mystery Partner', revealingSoon: true },
-      { name: 'Mystery Partner', revealingSoon: true },
-      { name: 'Mystery Partner', revealingSoon: true },
-      { name: 'Mystery Partner', revealingSoon: true },
-      { name: 'Mystery Partner', revealingSoon: true },
-      { name: 'Mystery Partner', revealingSoon: true },
+      { name: 'Technovators', logo: '/logo/techInnovators.jpeg' },
+      { name: 'Cloud Hustlers', logo: '/logo/cloud.png' },
+      { name: 'Hackholt', logo: '/logo/holt.png' },
+      { name: 'Code Crafters', logo: '/logo/CodeCrafters.png' },
+      { name: 'Sdiet Techies', logo: '/logo/sdiet.png' },
+      { name: 'gdg USICT', logo: '/logo/gdg.png' },
+      { name: 'Event Info', logo: '/logo/event.png' },
+      { name: 'Tech Masters', logo: '/logo/Tech_Masters.jpeg' }
     ],
   },
 ];
@@ -122,7 +122,7 @@ const SponsorCard = React.memo(({ partner, size, accent, accentRgb, delay }) => 
         className="absolute -top-16 -right-16 w-32 h-32 rounded-full
                    opacity-[0.02] group-hover:opacity-[0.05]
                    transition-opacity duration-700 pointer-events-none"
-        style={{ 
+        style={{
           background: `radial-gradient(circle, ${accent} 0%, transparent 70%)`
         }}
       />
@@ -132,7 +132,7 @@ const SponsorCard = React.memo(({ partner, size, accent, accentRgb, delay }) => 
         className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full
                    opacity-0 group-hover:opacity-[0.04]
                    transition-opacity duration-700 pointer-events-none"
-        style={{ 
+        style={{
           background: `radial-gradient(circle, ${accent} 0%, transparent 70%)`
         }}
       />
@@ -213,8 +213,8 @@ const MarqueeRow = React.memo(({ tier, partners, index }) => {
         <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, transparent, rgba(${tier.accentRgb},0.2), transparent)` }} />
         <div className="flex items-center gap-2.5">
           <span className="w-2 h-2 rounded-full flex-shrink-0 sponsor-tier-dot" style={{ background: tier.accent, boxShadow: `0 0 10px ${tier.accent}` }} />
-          <span 
-            className={`${tier.headingSize || 'text-[0.6rem] sm:text-[0.7rem]'} uppercase tracking-[0.35em] font-bold`} 
+          <span
+            className={`${tier.headingSize || 'text-[0.6rem] sm:text-[0.7rem]'} uppercase tracking-[0.35em] font-bold`}
             style={{ color: tier.accent, fontFamily: "'Montserrat', sans-serif" }}
           >
             {tier.name}
@@ -226,9 +226,9 @@ const MarqueeRow = React.memo(({ tier, partners, index }) => {
       <div className="relative w-full overflow-hidden py-4">
         {/* Fades - optimized to use simple opacity backgrounds */}
         <div className="absolute top-0 bottom-0 left-0 w-20 sm:w-32 z-10 pointer-events-none"
-             style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }} />
+          style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }} />
         <div className="absolute top-0 bottom-0 right-0 w-20 sm:w-32 z-10 pointer-events-none"
-             style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }} />
+          style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }} />
 
         <div
           ref={trackRef}
@@ -246,7 +246,7 @@ const MarqueeRow = React.memo(({ tier, partners, index }) => {
             <SponsorCard
               key={`${i}-${p.name}`}
               partner={p}
-              size="sm"
+              size="md"
               accent={tier.accent}
               accentRgb={tier.accentRgb}
               delay={0}
