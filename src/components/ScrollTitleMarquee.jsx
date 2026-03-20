@@ -9,8 +9,8 @@ const FALLBACK = { accent: "#888", accentRgb: "136,136,136" };
 
 /* ── Single partner card ── */
 function PartnerCard({ name, logo, link, accent, accentRgb }) {
-  const Wrapper = link ? 'a' : 'div';
-  const wrapperProps = link ? { href: link, target: '_blank', rel: 'noopener noreferrer' } : {};
+  const Wrapper = link ? "a" : "div";
+  const wrapperProps = link ? { href: link, target: "_blank", rel: "noopener noreferrer" } : {};
   return (
     <Wrapper
       {...wrapperProps}
@@ -22,8 +22,8 @@ function PartnerCard({ name, logo, link, accent, accentRgb }) {
         background: `linear-gradient(160deg, rgba(${accentRgb},0.06) 0%, rgba(10,10,10,0.85) 100%)`,
         width: 160,
         minWidth: 160,
-        cursor: link ? 'pointer' : 'default',
-        textDecoration: 'none',
+        cursor: link ? "pointer" : "default",
+        textDecoration: "none",
       }}
     >
       {/* Hover glow */}

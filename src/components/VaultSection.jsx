@@ -283,7 +283,6 @@ function HoldButton({ vaultColor, onResult, disabled }) {
 
   useEffect(() => () => cancelAnimationFrame(raf.current), []);
 
-  const progressDeg = (progress / 100) * 360;
   const pctDisplay = Math.round(progress);
 
   return (

@@ -1,9 +1,12 @@
 {
-  "buildCommand": "npx rspack build",
+  "buildCommand": "vp build",
   "outputDirectory": "dist",
   "framework": null,
   "rewrites": [
-    { "source": "/((?!assets|videos|models|textures|.*\\..*).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!assets|videos|models|textures|logo|music|.*\\..*).*)",
+      "destination": "/index.html"
+    }
   ],
   "headers": [
     {

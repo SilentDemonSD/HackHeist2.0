@@ -1,12 +1,12 @@
-import { lazy, Suspense, useState } from 'react'
-import Navbar from '../components/Navbar'
-import SEO from '../components/SEO'
-import Hero from '../components/Hero'
-import LazySection from '../components/LazySection'
-import useIsMobile from '../hooks/useIsMobile'
-import useInView from '../hooks/useInView'
+import { lazy, Suspense, useState } from "react";
+import Navbar from "../components/Navbar";
+import SEO from "../components/SEO";
+import Hero from "../components/Hero";
+import LazySection from "../components/LazySection";
+import useIsMobile from "../hooks/useIsMobile";
+import useInView from "../hooks/useInView";
 
-import HorizontalTracks, { MobileTracks } from '../components/HorizontalTracks'
+import HorizontalTracks, { MobileTracks } from "../components/HorizontalTracks";
 
 const DevfolioApply = lazy(
   () => import(/* webpackChunkName: "devfolio" */ "../components/DevfolioApply"),
@@ -96,7 +96,9 @@ const galleryLayout = [
   { col: "1 / 4", row: "6 / 7" }, // 9: full-width closing
 ];
 
-const PartnersSection = lazy(() => import(/* webpackChunkName: "partners" */ '../components/PartnersSection'))
+const PartnersSection = lazy(
+  () => import(/* webpackChunkName: "partners" */ "../components/PartnersSection"),
+);
 
 /* Per-letter animated heading (CSS animations, no framer-motion) */
 function LetterHeading({ text, centered = false, isMobile = false }) {
@@ -296,16 +298,20 @@ function MobileGallery({ items, activeIdx, setActiveIdx }) {
               decoding="async"
               width={600}
               height={400}
-              className={`h-full w-full object-cover transition-all duration-700 ease-out ${isActive
-                ? 'grayscale-0 brightness-105 scale-[1.03]'
-                : 'grayscale brightness-[0.7]'
-                }`}
+              className={`h-full w-full object-cover transition-all duration-700 ease-out ${
+                isActive ? "grayscale-0 brightness-105 scale-[1.03]" : "grayscale brightness-[0.7]"
+              }`}
             />
-            <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${isActive ? 'opacity-45' : 'opacity-90'}`} />
-            <div className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${isActive
-              ? 'border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]'
-              : 'border-white/[0.06]'
-              }`} />
+            <div
+              className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 pointer-events-none ${isActive ? "opacity-45" : "opacity-90"}`}
+            />
+            <div
+              className={`absolute inset-0 rounded-2xl pointer-events-none border transition-all duration-300 ${
+                isActive
+                  ? "border-red-500/40 shadow-[inset_0_0_30px_rgba(255,77,79,0.08)]"
+                  : "border-white/[0.06]"
+              }`}
+            />
             <div className="absolute inset-x-0 bottom-0 p-4">
               <p
                 className="text-[0.82rem] font-medium tracking-wide text-white/90 leading-snug"

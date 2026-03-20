@@ -175,15 +175,15 @@ const CARD_W = 500; // px — card width on desktop (also used in scroll math)
 const CARD_GAP = 40; // px — gap between cards
 const N = 6; // total number of tracks
 
-const DWELL   = 0.12;                              // 12% of scroll per card pause
-const TRANSIT = (1 - N * DWELL) / (N - 1);         // transition between dwells
+const DWELL = 0.12; // 12% of scroll per card pause
+const TRANSIT = (1 - N * DWELL) / (N - 1); // transition between dwells
 const CARD_STEP = CARD_W + CARD_GAP;
 
 const getCardDwellStart = (i) => i * (TRANSIT + DWELL);
 const getCardDwellEnd = (i) => i * (TRANSIT + DWELL) + DWELL;
 
 // Smooth ease function for interpolation (cubic ease-in-out)
-const easeInOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 // x keyframes: flat during each dwell, eased ramp between dwells
 // Add midpoints at 25%, 50%, 75% of each transition for smooth easing
@@ -211,26 +211,31 @@ for (let i = 0; i < N; i++) {
 }
 // Sort keyframes by input value (they were pushed interleaved)
 const sortedPairs = X_INPUT.map((v, i) => [v, X_OUTPUT[i]]).sort((a, b) => a[0] - b[0]);
-const X_INPUT_SORTED = sortedPairs.map(p => p[0]);
-const X_OUTPUT_SORTED = sortedPairs.map(p => p[1]);
+const X_INPUT_SORTED = sortedPairs.map((p) => p[0]);
+const X_OUTPUT_SORTED = sortedPairs.map((p) => p[1]);
 
 const TrackCard = React.memo(({ track, index, scrollYProgress }) => {
   const dwellStart = getCardDwellStart(index);
+  TrackCard.displayName = "TrackCard";
   const dwellEnd = getCardDwellEnd(index);
 
   // Transition radius: card ramps in during the transit *before* its dwell
   // and ramps out during the transit *after* its dwell
-  const rampIn  = dwellStart - TRANSIT * 0.6;
-  const rampOut = dwellEnd   + TRANSIT * 0.6;
+  const rampIn = dwellStart - TRANSIT * 0.6;
+  const rampOut = dwellEnd + TRANSIT * 0.6;
 
   // Removed blurVal and filter for better performance
   // Gentler scale/opacity for smoother focus transitions
-  const scale   = useTransform(scrollYProgress,
+  const scale = useTransform(
+    scrollYProgress,
     [rampIn, dwellStart, dwellEnd, rampOut],
-    [0.92,   1,          1,        0.92]);
-  const opacity = useTransform(scrollYProgress,
+    [0.92, 1, 1, 0.92],
+  );
+  const opacity = useTransform(
+    scrollYProgress,
     [rampIn, dwellStart, dwellEnd, rampOut],
-    [0.15,   1,          1,        0.15]);
+    [0.15, 1, 1, 0.15],
+  );
 
   return (
     <motion.div
@@ -240,7 +245,7 @@ const TrackCard = React.memo(({ track, index, scrollYProgress }) => {
         maxWidth: "min(500px, 85vw)",
         scale,
         opacity,
-        willChange: 'transform, opacity',
+        willChange: "transform, opacity",
       }}
     >
       <div
@@ -336,6 +341,7 @@ const TrackCard = React.memo(({ track, index, scrollYProgress }) => {
     </motion.div>
   );
 });
+TrackCard.displayName = "TrackCard";
 
 function SectionHeader({ className = "" }) {
   const [headRef, headInView] = useInView({ margin: "-40px" });
@@ -394,7 +400,7 @@ const HorizontalTracks = () => {
     <section
       ref={containerRef}
       className="relative bg-[#050505] hidden md:block"
-      style={{ height: '700vh' }}
+      style={{ height: "700vh" }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col">
         <div className="pt-16 lg:pt-20 pb-6 px-4 z-10">

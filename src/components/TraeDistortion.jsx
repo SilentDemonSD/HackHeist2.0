@@ -86,7 +86,7 @@ export default function TraeDistortion({ src, className = "" }) {
     img.crossOrigin = "anonymous";
 
     const compose = () => {
-      document.fonts.ready.then(() => {
+      void document.fonts.ready.then(() => {
         // Measure text width
         const tmp = document.createElement("canvas").getContext("2d");
         tmp.font = `${FONT_SIZE}px '3rdMan', sans-serif`;
