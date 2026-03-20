@@ -5,8 +5,9 @@
 .radialGlow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 20% 50%, rgba(100, 0, 0, 0.18) 0%, transparent 60%),
-              radial-gradient(ellipse 50% 40% at 80% 80%, rgba(60, 0, 0, 0.12) 0%, transparent 55%);
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(100, 0, 0, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(60, 0, 0, 0.12) 0%, transparent 55%);
   pointer-events: none;
 }
 
@@ -28,12 +29,18 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 77, 79, 0.4) 30%, rgba(255, 77, 79, 0.4) 70%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 77, 79, 0.4) 30%,
+    rgba(255, 77, 79, 0.4) 70%,
+    transparent
+  );
   pointer-events: none;
 }
 
 .eyebrow {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -47,7 +54,7 @@
 }
 
 .heading {
-  font-family: '3rdMan', sans-serif !important;
+  font-family: "3rdMan", sans-serif !important;
   font-weight: normal !important;
   font-size: clamp(2.2rem, 5vw, 3.8rem) !important;
   letter-spacing: 0.06em !important;
@@ -93,7 +100,7 @@
   color: rgba(185, 185, 185, 0.9);
   font-size: 0.93rem;
   line-height: 1.75;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .leadLine {
@@ -123,7 +130,10 @@
   border-radius: 0.875rem;
   padding: 1rem 0.75rem;
   text-align: center;
-  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    transform 0.3s ease;
 }
 
 .statCard:hover {
@@ -133,7 +143,7 @@
 }
 
 .statValue {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 1.65rem;
   font-weight: 800;
   color: #ffffff;
@@ -155,7 +165,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: rgba(185, 185, 185, 0.6);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .highlightsRow {
@@ -172,7 +182,9 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 0.75rem;
   padding: 0.875rem 1rem;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
 }
 
 .highlightCard:hover {
@@ -187,7 +199,7 @@
 }
 
 .highlightTitle {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   color: #e8e8e8;
@@ -200,7 +212,7 @@
   font-size: 0.8rem;
   color: rgba(170, 170, 170, 0.75);
   line-height: 1.55;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .metaRow {
@@ -217,7 +229,9 @@
   border-radius: 999px;
   padding: 0.35rem 0.85rem;
   background: rgba(255, 77, 79, 0.05);
-  transition: border-color 0.25s, background 0.25s;
+  transition:
+    border-color 0.25s,
+    background 0.25s;
 }
 
 .metaChip:hover {
@@ -230,14 +244,14 @@
   text-transform: uppercase;
   letter-spacing: 0.25em;
   color: rgba(185, 185, 185, 0.55);
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .metaValue {
   font-size: 0.78rem;
   color: #e8e8e8;
   font-weight: 600;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .blueprintShell {
@@ -283,14 +297,20 @@
   bottom: -20%;
   left: 0;
   width: 3px;
-  background: linear-gradient(180deg, rgba(255, 77, 79, 0) 0%, rgba(255, 77, 79, 0.85) 40%, rgba(255, 77, 79, 0.9) 60%, rgba(255, 77, 79, 0) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 77, 79, 0) 0%,
+    rgba(255, 77, 79, 0.85) 40%,
+    rgba(255, 77, 79, 0.9) 60%,
+    rgba(255, 77, 79, 0) 100%
+  );
   box-shadow: 0 0 18px rgba(255, 64, 64, 0.8);
-  animation: laserSweep 10s cubic-bezier(.22,.9,.3,1) infinite;
+  animation: laserSweep 10s cubic-bezier(0.22, 0.9, 0.3, 1) infinite;
   pointer-events: none;
 }
 
 .laser::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   filter: blur(12px);
@@ -319,26 +339,26 @@
 }
 
 .blueprintNode::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 100%;
   border-radius: 50%;
   border: 1.5px solid rgba(167, 209, 255, 0.6);
   background: radial-gradient(circle, rgba(13, 41, 68, 0.95) 0%, rgba(5, 18, 35, 0.85) 100%);
-  box-shadow: 
+  box-shadow:
     0 0 8px rgba(167, 209, 255, 0.3),
     inset 0 0 8px rgba(167, 209, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .blueprintNode::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: radial-gradient(circle, #FF4D4F 0%, rgba(255, 77, 79, 0.4) 100%);
+  background: radial-gradient(circle, #ff4d4f 0%, rgba(255, 77, 79, 0.4) 100%);
   box-shadow: 0 0 6px rgba(255, 77, 79, 0.8);
   z-index: 1;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -357,7 +377,7 @@
   padding: 6px 12px;
   border-radius: 6px;
   border: 1px solid rgba(255, 77, 79, 0.3);
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.4),
     0 0 8px rgba(255, 77, 79, 0.15);
   white-space: nowrap;
@@ -369,7 +389,7 @@
 }
 
 .blueprintNode span::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -386,7 +406,7 @@
 .blueprintNode:hover::before,
 .blueprintNode:focus-visible::before {
   border-color: rgba(255, 77, 79, 0.8);
-  box-shadow: 
+  box-shadow:
     0 0 16px rgba(167, 209, 255, 0.5),
     0 0 24px rgba(255, 77, 79, 0.3),
     inset 0 0 12px rgba(167, 209, 255, 0.15);
@@ -406,31 +426,65 @@
   transform: translateX(-50%) translateY(-2px);
 }
 
-.blueprintNode:nth-child(odd) { animation-delay: 0.4s; }
-.blueprintNode:nth-child(even) { animation-delay: 0.8s; }
+.blueprintNode:nth-child(odd) {
+  animation-delay: 0.4s;
+}
+.blueprintNode:nth-child(even) {
+  animation-delay: 0.8s;
+}
 
 @keyframes laserSweep {
-  0% { transform: translateX(0); opacity: 0; }
-  5% { opacity: 1; }
-  70% { transform: translateX(100%); opacity: 1; }
-  85% { opacity: 0.4; }
-  100% { transform: translateX(100%); opacity: 0; }
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 @keyframes nodePulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.85; }
-  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
 }
 
 @keyframes gridPulse {
-  0% { opacity: 0.1; }
-  50% { opacity: 0.25; }
-  100% { opacity: 0.1; }
+  0% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0.1;
+  }
 }
 
 @keyframes dashFlow {
-  0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 160; }
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 160;
+  }
 }
 
 .routeFlow {
@@ -439,8 +493,12 @@
 }
 
 @keyframes routeAnimate {
-  0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: -130; }
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -130;
+  }
 }
 
 @media (max-width: 479px) {
@@ -469,5 +527,7 @@
   .blueprintNode {
     animation: none !important;
   }
-  .laser { display: none; }
+  .laser {
+    display: none;
+  }
 }

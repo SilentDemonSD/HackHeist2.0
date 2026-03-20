@@ -1,26 +1,30 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React from "react";
+import { Helmet } from "react-helmet-async";
 
 export default function SEO({
   title,
   description,
-  name = 'Hack Heist 2.0',
-  type = 'website',
+  name = "Hack Heist 2.0",
+  type = "website",
   url,
-  image = 'https://www.hackheist2.xyz/og-image.png',
-  structuredData
+  image = "https://www.hackheist2.xyz/og-image.png",
+  structuredData,
 }) {
   const fullTitle = title ? `${title} | ${name}` : `${name} — 36-Hour Hackathon`;
-  const defaultDesc = 'Assemble your crew, crack the code, and pull off the perfect build. A 36-hour hackathon by GDG On Campus MIET, March 28–29, 2026.';
+  const defaultDesc =
+    "Assemble your crew, crack the code, and pull off the perfect build. A 36-hour hackathon by GDG On Campus MIET, March 28–29, 2026.";
   const finalDescription = description || defaultDesc;
-  const canonicalUrl = url ? `https://www.hackheist2.xyz${url}` : 'https://www.hackheist2.xyz/';
+  const canonicalUrl = url ? `https://www.hackheist2.xyz${url}` : "https://www.hackheist2.xyz/";
 
   return (
     <Helmet>
       {/* Standard metadata tags */}
       <title>{fullTitle}</title>
       <meta name="description" content={finalDescription} />
-      <meta name="keywords" content="hackheist, hack heist, gdg miet hackathon, meerut hackathon, 36 hour hackathon" />
+      <meta
+        name="keywords"
+        content="hackheist, hack heist, gdg miet hackathon, meerut hackathon, 36 hour hackathon"
+      />
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Open Graph tags */}
@@ -41,9 +45,7 @@ export default function SEO({
 
       {/* Structured Data */}
       {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       )}
     </Helmet>
   );

@@ -1,8 +1,8 @@
-import { useRef, useState, useCallback } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import useIsMobile from '../hooks/useIsMobile'
+import { useRef, useState, useCallback } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import useIsMobile from "../hooks/useIsMobile";
 
-const DEVFOLIO_URL = 'https://hack-heist-2.devfolio.co'
+const DEVFOLIO_URL = "https://hack-heist-2.devfolio.co";
 
 /* Devfolio "D" icon — dark fill */
 function DevfolioIcon({ size = 22 }) {
@@ -24,55 +24,58 @@ function DevfolioIcon({ size = 22 }) {
         fill="#1a1a1a"
       />
     </svg>
-  )
+  );
 }
 
-const MAGNETIC_RANGE = 320
-const MAGNETIC_STRENGTH = 0.55
+const MAGNETIC_RANGE = 320;
+const MAGNETIC_STRENGTH = 0.55;
 
 export default function DevfolioApply() {
-  const isMobile = useIsMobile()
-  const btnRef = useRef(null)
-  const [hovered, setHovered] = useState(false)
+  const isMobile = useIsMobile();
+  const btnRef = useRef(null);
+  const [hovered, setHovered] = useState(false);
 
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const springX = useSpring(mx, { stiffness: 100, damping: 10, mass: 1.2 })
-  const springY = useSpring(my, { stiffness: 100, damping: 10, mass: 1.2 })
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const springX = useSpring(mx, { stiffness: 100, damping: 10, mass: 1.2 });
+  const springY = useSpring(my, { stiffness: 100, damping: 10, mass: 1.2 });
 
-  const dist = useTransform(() => Math.sqrt(mx.get() ** 2 + my.get() ** 2))
-  const glowOpacity = useTransform(dist, [0, 60], [0.3, 1])
-  const glowScale = useTransform(dist, [0, 60], [1, 1.15])
-  const rotateX = useTransform(my, [-80, 80], [8, -8])
-  const rotateY = useTransform(mx, [-80, 80], [-8, 8])
+  const dist = useTransform(() => Math.sqrt(mx.get() ** 2 + my.get() ** 2));
+  const glowOpacity = useTransform(dist, [0, 60], [0.3, 1]);
+  const glowScale = useTransform(dist, [0, 60], [1, 1.15]);
+  const rotateX = useTransform(my, [-80, 80], [8, -8]);
+  const rotateY = useTransform(mx, [-80, 80], [-8, 8]);
 
-  const handlePointerMove = useCallback((e) => {
-    if (!btnRef.current || isMobile) return
-    const rect = btnRef.current.getBoundingClientRect()
-    const cx = rect.left + rect.width / 2
-    const cy = rect.top + rect.height / 2
-    const dx = e.clientX - cx
-    const dy = e.clientY - cy
-    const d = Math.sqrt(dx * dx + dy * dy)
-    if (d < MAGNETIC_RANGE) {
-      const factor = MAGNETIC_STRENGTH * (1 - d / MAGNETIC_RANGE)
-      mx.set(dx * factor * 1.8)
-      my.set(dy * factor * 1.8)
-    } else {
-      mx.set(0)
-      my.set(0)
-    }
-  }, [isMobile, mx, my])
+  const handlePointerMove = useCallback(
+    (e) => {
+      if (!btnRef.current || isMobile) return;
+      const rect = btnRef.current.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < MAGNETIC_RANGE) {
+        const factor = MAGNETIC_STRENGTH * (1 - d / MAGNETIC_RANGE);
+        mx.set(dx * factor * 1.8);
+        my.set(dy * factor * 1.8);
+      } else {
+        mx.set(0);
+        my.set(0);
+      }
+    },
+    [isMobile, mx, my],
+  );
 
   const handlePointerLeave = useCallback(() => {
-    mx.set(0)
-    my.set(0)
-    setHovered(false)
-  }, [mx, my])
+    mx.set(0);
+    my.set(0);
+    setHovered(false);
+  }, [mx, my]);
 
   const handleClick = useCallback(() => {
-    window.open(DEVFOLIO_URL, '_blank', 'noopener,noreferrer')
-  }, [])
+    window.open(DEVFOLIO_URL, "_blank", "noopener,noreferrer");
+  }, []);
 
   return (
     <div
@@ -80,28 +83,29 @@ export default function DevfolioApply() {
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       style={{
-        padding: isMobile ? '8px 16px' : '16px max(2rem, 10vw)',
-        touchAction: 'manipulation',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
+        padding: isMobile ? "8px 16px" : "16px max(2rem, 10vw)",
+        touchAction: "manipulation",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
       }}
     >
       <motion.div
         aria-hidden="true"
         style={{
-          position: 'absolute',
-          width: isMobile ? '200px' : '260px',
-          height: isMobile ? '56px' : '64px',
-          borderRadius: '20px',
-          background: 'radial-gradient(ellipse at center, rgba(179,0,0,0.35) 0%, rgba(179,0,0,0.12) 40%, transparent 70%)',
+          position: "absolute",
+          width: isMobile ? "200px" : "260px",
+          height: isMobile ? "56px" : "64px",
+          borderRadius: "20px",
+          background:
+            "radial-gradient(ellipse at center, rgba(179,0,0,0.35) 0%, rgba(179,0,0,0.12) 40%, transparent 70%)",
           opacity: glowOpacity,
           scale: glowScale,
           x: isMobile ? 0 : springX,
           y: isMobile ? 0 : springY,
-          filter: 'blur(14px)',
-          pointerEvents: 'none',
+          filter: "blur(14px)",
+          pointerEvents: "none",
           zIndex: 30,
         }}
       />
@@ -118,52 +122,67 @@ export default function DevfolioApply() {
           rotateX: isMobile ? 0 : rotateX,
           rotateY: isMobile ? 0 : rotateY,
           fontFamily: "'Montserrat', sans-serif",
-          cursor: 'pointer',
-          position: 'relative',
-          overflow: 'hidden',
-          border: '1px solid rgba(255,255,255,0.08)',
-          outline: 'none',
-          background: 'linear-gradient(145deg, rgba(240,240,240,0.92) 0%, rgba(215,215,215,0.88) 100%)',
-          color: '#1a1a1a',
-          fontSize: isMobile ? '1.2rem' : '1.4rem',
+          cursor: "pointer",
+          position: "relative",
+          overflow: "hidden",
+          border: "1px solid rgba(255,255,255,0.08)",
+          outline: "none",
+          background:
+            "linear-gradient(145deg, rgba(240,240,240,0.92) 0%, rgba(215,215,215,0.88) 100%)",
+          color: "#1a1a1a",
+          fontSize: isMobile ? "1.2rem" : "1.4rem",
           fontWeight: 600,
-          letterSpacing: '0.03em',
-          padding: isMobile ? '10px 25px' : '10px 30px',
-          borderRadius: '14px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '11px',
-          boxShadow: '0 2px 16px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15)',
+          letterSpacing: "0.03em",
+          padding: isMobile ? "10px 25px" : "10px 30px",
+          borderRadius: "14px",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "11px",
+          boxShadow: "0 2px 16px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15)",
           zIndex: 40,
-          transformStyle: 'preserve-3d',
-          backdropFilter: 'blur(4px)',
-          WebkitTapHighlightColor: 'transparent',
+          transformStyle: "preserve-3d",
+          backdropFilter: "blur(4px)",
+          WebkitTapHighlightColor: "transparent",
         }}
-        whileHover={isMobile ? {} : {
-          scale: 1.04,
-          boxShadow: '0 4px 32px rgba(179,0,0,0.2), 0 0 50px rgba(179,0,0,0.1), 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-          transition: { duration: 0.25, ease: 'easeOut' },
-        }}
+        whileHover={
+          isMobile
+            ? {}
+            : {
+                scale: 1.04,
+                boxShadow:
+                  "0 4px 32px rgba(179,0,0,0.2), 0 0 50px rgba(179,0,0,0.1), 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)",
+                transition: { duration: 0.25, ease: "easeOut" },
+              }
+        }
         whileTap={{ scale: 0.95, transition: { duration: 0.08 } }}
       >
         <motion.span
           aria-hidden="true"
           style={{
-            position: 'absolute',
+            position: "absolute",
             inset: 0,
-            background: 'linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.5) 50%, transparent 65%)',
+            background:
+              "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.5) 50%, transparent 65%)",
             zIndex: 1,
           }}
-          initial={{ x: '-130%' }}
-          animate={hovered ? { x: '130%' } : { x: '-130%' }}
+          initial={{ x: "-130%" }}
+          animate={hovered ? { x: "130%" } : { x: "-130%" }}
           transition={hovered ? { duration: 0.5, ease: [0.22, 1, 0.36, 1] } : { duration: 0 }}
         />
 
-        <span style={{ position: 'relative', zIndex: 2, display: 'inline-flex', alignItems: 'center', gap: '11px' }}>
+        <span
+          style={{
+            position: "relative",
+            zIndex: 2,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "11px",
+          }}
+        >
           <DevfolioIcon size={isMobile ? 20 : 22} />
           <span>Apply with Devfolio</span>
         </span>
       </motion.button>
     </div>
-  )
+  );
 }

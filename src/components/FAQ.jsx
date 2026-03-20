@@ -1,48 +1,45 @@
-import { useState, useRef, useEffect } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import useInView from '../hooks/useInView'
+import { useState, useRef, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import useInView from "../hooks/useInView";
 
 /* Only AnimatePresence + motion kept for accordion height animation */
 
 const faqs = [
   {
-    q: 'Who can participate?',
+    q: "Who can participate?",
     a: "Anyone from beginners to pros — whether you're a developer, designer, or innovator, Hack Heist welcomes all.",
   },
   {
-    q: 'Is it free?',
-    a: 'Yes — participation is 100% free, including access to mentors, sessions, and the venue.',
+    q: "Is it free?",
+    a: "Yes — participation is 100% free, including access to mentors, sessions, and the venue.",
   },
   {
-    q: 'Do I need a team?',
+    q: "Do I need a team?",
     a: "Teams of 2-4 members are allowed. You can register solo and we'll help you form a team at the venue if needed.",
   },
   {
-    q: 'What should I bring?',
+    q: "What should I bring?",
     a: "A laptop, charger, valid student ID, and lots of energy. We'll handle the rest.",
   },
   {
     q: "What's the judging criteria?",
-    a: 'Innovation, Impact, Technical Strength, UI/UX, and Presentation.',
+    a: "Innovation, Impact, Technical Strength, UI/UX, and Presentation.",
   },
-]
+];
 
 function Cursor() {
   return (
     <span
       className="inline-block w-[2px] h-[1em] bg-red-500 ml-1 align-middle"
-      style={{ animation: 'cursorBlink 0.7s ease-in-out infinite alternate' }}
+      style={{ animation: "cursorBlink 0.7s ease-in-out infinite alternate" }}
       aria-hidden
     />
-  )
+  );
 }
 
 function FAQItem({ item, idx, isOpen, toggle }) {
   return (
-    <div
-      className="reveal-section revealed"
-      style={{ '--delay': `${idx * 60}ms` }}
-    >
+    <div className="reveal-section revealed" style={{ "--delay": `${idx * 60}ms` }}>
       <button
         onClick={() => toggle(idx)}
         className="w-full flex items-center gap-3 text-left group
@@ -51,10 +48,7 @@ function FAQItem({ item, idx, isOpen, toggle }) {
                    hover:border-red-500/30 hover:translate-x-1
                    active:scale-[0.985] transition-all duration-200"
       >
-        <span
-          className="shrink-0 text-red-500/70 text-xs font-mono select-none"
-          aria-hidden
-        >
+        <span className="shrink-0 text-red-500/70 text-xs font-mono select-none" aria-hidden>
           &gt;_
         </span>
 
@@ -70,7 +64,7 @@ function FAQItem({ item, idx, isOpen, toggle }) {
                      rounded-full border border-white/10
                      text-red-500 text-lg leading-none select-none
                      group-hover:border-red-500/40 transition-all duration-250"
-          style={{ transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)' }}
+          style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0deg)" }}
         >
           +
         </span>
@@ -81,7 +75,7 @@ function FAQItem({ item, idx, isOpen, toggle }) {
           <motion.div
             key="answer"
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
+            animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
@@ -96,7 +90,7 @@ function FAQItem({ item, idx, isOpen, toggle }) {
                 className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-[0.03]"
                 style={{
                   backgroundImage:
-                    'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 4px)',
+                    "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 4px)",
                 }}
               />
 
@@ -118,18 +112,18 @@ function FAQItem({ item, idx, isOpen, toggle }) {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }
 
 function HeadingBlock() {
-  const [ref, inView] = useInView({ threshold: 0.3 })
-  const cls = inView ? 'revealed' : ''
+  const [ref, inView] = useInView({ threshold: 0.3 });
+  const cls = inView ? "revealed" : "";
 
   return (
     <div ref={ref} className={`reveal-section ${cls} text-center mb-12`}>
       <span
         className="block text-[0.65rem] font-semibold tracking-[0.45em] uppercase mb-2"
-        style={{ fontFamily: "'Montserrat', sans-serif", color: 'rgba(255,77,79,0.75)' }}
+        style={{ fontFamily: "'Montserrat', sans-serif", color: "rgba(255,77,79,0.75)" }}
       >
         Intel Briefing
       </span>
@@ -137,74 +131,65 @@ function HeadingBlock() {
       <h2
         style={{
           fontFamily: "'3rdMan', 'Montserrat', sans-serif",
-          fontSize: 'clamp(1.9rem, 4.5vw, 3.6rem)',
-          fontWeight: 'normal',
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          color: '#fff',
+          fontSize: "clamp(1.9rem, 4.5vw, 3.6rem)",
+          fontWeight: "normal",
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          color: "#fff",
           margin: 0,
           lineHeight: 1.1,
         }}
       >
-        {"FAQ's".split('').map((ch, i) => (
-          <span
-            key={i}
-            className={`letter-char ${cls}`}
-            style={{ '--i': i }}
-          >
-            {ch === ' ' ? '\u00A0' : ch}
+        {"FAQ's".split("").map((ch, i) => (
+          <span key={i} className={`letter-char ${cls}`} style={{ "--i": i }}>
+            {ch === " " ? "\u00A0" : ch}
           </span>
         ))}
       </h2>
 
       <p
         className="mt-2 text-sm tracking-wide"
-        style={{ fontFamily: "'Montserrat', sans-serif", color: 'rgba(200,200,200,0.5)' }}
+        style={{ fontFamily: "'Montserrat', sans-serif", color: "rgba(200,200,200,0.5)" }}
       >
         Laser-scanned intel for your heist questions.
       </p>
     </div>
-  )
+  );
 }
 
 export default function FAQ() {
-  const [openSet, setOpenSet] = useState(new Set())
-  const faqEndRef = useRef(null)
-  const prevSize = useRef(0)
+  const [openSet, setOpenSet] = useState(new Set());
+  const faqEndRef = useRef(null);
+  const prevSize = useRef(0);
 
   const toggle = (idx) => {
     setOpenSet((prev) => {
-      const next = new Set(prev)
-      next.has(idx) ? next.delete(idx) : next.add(idx)
-      return next
-    })
-  }
+      const next = new Set(prev);
+      next.has(idx) ? next.delete(idx) : next.add(idx);
+      return next;
+    });
+  };
 
-  const allOpen = openSet.size === faqs.length
-  const toggleAll = () =>
-    setOpenSet(allOpen ? new Set() : new Set(faqs.map((_, i) => i)))
+  const allOpen = openSet.size === faqs.length;
+  const toggleAll = () => setOpenSet(allOpen ? new Set() : new Set(faqs.map((_, i) => i)));
 
   useEffect(() => {
     if (openSet.size > prevSize.current) {
-      faqEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      faqEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-    prevSize.current = openSet.size
-  }, [openSet])
+    prevSize.current = openSet.size;
+  }, [openSet]);
 
   return (
-    <section
-      id="faq"
-      className="relative py-16 md:py-28 overflow-hidden"
-      aria-label="FAQ"
-    >
+    <section id="faq" className="relative py-16 md:py-28 overflow-hidden" aria-label="FAQ">
       <div className="absolute inset-0 bg-[#0a0a0a]" />
 
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
+            "linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
         }}
       />
 
@@ -221,23 +206,17 @@ export default function FAQ() {
                        hover:bg-red-500/10 transition font-medium"
             style={{ fontFamily: "'Montserrat', sans-serif" }}
           >
-            {allOpen ? 'Collapse All' : 'Expand All'}
+            {allOpen ? "Collapse All" : "Expand All"}
           </button>
         </div>
 
         <div className="space-y-4">
           {faqs.map((item, idx) => (
-            <FAQItem
-              key={item.q}
-              item={item}
-              idx={idx}
-              isOpen={openSet.has(idx)}
-              toggle={toggle}
-            />
+            <FAQItem key={item.q} item={item} idx={idx} isOpen={openSet.has(idx)} toggle={toggle} />
           ))}
           <div ref={faqEndRef} />
         </div>
       </div>
     </section>
-  )
+  );
 }

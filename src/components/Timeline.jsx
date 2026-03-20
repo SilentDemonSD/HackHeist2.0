@@ -4,25 +4,130 @@ import clsx from "clsx";
 import "./timeline.css";
 
 const VIEWBOX = { width: 2400, height: 360 };
-const PATH_D = "M 60 295 C 240 165, 460 112, 660 197 S 940 315, 1160 222 S 1380 112, 1600 197 S 1860 315, 2060 222 S 2240 128, 2360 171";
+const PATH_D =
+  "M 60 295 C 240 165, 460 112, 660 197 S 940 315, 1160 222 S 1380 112, 1600 197 S 1860 315, 2060 222 S 2240 128, 2360 171";
 
 const timelineEvents = [
-  { id: "checkin",   day: 1, time: "09:00", title: "Doors Open",        detail: "Registration & welcome kit",      t: 0.03, above: true  },
-  { id: "brief",     day: 1, time: "10:00", title: "Opening Ceremony",  detail: "Kickoff, rules & intel briefing", t: 0.07, above: false },
-  { id: "hacking",   day: 1, time: "11:00", title: "Hacking Begins",    detail: "Clock starts — 30h to crack",     t: 0.12, above: true  },
-  { id: "lunch",     day: 1, time: "13:00", title: "Lunch Break",       detail: "Fuel up — 45 min",               t: 0.18, above: false },
-  { id: "snack",     day: 1, time: "16:00", title: "Snack Break",       detail: "Coffee & quick bites",           t: 0.27, above: true  },
-  { id: "dinner",    day: 1, time: "20:00", title: "Dinner",            detail: "Evening refuel",                 t: 0.38, above: true },
-  { id: "mentor",    day: 1, time: "22:00", title: "Mentor Rounds",     detail: "Guidance & feedback circuit",    t: 0.45, above: true  },
-  { id: "midnight",  day: 2, time: "00:00", title: "Midnight Snacks",   detail: "Night fuel drop",                t: 0.51, above: false },
-  { id: "dawn",      day: 2, time: "03:00", title: "Dawn Coffee",       detail: "Survival kit distribution",      t: 0.57, above: false  },
-  { id: "breakfast", day: 2, time: "07:00", title: "Breakfast",         detail: "Morning meal before final push",  t: 0.65, above: false },
-  { id: "freeze",    day: 2, time: "11:00", title: "Code Freeze",       detail: "Submissions close — push it",    t: 0.74, above: true  },
-  { id: "judging",   day: 2, time: "14:00", title: "Judging Begins",    detail: "Panel evaluates all builds",     t: 0.85, above: true },
-  { id: "ceremony",  day: 2, time: "17:00", title: "Closing Ceremony",  detail: "Results, awards & wrap-up",      t: 0.97, above: false  },
+  {
+    id: "checkin",
+    day: 1,
+    time: "09:00",
+    title: "Doors Open",
+    detail: "Registration & welcome kit",
+    t: 0.03,
+    above: true,
+  },
+  {
+    id: "brief",
+    day: 1,
+    time: "10:00",
+    title: "Opening Ceremony",
+    detail: "Kickoff, rules & intel briefing",
+    t: 0.07,
+    above: false,
+  },
+  {
+    id: "hacking",
+    day: 1,
+    time: "11:00",
+    title: "Hacking Begins",
+    detail: "Clock starts — 30h to crack",
+    t: 0.12,
+    above: true,
+  },
+  {
+    id: "lunch",
+    day: 1,
+    time: "13:00",
+    title: "Lunch Break",
+    detail: "Fuel up — 45 min",
+    t: 0.18,
+    above: false,
+  },
+  {
+    id: "snack",
+    day: 1,
+    time: "16:00",
+    title: "Snack Break",
+    detail: "Coffee & quick bites",
+    t: 0.27,
+    above: true,
+  },
+  {
+    id: "dinner",
+    day: 1,
+    time: "20:00",
+    title: "Dinner",
+    detail: "Evening refuel",
+    t: 0.38,
+    above: true,
+  },
+  {
+    id: "mentor",
+    day: 1,
+    time: "22:00",
+    title: "Mentor Rounds",
+    detail: "Guidance & feedback circuit",
+    t: 0.45,
+    above: true,
+  },
+  {
+    id: "midnight",
+    day: 2,
+    time: "00:00",
+    title: "Midnight Snacks",
+    detail: "Night fuel drop",
+    t: 0.51,
+    above: false,
+  },
+  {
+    id: "dawn",
+    day: 2,
+    time: "03:00",
+    title: "Dawn Coffee",
+    detail: "Survival kit distribution",
+    t: 0.57,
+    above: false,
+  },
+  {
+    id: "breakfast",
+    day: 2,
+    time: "07:00",
+    title: "Breakfast",
+    detail: "Morning meal before final push",
+    t: 0.65,
+    above: false,
+  },
+  {
+    id: "freeze",
+    day: 2,
+    time: "11:00",
+    title: "Code Freeze",
+    detail: "Submissions close — push it",
+    t: 0.74,
+    above: true,
+  },
+  {
+    id: "judging",
+    day: 2,
+    time: "14:00",
+    title: "Judging Begins",
+    detail: "Panel evaluates all builds",
+    t: 0.85,
+    above: true,
+  },
+  {
+    id: "ceremony",
+    day: 2,
+    time: "17:00",
+    title: "Closing Ceremony",
+    detail: "Results, awards & wrap-up",
+    t: 0.97,
+    above: false,
+  },
 ];
 
-const noop = () => { };
+const noop = () => {};
 
 function HeistCar() {
   return (
@@ -34,16 +139,16 @@ function HeistCar() {
     >
       <defs>
         <linearGradient id="hcBody" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#252838" />
-          <stop offset="55%"  stopColor="#141620" />
+          <stop offset="0%" stopColor="#252838" />
+          <stop offset="55%" stopColor="#141620" />
           <stop offset="100%" stopColor="#0b0c12" />
         </linearGradient>
         <radialGradient id="hcRoof" cx="55%" cy="38%" r="65%">
-          <stop offset="0%"   stopColor="#32364e" />
+          <stop offset="0%" stopColor="#32364e" />
           <stop offset="100%" stopColor="#151720" />
         </radialGradient>
         <radialGradient id="hcShadow" cx="50%" cy="60%" r="55%">
-          <stop offset="0%"   stopColor="rgba(0,0,0,0.55)" />
+          <stop offset="0%" stopColor="rgba(0,0,0,0.55)" />
           <stop offset="100%" stopColor="rgba(0,0,0,0)" />
         </radialGradient>
       </defs>
@@ -57,8 +162,18 @@ function HeistCar() {
         strokeWidth="0.6"
       />
 
-      <path d="M22 3.8 L40 3.8" stroke="rgba(255,77,79,0.6)"  strokeWidth="0.9" strokeLinecap="round" />
-      <path d="M22 24.2 L40 24.2" stroke="rgba(255,77,79,0.6)" strokeWidth="0.9" strokeLinecap="round" />
+      <path
+        d="M22 3.8 L40 3.8"
+        stroke="rgba(255,77,79,0.6)"
+        strokeWidth="0.9"
+        strokeLinecap="round"
+      />
+      <path
+        d="M22 24.2 L40 24.2"
+        stroke="rgba(255,77,79,0.6)"
+        strokeWidth="0.9"
+        strokeLinecap="round"
+      />
 
       <path
         d="M20 14 C20 10,23 8,30 8 L34 8 C42 8,43 10,43 14 C43 18,42 20,34 20 L30 20 C23 20,20 18,20 14Z"
@@ -89,29 +204,110 @@ function HeistCar() {
       <ellipse cx="7.5" cy="10.5" rx="1.0" ry="0.8" fill="#ff8080" />
       <ellipse cx="7.5" cy="17.5" rx="1.0" ry="0.8" fill="#ff8080" />
 
-      <rect x="5.5" y="9.5" width="2.2" height="9" rx="1.1"
-        fill="#1a1b28" stroke="rgba(255,77,79,0.55)" strokeWidth="0.7" />
+      <rect
+        x="5.5"
+        y="9.5"
+        width="2.2"
+        height="9"
+        rx="1.1"
+        fill="#1a1b28"
+        stroke="rgba(255,77,79,0.55)"
+        strokeWidth="0.7"
+      />
 
-      <rect x="14" y="0.5"  width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
-      <rect x="37" y="0.5"  width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
-      <rect x="14" y="22"   width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
-      <rect x="37" y="22"   width="9" height="5.5" rx="2.2" fill="#08090e" stroke="rgba(255,255,255,0.05)" strokeWidth="0.5" />
+      <rect
+        x="14"
+        y="0.5"
+        width="9"
+        height="5.5"
+        rx="2.2"
+        fill="#08090e"
+        stroke="rgba(255,255,255,0.05)"
+        strokeWidth="0.5"
+      />
+      <rect
+        x="37"
+        y="0.5"
+        width="9"
+        height="5.5"
+        rx="2.2"
+        fill="#08090e"
+        stroke="rgba(255,255,255,0.05)"
+        strokeWidth="0.5"
+      />
+      <rect
+        x="14"
+        y="22"
+        width="9"
+        height="5.5"
+        rx="2.2"
+        fill="#08090e"
+        stroke="rgba(255,255,255,0.05)"
+        strokeWidth="0.5"
+      />
+      <rect
+        x="37"
+        y="22"
+        width="9"
+        height="5.5"
+        rx="2.2"
+        fill="#08090e"
+        stroke="rgba(255,255,255,0.05)"
+        strokeWidth="0.5"
+      />
 
-      <ellipse cx="18.5" cy="3"  rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
-      <ellipse cx="41.5" cy="3"  rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
-      <ellipse cx="18.5" cy="25" rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
-      <ellipse cx="41.5" cy="25" rx="3.8" ry="2.4" fill="#191921" stroke="rgba(255,255,255,0.13)" strokeWidth="0.6" />
+      <ellipse
+        cx="18.5"
+        cy="3"
+        rx="3.8"
+        ry="2.4"
+        fill="#191921"
+        stroke="rgba(255,255,255,0.13)"
+        strokeWidth="0.6"
+      />
+      <ellipse
+        cx="41.5"
+        cy="3"
+        rx="3.8"
+        ry="2.4"
+        fill="#191921"
+        stroke="rgba(255,255,255,0.13)"
+        strokeWidth="0.6"
+      />
+      <ellipse
+        cx="18.5"
+        cy="25"
+        rx="3.8"
+        ry="2.4"
+        fill="#191921"
+        stroke="rgba(255,255,255,0.13)"
+        strokeWidth="0.6"
+      />
+      <ellipse
+        cx="41.5"
+        cy="25"
+        rx="3.8"
+        ry="2.4"
+        fill="#191921"
+        stroke="rgba(255,255,255,0.13)"
+        strokeWidth="0.6"
+      />
 
-      <ellipse cx="18.5" cy="3"  rx="2"   ry="1.3" fill="#3a3b52" />
-      <ellipse cx="41.5" cy="3"  rx="2"   ry="1.3" fill="#3a3b52" />
-      <ellipse cx="18.5" cy="25" rx="2"   ry="1.3" fill="#3a3b52" />
-      <ellipse cx="41.5" cy="25" rx="2"   ry="1.3" fill="#3a3b52" />
-      <circle cx="18.5" cy="3"  r="0.7" fill="#5a5c78" />
-      <circle cx="41.5" cy="3"  r="0.7" fill="#5a5c78" />
+      <ellipse cx="18.5" cy="3" rx="2" ry="1.3" fill="#3a3b52" />
+      <ellipse cx="41.5" cy="3" rx="2" ry="1.3" fill="#3a3b52" />
+      <ellipse cx="18.5" cy="25" rx="2" ry="1.3" fill="#3a3b52" />
+      <ellipse cx="41.5" cy="25" rx="2" ry="1.3" fill="#3a3b52" />
+      <circle cx="18.5" cy="3" r="0.7" fill="#5a5c78" />
+      <circle cx="41.5" cy="3" r="0.7" fill="#5a5c78" />
       <circle cx="18.5" cy="25" r="0.7" fill="#5a5c78" />
       <circle cx="41.5" cy="25" r="0.7" fill="#5a5c78" />
 
-      <path d="M44 14 L50 14" stroke="rgba(255,255,255,0.1)" strokeWidth="0.7" strokeLinecap="round" />
+      <path
+        d="M44 14 L50 14"
+        stroke="rgba(255,255,255,0.1)"
+        strokeWidth="0.7"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -190,7 +386,7 @@ export default function Timeline({
 
       return { px, py, angle };
     },
-    [pointerX, pointerY, stageSize]
+    [pointerX, pointerY, stageSize],
   );
 
   const registerWake = useCallback((segment) => {
@@ -222,7 +418,7 @@ export default function Timeline({
         });
       }
     },
-    [isDragging, projectToPath, registerWake]
+    [isDragging, projectToPath, registerWake],
   );
 
   const handleRoadEnter = useCallback(() => {
@@ -270,7 +466,11 @@ export default function Timeline({
         <h2 style={{ cursor: "default" }}>
           {"OPERATION TIMELINE".split("").map((char, i) =>
             char === " " ? (
-              <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.2em" }} />
+              <span
+                key={i}
+                aria-hidden="true"
+                style={{ display: "inline-block", width: "0.2em" }}
+              />
             ) : (
               <motion.span
                 key={i}
@@ -287,7 +487,7 @@ export default function Timeline({
               >
                 {char}
               </motion.span>
-            )
+            ),
           )}
         </h2>
         <p>Hover the winding road to trace the pulse of HackHeist.</p>
@@ -307,10 +507,18 @@ export default function Timeline({
         >
           <div className="timeline-stage-grid" aria-hidden="true" />
 
-          <div className="timeline-day-label timeline-day-label--1" aria-hidden="true">DAY 1</div>
-          <div className="timeline-day-label timeline-day-label--2" aria-hidden="true">DAY 2</div>
+          <div className="timeline-day-label timeline-day-label--1" aria-hidden="true">
+            DAY 1
+          </div>
+          <div className="timeline-day-label timeline-day-label--2" aria-hidden="true">
+            DAY 2
+          </div>
 
-          <svg className="timeline-road" viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`} preserveAspectRatio="xMidYMid meet">
+          <svg
+            className="timeline-road"
+            viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`}
+            preserveAspectRatio="xMidYMid meet"
+          >
             <defs>
               <mask id="timeline-road-mask">
                 <path d={PATH_D} stroke="white" strokeWidth="20" fill="none" />
@@ -327,7 +535,8 @@ export default function Timeline({
                 key={segment.id}
                 className="timeline-road__wake"
                 transform={`translate(${(segment.x / stageSize.width) * VIEWBOX.width} ${(segment.y / stageSize.height) * VIEWBOX.height}) rotate(${(
-                  (segment.angle * 180) / Math.PI
+                  (segment.angle * 180) /
+                  Math.PI
                 ).toFixed(2)})`}
               >
                 <rect x="-40" y="-2" width="80" height="4" rx="2" />
@@ -397,9 +606,7 @@ export default function Timeline({
                     setPulseVisible(false);
                     onLeaveFlag(event);
                   }}
-                  onClick={() =>
-                    setActiveFlag((prev) => (prev === event.id ? null : event.id))
-                  }
+                  onClick={() => setActiveFlag((prev) => (prev === event.id ? null : event.id))}
                 >
                   <span className="timeline-flag__pin" aria-hidden="true" />
                   <span className="timeline-flag__pole" />
@@ -414,7 +621,6 @@ export default function Timeline({
           </div>
         </div>
       </div>
-
     </section>
   );
 }

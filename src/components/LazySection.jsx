@@ -1,16 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
-export default function LazySection({
-  children,
-  rootMargin = '300px',
-  minHeight = '40vh',
-}) {
+export default function LazySection({ children, rootMargin = "300px", minHeight = "40vh" }) {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !('IntersectionObserver' in window)) {
+    if (!el || !("IntersectionObserver" in window)) {
       setVisible(true);
       return;
     }
@@ -22,7 +18,7 @@ export default function LazySection({
           obs.disconnect();
         }
       },
-      { rootMargin }
+      { rootMargin },
     );
 
     obs.observe(el);
@@ -36,8 +32,8 @@ export default function LazySection({
       ref={ref}
       style={{
         minHeight,
-        background: '#000',
-        contentVisibility: 'auto',
+        background: "#000",
+        contentVisibility: "auto",
         containIntrinsicSize: `0 ${minHeight}`,
       }}
     />

@@ -45,7 +45,7 @@ const VAULTS = [
 ];
 
 const HOLD_DURATION = 2200; // ms
-const GRANT_PROBABILITY = 0.70;
+const GRANT_PROBABILITY = 0.7;
 
 function VaultDoor({ scanning, granted, denied, color }) {
   const ringColor = granted ? color : denied ? "#ff4d4f" : "rgba(255,60,60,0.5)";
@@ -58,15 +58,15 @@ function VaultDoor({ scanning, granted, denied, color }) {
         denied
           ? { x: [-6, 8, -8, 6, -4, 4, 0], rotate: [0, -3, 3, -2, 2, 0] }
           : scanning
-          ? { scale: [1, 1.04, 1] }
-          : {}
+            ? { scale: [1, 1.04, 1] }
+            : {}
       }
       transition={
         denied
           ? { duration: 0.55, ease: "easeInOut" }
           : scanning
-          ? { duration: 1, repeat: Infinity, ease: "easeInOut" }
-          : {}
+            ? { duration: 1, repeat: Infinity, ease: "easeInOut" }
+            : {}
       }
     >
       {/* Outer beveled rim */}
@@ -81,8 +81,8 @@ function VaultDoor({ scanning, granted, denied, color }) {
           scanning
             ? { duration: 2.5, repeat: Infinity, ease: "linear" }
             : granted
-            ? { duration: 0.6, ease: "easeOut" }
-            : { duration: 28, repeat: Infinity, ease: "linear" }
+              ? { duration: 0.6, ease: "easeOut" }
+              : { duration: 28, repeat: Infinity, ease: "linear" }
         }
       >
         {/* 12 bolt holes around outer ring */}
@@ -103,8 +103,8 @@ function VaultDoor({ scanning, granted, denied, color }) {
           scanning
             ? { duration: 3, repeat: Infinity, ease: "linear" }
             : granted
-            ? { duration: 0.8, ease: "easeOut" }
-            : { duration: 36, repeat: Infinity, ease: "linear" }
+              ? { duration: 0.8, ease: "easeOut" }
+              : { duration: 36, repeat: Infinity, ease: "linear" }
         }
       >
         {comboNumbers.map((num, i) => (
@@ -138,8 +138,8 @@ function VaultDoor({ scanning, granted, denied, color }) {
           scanning
             ? { duration: 1.8, repeat: Infinity, ease: "linear" }
             : granted
-            ? { duration: 0.5, ease: "easeOut" }
-            : { duration: 20, repeat: Infinity, ease: "linear" }
+              ? { duration: 0.5, ease: "easeOut" }
+              : { duration: 20, repeat: Infinity, ease: "linear" }
         }
       >
         {/* 4 locking lugs on mid ring */}
@@ -171,13 +171,7 @@ function VaultDoor({ scanning, granted, denied, color }) {
       {/* Central bolt with keyhole detail */}
       <motion.div
         className="vcard__bolt"
-        animate={
-          granted
-            ? { scale: [1, 1.8, 1] }
-            : denied
-            ? { scale: [1, 1.4, 1] }
-            : {}
-        }
+        animate={granted ? { scale: [1, 1.8, 1] } : denied ? { scale: [1, 1.4, 1] } : {}}
         style={granted ? { background: color, boxShadow: `0 0 24px ${color}` } : {}}
         transition={{ duration: 0.5 }}
       >
@@ -206,7 +200,9 @@ function VaultDoor({ scanning, granted, denied, color }) {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.15 }}
-          >✓</motion.div>
+          >
+            ✓
+          </motion.div>
         )}
       </AnimatePresence>
       <AnimatePresence>
@@ -217,7 +213,9 @@ function VaultDoor({ scanning, granted, denied, color }) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-          >✕</motion.div>
+          >
+            ✕
+          </motion.div>
         )}
       </AnimatePresence>
     </motion.div>
@@ -240,7 +238,8 @@ function Sparks({ active, color }) {
               animate={{
                 x: Math.cos((angle * Math.PI) / 180) * dist,
                 y: Math.sin((angle * Math.PI) / 180) * dist,
-                opacity: 0, scale: 0,
+                opacity: 0,
+                scale: 0,
               }}
               exit={{}}
               transition={{ duration: 0.6, ease: "easeOut", delay: i * 0.025 }}
@@ -290,17 +289,18 @@ function HoldButton({ vaultColor, onResult, disabled }) {
   return (
     <div className="vcard__hold-wrap">
       <motion.button
-        className={`vcard__hold-btn ${holding ? 'vcard__hold-btn--active' : ''}`}
+        className={`vcard__hold-btn ${holding ? "vcard__hold-btn--active" : ""}`}
         style={{
           borderColor: holding ? vaultColor : "rgba(255,77,79,0.38)",
-          boxShadow: holding
-            ? `0 0 24px ${vaultColor}55, 0 0 60px ${vaultColor}18`
-            : "none",
+          boxShadow: holding ? `0 0 24px ${vaultColor}55, 0 0 60px ${vaultColor}18` : "none",
         }}
         onMouseDown={startHold}
         onMouseUp={stopHold}
         onMouseLeave={stopHold}
-        onTouchStart={(e) => { e.preventDefault(); startHold(); }}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          startHold();
+        }}
         onTouchEnd={stopHold}
         onTouchCancel={stopHold}
         disabled={disabled}
@@ -317,10 +317,10 @@ function HoldButton({ vaultColor, onResult, disabled }) {
         )}
 
         {/* Scan line sweep */}
-        {holding && <span className="vcard__scan-line" style={{ '--scan-color': vaultColor }} />}
+        {holding && <span className="vcard__scan-line" style={{ "--scan-color": vaultColor }} />}
 
         {/* Pulse glow underlay */}
-        {holding && <span className="vcard__scan-pulse" style={{ '--scan-color': vaultColor }} />}
+        {holding && <span className="vcard__scan-pulse" style={{ "--scan-color": vaultColor }} />}
 
         {/* Label */}
         <span className="vcard__hold-label">
@@ -390,23 +390,23 @@ function CountingAmount({ target, color }) {
     return () => cancelAnimationFrame(rafRef.current);
   }, [target]);
 
-  const formatted = display.toLocaleString('en-IN');
+  const formatted = display.toLocaleString("en-IN");
 
   return (
     <>
-      <span className="vcard__amount-prefix">{'\u20B9'}</span>
+      <span className="vcard__amount-prefix">{"\u20B9"}</span>
       <span className="vcard__amount-value">{formatted}</span>
       {done && (
         <motion.span
           aria-hidden="true"
           style={{
-            position: 'absolute',
+            position: "absolute",
             inset: 0,
             background: `linear-gradient(105deg, transparent 35%, ${color}18 50%, transparent 65%)`,
-            pointerEvents: 'none',
+            pointerEvents: "none",
           }}
-          initial={{ x: '-100%' }}
-          animate={{ x: '100%' }}
+          initial={{ x: "-100%" }}
+          animate={{ x: "100%" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         />
       )}
@@ -454,21 +454,36 @@ function VaultCard({ vault, index }) {
 
       <AnimatePresence mode="wait">
         {granted ? (
-          <motion.div key="g" className="vcard__status vcard__status--granted"
+          <motion.div
+            key="g"
+            className="vcard__status vcard__status--granted"
             style={{ color: vault.color, borderColor: `${vault.color}44` }}
-            initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}>
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             ● ACCESS GRANTED
           </motion.div>
         ) : denied ? (
-          <motion.div key="d" className="vcard__status vcard__status--denied"
-            initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}>
+          <motion.div
+            key="d"
+            className="vcard__status vcard__status--denied"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             ✕ ACCESS DENIED — RETRY
           </motion.div>
         ) : (
-          <motion.div key="i" className="vcard__status vcard__status--idle"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div
+            key="i"
+            className="vcard__status vcard__status--idle"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             ◌ AWAITING AUTHENTICATION
           </motion.div>
         )}
@@ -524,14 +539,10 @@ function VaultHeading() {
           char === " " ? (
             <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.2em" }} />
           ) : (
-            <span
-              key={i}
-              className={`letter-char ${cls}`}
-              style={{ "--i": i }}
-            >
+            <span key={i} className={`letter-char ${cls}`} style={{ "--i": i }}>
               {char}
             </span>
-          )
+          ),
         )}
       </h2>
       <p className="vault-sub">

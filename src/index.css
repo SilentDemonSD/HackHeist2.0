@@ -1,12 +1,12 @@
-@import '@fontsource/montserrat/400.css';
-@import '@fontsource/montserrat/500.css';
-@import '@fontsource/montserrat/600.css';
-@import '@fontsource/montserrat/700.css';
-@import '@fontsource/montserrat/800.css';
+@import "@fontsource/montserrat/400.css";
+@import "@fontsource/montserrat/500.css";
+@import "@fontsource/montserrat/600.css";
+@import "@fontsource/montserrat/700.css";
+@import "@fontsource/montserrat/800.css";
 
 @font-face {
-  font-family: '3rdMan';
-  src: url('./assets/fonts/3rdMan.woff2') format('woff2');
+  font-family: "3rdMan";
+  src: url("./assets/fonts/3rdMan.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -24,13 +24,13 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 * {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 @layer components {
   .hero-title {
-    font-family: '3rdMan', sans-serif;
+    font-family: "3rdMan", sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
@@ -44,7 +44,7 @@
   }
 
   html {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     background-color: var(--bg);
     color: white;
     scroll-behavior: auto;
@@ -54,8 +54,9 @@
 
   body {
     @apply min-h-screen antialiased;
-    background: radial-gradient(1200px 600px at 50% -20%, rgba(179, 0, 0, 0.12), transparent 60%), #000;
-    font-family: 'Montserrat', sans-serif;
+    background:
+      radial-gradient(1200px 600px at 50% -20%, rgba(179, 0, 0, 0.12), transparent 60%), #000;
+    font-family: "Montserrat", sans-serif;
     overflow-x: hidden;
   }
 
@@ -65,7 +66,7 @@
   h4,
   h5,
   h6 {
-    font-family: '3rdMan', sans-serif;
+    font-family: "3rdMan", sans-serif;
     font-weight: normal;
     letter-spacing: 0.06em;
     color: #f5f5f5;
@@ -83,11 +84,13 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: repeating-linear-gradient(to bottom,
-      rgba(255, 255, 255, 0.03) 0px,
-      rgba(255, 255, 255, 0.03) 1px,
-      transparent 1px,
-      transparent 2px);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
   mix-blend-mode: overlay;
   transform: translateZ(0);
 }
@@ -105,67 +108,133 @@
    backface-visibility creates a containing block that would
    break backdrop-filter on the child <nav>. */
 @keyframes headerFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes logoGlow {
-  0%, 100% { transform: scale(1); opacity: 0.4; }
-  50% { transform: scale(1.3); opacity: 0.6; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.6;
+  }
 }
 @keyframes logoShadow {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* ── Cursor blink (FAQ) ── */
 
 @keyframes cursorBlink {
-  from { opacity: 1; }
-  to   { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 /* ── Reveal animations (replaces framer-motion per-letter) ── */
 
 @keyframes letterReveal {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes letterRevealFlip {
-  from { opacity: 0; transform: translateY(28px) rotateX(-70deg); }
-  to   { opacity: 1; transform: translateY(0) rotateX(0deg); }
+  from {
+    opacity: 0;
+    transform: translateY(28px) rotateX(-70deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeUpGallery {
-  from { opacity: 0; transform: translateY(38px) scale(0.92); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(38px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes navSlideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes navExpand {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes navSlideRight {
-  from { opacity: 0; transform: translateX(30px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes shimmerPulse {
-  0%   { opacity: 0.03; }
-  50%  { opacity: 0.07; }
-  100% { opacity: 0.03; }
+  0% {
+    opacity: 0.03;
+  }
+  50% {
+    opacity: 0.07;
+  }
+  100% {
+    opacity: 0.03;
+  }
 }
 
 /* Skeleton shimmer placeholder for lazy-loaded sections */
@@ -176,11 +245,16 @@
   overflow: hidden;
 }
 .section-skeleton::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 20% 10%;
   border-radius: 12px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 100%
+  );
   animation: shimmerPulse 1.8s ease-in-out infinite;
 }
 
@@ -188,7 +262,9 @@
 .letter-char {
   display: inline-block;
   opacity: 0;
-  transition: color 0.15s, transform 0.15s;
+  transition:
+    color 0.15s,
+    transform 0.15s;
 }
 
 .letter-char.revealed {
@@ -200,7 +276,9 @@
   display: inline-block;
   opacity: 0;
   letter-spacing: 0.07em;
-  transition: color 0.14s, transform 0.14s;
+  transition:
+    color 0.14s,
+    transform 0.14s;
 }
 
 .letter-char-flip.revealed {
@@ -266,19 +344,26 @@
 }
 
 .nav-link-hover::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: 9999px;
   border: 1px solid rgba(179, 0, 0, 0.5);
-  background: linear-gradient(to right, rgba(179,0,0,0.2), rgba(179,0,0,0.35), rgba(179,0,0,0.2));
+  background: linear-gradient(
+    to right,
+    rgba(179, 0, 0, 0.2),
+    rgba(179, 0, 0, 0.35),
+    rgba(179, 0, 0, 0.2)
+  );
   transform: scale(0);
   opacity: 0;
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.25s ease;
 }
 
 .nav-link-hover::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: 9999px;
@@ -286,7 +371,9 @@
   filter: blur(12px);
   transform: scale(0);
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .nav-link-hover:hover::before {
@@ -303,11 +390,21 @@
 
 /* MaskLogo hover */
 @keyframes maskWiggle {
-  0% { transform: scale(1.15) rotate(0deg); }
-  25% { transform: scale(1.15) rotate(-5deg); }
-  50% { transform: scale(1.15) rotate(5deg); }
-  75% { transform: scale(1.15) rotate(0deg); }
-  100% { transform: scale(1.15) rotate(0deg); }
+  0% {
+    transform: scale(1.15) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.15) rotate(-5deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(5deg);
+  }
+  75% {
+    transform: scale(1.15) rotate(0deg);
+  }
+  100% {
+    transform: scale(1.15) rotate(0deg);
+  }
 }
 .mask-logo-wrap {
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
@@ -318,13 +415,22 @@
 
 /* Nav shimmer on hover */
 @keyframes navShimmerX {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 .nav-shimmer {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(179,0,0,0), rgba(179,0,0,0.1), rgba(179,0,0,0));
+  background: linear-gradient(
+    to right,
+    rgba(179, 0, 0, 0),
+    rgba(179, 0, 0, 0.1),
+    rgba(179, 0, 0, 0)
+  );
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -344,12 +450,16 @@
   transition: box-shadow 0.3s ease;
 }
 .group:hover .nav-hover-glow {
-  box-shadow: 0 0 30px rgba(179, 0, 0, 0.4), 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 0 30px rgba(179, 0, 0, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
 /* "Hack Heist" title hover */
 .hack-heist-title {
-  transition: text-shadow 0.2s ease, transform 0.2s ease;
+  transition:
+    text-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 .hack-heist-title:hover {
   transform: scale(1.05);
@@ -362,7 +472,9 @@
   opacity: 0;
   animation: navSlideDown 0.3s ease-out forwards;
   animation-delay: var(--delay, 0ms);
-  transition: transform 0.15s ease, color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    color 0.15s ease;
 }
 .hack-heist-letter:hover {
   transform: translateY(-2px);
@@ -380,7 +492,9 @@
 /* Trae scroll reveal */
 .trae-scroll-reveal {
   overflow: hidden;
-  transition: width 0.35s ease-in-out, opacity 0.35s ease-in-out;
+  transition:
+    width 0.35s ease-in-out,
+    opacity 0.35s ease-in-out;
 }
 
 /* Mobile nav link */
@@ -388,7 +502,9 @@
   opacity: 0;
   animation: navSlideRight 0.3s ease-out forwards;
   animation-delay: var(--delay, 0ms);
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
 }
 .mobile-nav-link:hover {
   transform: translateX(5px);
@@ -408,7 +524,9 @@
 
 /* Hamburger button */
 .hamburger-btn {
-  transition: transform 0.15s ease, background-color 0.2s ease;
+  transition:
+    transform 0.15s ease,
+    background-color 0.2s ease;
 }
 .hamburger-btn:hover {
   transform: scale(1.1);
@@ -427,7 +545,9 @@
 .mobile-panel {
   transform: translateX(100%);
   opacity: 0;
-  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease;
+  transition:
+    transform 0.4s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.3s ease;
   pointer-events: none;
 }
 .mobile-panel.mobile-panel--open {
@@ -447,7 +567,9 @@
 
 /* Close button */
 .close-btn {
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
 }
 .close-btn:hover {
   transform: scale(1.1) rotate(90deg);

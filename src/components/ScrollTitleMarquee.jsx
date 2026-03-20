@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
-import useInView from '../hooks/useInView';
+import React, { useRef, useEffect, useState } from "react";
+import useInView from "../hooks/useInView";
 
 const TIER_STYLES = {
-  Sponsors: { accent: '#FFD700', accentRgb: '255,215,0' },
-  'Community Partners': { accent: '#DC2626', accentRgb: '220,38,38' },
+  Sponsors: { accent: "#FFD700", accentRgb: "255,215,0" },
+  "Community Partners": { accent: "#DC2626", accentRgb: "220,38,38" },
 };
-const FALLBACK = { accent: '#888', accentRgb: '136,136,136' };
+const FALLBACK = { accent: "#888", accentRgb: "136,136,136" };
 
 /* ── Single partner card ── */
 function PartnerCard({ name, logo, accent, accentRgb }) {
@@ -49,7 +49,12 @@ function PartnerCard({ name, logo, accent, accentRgb }) {
               border: `1px solid rgba(${accentRgb},0.18)`,
             }}
           >
-            {name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()}
+            {name
+              .split(" ")
+              .map((w) => w[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()}
           </span>
         )}
       </div>
@@ -72,9 +77,10 @@ function MarqueeRow({ tier, partners, style, reverse }) {
   const [animDuration, setAnimDuration] = useState(30);
 
   /* Duplicate partners enough times to fill viewport + extra */
-  const repeated = partners.length < 4
-    ? [...partners, ...partners, ...partners, ...partners]
-    : [...partners, ...partners];
+  const repeated =
+    partners.length < 4
+      ? [...partners, ...partners, ...partners, ...partners]
+      : [...partners, ...partners];
 
   useEffect(() => {
     if (!trackRef.current) return;
@@ -83,7 +89,7 @@ function MarqueeRow({ tier, partners, style, reverse }) {
     setAnimDuration(Math.max(halfW / 50, 12));
   }, [partners.length]);
 
-  const direction = reverse ? 'marquee-reverse' : 'marquee-forward';
+  const direction = reverse ? "marquee-reverse" : "marquee-forward";
 
   return (
     <div className="flex flex-col items-center gap-5 sm:gap-6">
@@ -108,11 +114,15 @@ function MarqueeRow({ tier, partners, style, reverse }) {
       {/* Marquee track with blur-fade edges */}
       <div className="relative w-full overflow-hidden py-2">
         {/* Left fade */}
-        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 z-10 pointer-events-none"
-             style={{ background: 'linear-gradient(to right, #000 0%, transparent 100%)' }} />
+        <div
+          className="absolute top-0 bottom-0 left-0 w-16 sm:w-28 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to right, #000 0%, transparent 100%)" }}
+        />
         {/* Right fade */}
-        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 z-10 pointer-events-none"
-             style={{ background: 'linear-gradient(to left, #000 0%, transparent 100%)' }} />
+        <div
+          className="absolute top-0 bottom-0 right-0 w-16 sm:w-28 z-10 pointer-events-none"
+          style={{ background: "linear-gradient(to left, #000 0%, transparent 100%)" }}
+        />
 
         <div
           ref={trackRef}
@@ -120,8 +130,8 @@ function MarqueeRow({ tier, partners, style, reverse }) {
           style={{
             animation: `${direction} ${animDuration}s linear infinite`,
           }}
-          onMouseEnter={(e) => e.currentTarget.style.animationPlayState = 'paused'}
-          onMouseLeave={(e) => e.currentTarget.style.animationPlayState = 'running'}
+          onMouseEnter={(e) => (e.currentTarget.style.animationPlayState = "paused")}
+          onMouseLeave={(e) => (e.currentTarget.style.animationPlayState = "running")}
         >
           {/* First set */}
           {repeated.map((p, i) => (
@@ -150,14 +160,14 @@ function MarqueeRow({ tier, partners, style, reverse }) {
 }
 
 /* ── Main component ── */
-export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
-  const [ref, inView] = useInView({ margin: '0px', once: true });
+export default function ScrollTitleMarquee({ rows, partnerCta = "#" }) {
+  const [ref, inView] = useInView({ margin: "0px", once: true });
 
   return (
     <div
       ref={ref}
       className={`relative w-full select-none transition-opacity duration-700 ${
-        inView ? 'opacity-100' : 'opacity-0'
+        inView ? "opacity-100" : "opacity-0"
       }`}
     >
       <style>{`
@@ -197,12 +207,15 @@ export default function ScrollTitleMarquee({ rows, partnerCta = '#' }) {
                      border border-red-800/40 text-red-400/80
                      hover:border-red-600/60 hover:text-red-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.15)]
                      transition-all duration-300"
-          style={{ background: 'rgba(220,38,38,0.05)' }}
+          style={{ background: "rgba(220,38,38,0.05)" }}
         >
           Why Sponsor Us?
           <svg
             className="w-3.5 h-3.5 opacity-60 group-hover:translate-x-0.5 transition-transform"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>

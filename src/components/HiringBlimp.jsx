@@ -1,9 +1,9 @@
-import { useRef, useState, useCallback, useEffect } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
-import useIsMobile from '../hooks/useIsMobile'
-import './HiringBlimp.css'
+import { useRef, useState, useCallback, useEffect } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import useIsMobile from "../hooks/useIsMobile";
+import "./HiringBlimp.css";
 
-const CAREERS_URL = 'https://hack-heist-2.devfolio.co/'
+const CAREERS_URL = "https://hack-heist-2.devfolio.co/";
 
 function RopeSVG() {
   return (
@@ -37,74 +37,74 @@ function RopeSVG() {
         strokeLinecap="round"
       />
     </svg>
-  )
+  );
 }
 
 export default function HiringBlimp() {
-  const isMobile = useIsMobile()
-  const wrapRef = useRef(null)
-  const [isDragging, setIsDragging] = useState(false)
-  const [entered, setEntered] = useState(false)
-  const [hasLanded, setHasLanded] = useState(false)
+  const isMobile = useIsMobile();
+  const wrapRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [entered, setEntered] = useState(false);
+  const [hasLanded, setHasLanded] = useState(false);
 
-  const bobY = useMotionValue(0)
-  const bobYSmooth = useSpring(bobY, { stiffness: 16, damping: 7, mass: 1.4 })
+  const bobY = useMotionValue(0);
+  const bobYSmooth = useSpring(bobY, { stiffness: 16, damping: 7, mass: 1.4 });
 
   useEffect(() => {
-    if (!hasLanded) return
-    const CYCLE = 6800
-    const start = performance.now()
-    let raf
+    if (!hasLanded) return;
+    const CYCLE = 6800;
+    const start = performance.now();
+    let raf;
     const tick = (now) => {
-      const t = ((now - start) % CYCLE) / CYCLE
-      bobY.set(Math.sin(t * Math.PI * 2) * 5)
-      raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [hasLanded, bobY])
+      const t = ((now - start) % CYCLE) / CYCLE;
+      bobY.set(Math.sin(t * Math.PI * 2) * 5);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [hasLanded, bobY]);
 
   useEffect(() => {
-    const delay = isMobile ? 1500 : 2000
-    const timer = setTimeout(() => setEntered(true), delay)
-    return () => clearTimeout(timer)
-  }, [isMobile])
+    const delay = isMobile ? 1500 : 2000;
+    const timer = setTimeout(() => setEntered(true), delay);
+    return () => clearTimeout(timer);
+  }, [isMobile]);
 
   const handleTransitionEnd = useCallback((e) => {
-    if (e.propertyName === 'transform') {
-      setHasLanded(true)
+    if (e.propertyName === "transform") {
+      setHasLanded(true);
     }
-  }, [])
+  }, []);
 
   const getDragBounds = useCallback(() => {
-    const vw = window.innerWidth
-    const vh = window.innerHeight
-    const hitW = vw <= 768 ? 180 : 260
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const hitW = vw <= 768 ? 180 : 260;
     return {
       top: -20,
       bottom: vh - 120,
       left: -(vw * 0.05),
       right: vw - hitW - 20,
-    }
-  }, [])
+    };
+  }, []);
 
-  const [dragBounds, setDragBounds] = useState(getDragBounds)
+  const [dragBounds, setDragBounds] = useState(getDragBounds);
   useEffect(() => {
-    const update = () => setDragBounds(getDragBounds())
-    update()
-    window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
-  }, [getDragBounds])
+    const update = () => setDragBounds(getDragBounds());
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [getDragBounds]);
 
   const handleClick = useCallback(() => {
     if (!isDragging) {
-      window.open(CAREERS_URL, '_blank', 'noopener,noreferrer')
+      window.open(CAREERS_URL, "_blank", "noopener,noreferrer");
     }
-  }, [isDragging])
+  }, [isDragging]);
 
   return (
     <div
-      className={`hb-entry ${entered ? 'hb-entered' : ''}`}
+      className={`hb-entry ${entered ? "hb-entered" : ""}`}
       onTransitionEnd={handleTransitionEnd}
     >
       <motion.div
@@ -126,52 +126,47 @@ export default function HiringBlimp() {
           style={{ y: hasLanded ? bobYSmooth : 0 }}
           onClick={handleClick}
         >
-        <div className="hb-blimp-layer">
-          <picture>
-            <source srcSet="/blimp.webp" type="image/webp" />
-            <img
-              src="/blimp_trimmed.png"
-              alt=""
-              className="hb-blimp-img"
-              draggable={false}
-            />
-          </picture>
-          <div className="hb-heist-glow" aria-hidden="true" />
-        </div>
-
-        <div className="hb-ropes-layer">
-          <RopeSVG />
-        </div>
-
-        <div className="hb-banner-sway">
-          <div className="hb-banner">
-            <div className="hb-banner__glow" aria-hidden="true" />
-
-            <span className="hb-banner__eyebrow">HIRING OPPORTUNITY</span>
-
-            <span className="hb-banner__headline">
-              WANT TO GET{isMobile ? ' ' : <br />}HIRED?
-            </span>
-
-            <div className="hb-banner__divider" />
-
-            <picture className="hb-banner__company-logo">
-              <source srcSet="/webreinvent.webp" type="image/webp" />
-              <img
-                src="/webreinvent.png"
-                alt="WebReinvent"
-                className="hb-banner__company-img"
-                draggable={false}
-              />
+          <div className="hb-blimp-layer">
+            <picture>
+              <source srcSet="/blimp.webp" type="image/webp" />
+              <img src="/blimp_trimmed.png" alt="" className="hb-blimp-img" draggable={false} />
             </picture>
-
-            <span className="hb-banner__cta">
-              Apply Now <span className="hb-arrow">&rarr;</span>
-            </span>
+            <div className="hb-heist-glow" aria-hidden="true" />
           </div>
-        </div>
+
+          <div className="hb-ropes-layer">
+            <RopeSVG />
+          </div>
+
+          <div className="hb-banner-sway">
+            <div className="hb-banner">
+              <div className="hb-banner__glow" aria-hidden="true" />
+
+              <span className="hb-banner__eyebrow">HIRING OPPORTUNITY</span>
+
+              <span className="hb-banner__headline">
+                WANT TO GET{isMobile ? " " : <br />}HIRED?
+              </span>
+
+              <div className="hb-banner__divider" />
+
+              <picture className="hb-banner__company-logo">
+                <source srcSet="/webreinvent.webp" type="image/webp" />
+                <img
+                  src="/webreinvent.png"
+                  alt="WebReinvent"
+                  className="hb-banner__company-img"
+                  draggable={false}
+                />
+              </picture>
+
+              <span className="hb-banner__cta">
+                Apply Now <span className="hb-arrow">&rarr;</span>
+              </span>
+            </div>
+          </div>
         </motion.div>
       </motion.div>
     </div>
-  )
+  );
 }

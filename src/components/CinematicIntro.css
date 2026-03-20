@@ -12,10 +12,20 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  -webkit-mask-image:
-    radial-gradient(ellipse 42% 38% at 50% 68%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.85) 55%, black 70%);
-  mask-image:
-    radial-gradient(ellipse 42% 38% at 50% 68%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.4) 35%, rgba(0, 0, 0, 0.85) 55%, black 70%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 42% 38% at 50% 68%,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.4) 35%,
+    rgba(0, 0, 0, 0.85) 55%,
+    black 70%
+  );
+  mask-image: radial-gradient(
+    ellipse 42% 38% at 50% 68%,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.4) 35%,
+    rgba(0, 0, 0, 0.85) 55%,
+    black 70%
+  );
 }
 
 .cinematic-video-wrap {
@@ -66,7 +76,7 @@
 }
 
 .sponsor-label {
-  font-family: '3rdMan', sans-serif;
+  font-family: "3rdMan", sans-serif;
   font-size: clamp(0.85rem, 1.6vw, 1.1rem);
   color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.15em;
@@ -87,7 +97,7 @@
 
 .cinematic-title {
   pointer-events: auto;
-  font-family: '3rdMan', sans-serif;
+  font-family: "3rdMan", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   font-size: clamp(4rem, 12vw, 11rem);
@@ -102,7 +112,7 @@
 }
 
 .cinematic-tagline {
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: clamp(0.6rem, 1.4vw, 0.9rem);
   color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.2em;
@@ -135,7 +145,7 @@
 }
 
 .cinematic-cta::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
@@ -147,7 +157,7 @@
 }
 
 .cinematic-cta-text {
-  font-family: '3rdMan', sans-serif;
+  font-family: "3rdMan", sans-serif;
   font-size: clamp(1.8rem, 10vw, 6rem);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -155,7 +165,9 @@
   color: rgba(255, 255, 255, 0.85);
   text-align: center;
   text-shadow: 0 0 20px rgba(179, 0, 0, 0.25);
-  transition: color 0.4s ease, text-shadow 0.4s ease;
+  transition:
+    color 0.4s ease,
+    text-shadow 0.4s ease;
 }
 
 .cinematic-cta-text:hover {
@@ -166,10 +178,12 @@
 }
 
 .cinematic-mobile-bg {
-  background: radial-gradient(ellipse 70% 50% at 50% 65%,
-      rgb(60, 8, 4),
-      rgb(15, 2, 1) 60%,
-      rgb(5, 0, 0));
+  background: radial-gradient(
+    ellipse 70% 50% at 50% 65%,
+    rgb(60, 8, 4),
+    rgb(15, 2, 1) 60%,
+    rgb(5, 0, 0)
+  );
 }
 
 @media (max-width: 768px) {
@@ -228,13 +242,20 @@
 
 /* Hero entry animations (CSS replacement for framer-motion) */
 @keyframes heroSlideUp {
-  from { opacity: 0; transform: translateY(var(--hero-y, 30px)); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(var(--hero-y, 30px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero-entry {
   opacity: 0;
-  animation: heroSlideUp var(--hero-dur, 0.8s) cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s) forwards;
+  animation: heroSlideUp var(--hero-dur, 0.8s) cubic-bezier(0.16, 1, 0.3, 1) var(--hero-delay, 0s)
+    forwards;
 }
 
 .hero-tagline {

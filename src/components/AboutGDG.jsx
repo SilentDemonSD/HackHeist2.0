@@ -1,27 +1,27 @@
-import { motion } from 'framer-motion'
-import clsx from 'clsx'
-import styles from './AboutGDG.module.css'
+import { motion } from "framer-motion";
+import clsx from "clsx";
+import styles from "./AboutGDG.module.css";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
   show: (i = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, delay: i * 0.1, ease: 'easeOut' },
+    transition: { duration: 0.5, delay: i * 0.1, ease: "easeOut" },
   }),
-}
+};
 
 const sectionVariants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.08 } },
-}
+};
 
 export default function AboutGDG() {
   return (
     <motion.section
       id="about-gdg"
       aria-labelledby="gdg-heading"
-      className={clsx('relative overflow-hidden', styles.missionSection)}
+      className={clsx("relative overflow-hidden", styles.missionSection)}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.15 }}
@@ -32,15 +32,17 @@ export default function AboutGDG() {
       <div className={styles.topBorder} aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 py-16 md:py-24">
-        <motion.p className={styles.eyebrow} variants={fadeUp} custom={0}>
-
-        </motion.p>
+        <motion.p className={styles.eyebrow} variants={fadeUp} custom={0}></motion.p>
 
         <div className={styles.headingRow}>
           <h2 id="gdg-heading" className={styles.heading} style={{ cursor: "default" }}>
             {"About GDG On Campus MIET".split("").map((char, i) =>
               char === " " ? (
-                <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.22em" }} />
+                <span
+                  key={i}
+                  aria-hidden="true"
+                  style={{ display: "inline-block", width: "0.22em" }}
+                />
               ) : (
                 <motion.span
                   key={i}
@@ -53,24 +55,23 @@ export default function AboutGDG() {
                 >
                   {char}
                 </motion.span>
-              )
+              ),
             )}
           </h2>
           <span className={styles.headingRule} />
         </div>
 
         <div className={styles.mainGrid}>
-
           <div className={styles.leftCol}>
             <motion.div className={styles.copyBlock} variants={fadeUp} custom={1}>
               <p className={styles.leadLine}>
                 <strong>What is GDG On Campus?</strong>
               </p>
               <p>
-                GDG on Campus is a student-led initiative under Google Developer Groups (GDG)
-                aimed at fostering a community of student developers. It provides resources,
-                networking opportunities, and events to help students grow their technical and
-                professional skills.
+                GDG on Campus is a student-led initiative under Google Developer Groups (GDG) aimed
+                at fostering a community of student developers. It provides resources, networking
+                opportunities, and events to help students grow their technical and professional
+                skills.
               </p>
 
               <br />
@@ -86,8 +87,8 @@ export default function AboutGDG() {
                 and expert talks.
               </p>
               <p>
-                Built on Unity, Growth, and Innovation, GDG On Campus MIET inspires changemakers
-                to learn, share, and lead.
+                Built on Unity, Growth, and Innovation, GDG On Campus MIET inspires changemakers to
+                learn, share, and lead.
               </p>
             </motion.div>
           </div>
@@ -96,7 +97,7 @@ export default function AboutGDG() {
             className={styles.logoShell}
             variants={{
               hidden: { opacity: 0, scale: 0.96 },
-              show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } }
+              show: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
             }}
           >
             <div className={styles.logoContainer}>
@@ -117,16 +118,19 @@ export default function AboutGDG() {
 
             <svg className={styles.blueprintSvgOverlay} viewBox="0 0 460 500" role="presentation">
               <g stroke="rgba(255,77,79,0.4)" strokeWidth="0.8">
-                <line x1="14" y1="38" x2="24" y2="38" /><line x1="19" y1="33" x2="19" y2="43" />
-                <line x1="436" y1="38" x2="446" y2="38" /><line x1="441" y1="33" x2="441" y2="43" />
-                <line x1="14" y1="470" x2="24" y2="470" /><line x1="19" y1="465" x2="19" y2="475" />
-                <line x1="436" y1="470" x2="446" y2="470" /><line x1="441" y1="465" x2="441" y2="475" />
+                <line x1="14" y1="38" x2="24" y2="38" />
+                <line x1="19" y1="33" x2="19" y2="43" />
+                <line x1="436" y1="38" x2="446" y2="38" />
+                <line x1="441" y1="33" x2="441" y2="43" />
+                <line x1="14" y1="470" x2="24" y2="470" />
+                <line x1="19" y1="465" x2="19" y2="475" />
+                <line x1="436" y1="470" x2="446" y2="470" />
+                <line x1="441" y1="465" x2="441" y2="475" />
               </g>
             </svg>
           </motion.div>
         </div>
-
       </div>
     </motion.section>
-  )
+  );
 }

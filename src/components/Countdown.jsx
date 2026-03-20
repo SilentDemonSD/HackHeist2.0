@@ -47,7 +47,7 @@ function CountdownHeading() {
             >
               {char}
             </span>
-          )
+          ),
         )}
       </span>
 
@@ -68,14 +68,10 @@ function CountdownHeading() {
           char === " " ? (
             <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.28em" }} />
           ) : (
-            <span
-              key={i}
-              className={`letter-char-flip ${cls}`}
-              style={{ "--i": i }}
-            >
+            <span key={i} className={`letter-char-flip ${cls}`} style={{ "--i": i }}>
               {char}
             </span>
-          )
+          ),
         )}
       </h2>
 
@@ -84,8 +80,7 @@ function CountdownHeading() {
           width: 64,
           height: 2,
           marginTop: "1rem",
-          background:
-            "linear-gradient(90deg, transparent, #ff4d4f 40%, #ff4d4f 60%, transparent)",
+          background: "linear-gradient(90deg, transparent, #ff4d4f 40%, #ff4d4f 60%, transparent)",
           borderRadius: 2,
         }}
       />
@@ -148,7 +143,10 @@ export default function Countdown() {
   return (
     <section
       className="relative w-full flex flex-col items-center justify-center overflow-hidden"
-      style={{ padding: "clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 1.5rem) clamp(3rem, 5vw, 4.5rem)", background: "#06070b" }}
+      style={{
+        padding: "clamp(2.5rem, 5vw, 4rem) clamp(1rem, 3vw, 1.5rem) clamp(3rem, 5vw, 4.5rem)",
+        background: "#06070b",
+      }}
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -170,8 +168,8 @@ export default function Countdown() {
       <div
         className="absolute pointer-events-none"
         style={{
-          width: 'min(640px, 90vw)',
-          height: 'min(640px, 90vw)',
+          width: "min(640px, 90vw)",
+          height: "min(640px, 90vw)",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
@@ -201,8 +199,7 @@ function CountdownItem({ unit, label, index, isMobile }) {
     fontSize: "clamp(2rem, 6vw, 5rem)",
     color: "#ffffff",
     lineHeight: 1,
-    textShadow:
-      "0 0 18px rgba(255,77,79,0.55), 0 0 50px rgba(200,0,0,0.3)",
+    textShadow: "0 0 18px rgba(255,77,79,0.55), 0 0 50px rgba(200,0,0,0.3)",
     letterSpacing: "0.04em",
   };
 
@@ -222,13 +219,14 @@ function CountdownItem({ unit, label, index, isMobile }) {
         border: "1px solid rgba(255,255,255,0.07)",
         borderRadius: 16,
         backdropFilter: "blur(12px)",
-        boxShadow:
-          "0 4px 24px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)",
         overflow: "hidden",
         cursor: "default",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease",
       }}
-      onMouseEnter={isMobile ? undefined : (e) => (e.currentTarget.style.transform = "translateY(-4px)")}
+      onMouseEnter={
+        isMobile ? undefined : (e) => (e.currentTarget.style.transform = "translateY(-4px)")
+      }
       onMouseLeave={isMobile ? undefined : (e) => (e.currentTarget.style.transform = "")}
     >
       <span
@@ -275,7 +273,7 @@ function CountdownItem({ unit, label, index, isMobile }) {
             key={display}
             style={{
               ...digitStyle,
-              transition: 'opacity 0.2s ease-out',
+              transition: "opacity 0.2s ease-out",
             }}
           >
             {display}
@@ -301,8 +299,7 @@ function CountdownItem({ unit, label, index, isMobile }) {
           width: "55%",
           height: 1,
           margin: "0.4rem 0",
-          background:
-            "linear-gradient(90deg, transparent, rgba(255,77,79,0.4), transparent)",
+          background: "linear-gradient(90deg, transparent, rgba(255,77,79,0.4), transparent)",
         }}
       />
 

@@ -55,22 +55,25 @@ export default function TraeDistortion({ src, className = "" }) {
     rafId.current = requestAnimationFrame(draw);
   }, [draw]);
 
-  const handleMove = useCallback((e) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const relX = (e.clientX - rect.left) / rect.width - 0.5;
-    const relY = (e.clientY - rect.top) / rect.height;
-    mouse.current = { x: relX, y: relY, active: true };
+  const handleMove = useCallback(
+    (e) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height;
+      mouse.current = { x: relX, y: relY, active: true };
 
-    for (let i = 0; i < SLICES; i++) {
-      const sliceCenter = (i + 0.5) / SLICES;
-      const dist = Math.abs(relY - sliceCenter);
-      const influence = Math.max(0, 1 - dist * 2.5);
-      targets.current[i] = relX * influence * MAX_SHIFT * (1 + Math.sin(i * 0.8) * 0.3);
-    }
-    startLoop();
-  }, [startLoop]);
+      for (let i = 0; i < SLICES; i++) {
+        const sliceCenter = (i + 0.5) / SLICES;
+        const dist = Math.abs(relY - sliceCenter);
+        const influence = Math.max(0, 1 - dist * 2.5);
+        targets.current[i] = relX * influence * MAX_SHIFT * (1 + Math.sin(i * 0.8) * 0.3);
+      }
+      startLoop();
+    },
+    [startLoop],
+  );
 
   const handleLeave = useCallback(() => {
     mouse.current.active = false;
@@ -139,7 +142,7 @@ export default function TraeDistortion({ src, className = "" }) {
     };
   }, [src, draw]);
 
-  const openTrae = () => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer');
+  const openTrae = () => window.open("https://www.trae.ai", "_blank", "noopener,noreferrer");
 
   return (
     <canvas
@@ -150,7 +153,7 @@ export default function TraeDistortion({ src, className = "" }) {
       className={className}
       aria-label="Build with Trae — visit trae.ai"
       role="link"
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: "pointer" }}
     />
   );
 }

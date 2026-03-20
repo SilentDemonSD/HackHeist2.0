@@ -10,7 +10,6 @@ const TITLE = "HACK HEIST 2.0";
 const POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&!*?^~+=/<>{}[]|\\".split("");
 const rand = () => POOL[Math.floor(Math.random() * POOL.length)];
 
-
 function CipherLetter({ finalChar, isRevealed, isMobile }) {
   const [display, setDisplay] = useState(rand);
   const [isScrambling, setIsScrambling] = useState(true);
@@ -26,7 +25,9 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
     }
     setIsScrambling(true);
     noiseRef.current = setInterval(() => setDisplay(rand()), isMobile ? 150 : 55);
-    return () => { if (noiseRef.current) clearInterval(noiseRef.current); };
+    return () => {
+      if (noiseRef.current) clearInterval(noiseRef.current);
+    };
   }, [isRevealed, finalChar, isMobile]);
 
   const handleEnter = () => {
@@ -57,10 +58,13 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
     }
   };
 
-  useEffect(() => () => {
-    if (noiseRef.current) clearInterval(noiseRef.current);
-    if (hoverRef.current) clearInterval(hoverRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (noiseRef.current) clearInterval(noiseRef.current);
+      if (hoverRef.current) clearInterval(hoverRef.current);
+    },
+    [],
+  );
 
   const color = isRevealed
     ? isScrambling
@@ -92,7 +96,7 @@ function CipherLetter({ finalChar, isRevealed, isMobile }) {
 
 function useCipherReveal(text, startDelay = 380) {
   const chars = text.split("");
-  const [revealed, setRevealed] = useState(() => chars.map(c => c === " "));
+  const [revealed, setRevealed] = useState(() => chars.map((c) => c === " "));
   const [allDone, setAllDone] = useState(false);
 
   useEffect(() => {
@@ -101,19 +105,33 @@ function useCipherReveal(text, startDelay = 380) {
 
     const timer = setTimeout(function advance() {
       if (cancelled) return;
-      if (ci >= chars.length) { setAllDone(true); return; }
-      if (chars[ci] === " ") { ci++; setTimeout(advance, 20); return; }
+      if (ci >= chars.length) {
+        setAllDone(true);
+        return;
+      }
+      if (chars[ci] === " ") {
+        ci++;
+        setTimeout(advance, 20);
+        return;
+      }
 
       const idx = ci++;
       setTimeout(() => {
         if (cancelled) return;
-        setRevealed(prev => { const n = [...prev]; n[idx] = true; return n; });
+        setRevealed((prev) => {
+          const n = [...prev];
+          n[idx] = true;
+          return n;
+        });
         setTimeout(advance, 60);
       }, 110);
     }, startDelay);
 
-    return () => { cancelled = true; clearTimeout(timer); };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, []); // oxlint-disable-line react-hooks/exhaustive-deps
 
   return { chars, revealed, allDone };
 }
@@ -129,15 +147,7 @@ function HeroVideo({ src }) {
   }, [src]);
 
   return (
-    <video
-      ref={videoRef}
-      src={src}
-      muted
-      autoPlay
-      playsInline
-      preload="auto"
-      aria-hidden="true"
-    >
+    <video ref={videoRef} src={src} muted autoPlay playsInline preload="auto" aria-hidden="true">
       <track kind="captions" />
     </video>
   );
@@ -148,9 +158,7 @@ export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
   const { chars, revealed, allDone } = useCipherReveal(TITLE);
 
-  const videoSrc = isMobile
-    ? "/videos/hh_intro_mobile.mp4"
-    : "/videos/hh_intro_desktop.mp4";
+  const videoSrc = isMobile ? "/videos/hh_intro_mobile.mp4" : "/videos/hh_intro_desktop.mp4";
 
   return (
     <section className="cinematic-intro">
@@ -158,12 +166,7 @@ export default function Hero() {
         <div className="cinematic-dither-bg cinematic-mobile-bg" />
       ) : (
         <Suspense
-          fallback={
-            <div
-              className="cinematic-dither-bg"
-              style={{ background: "rgb(40,5,2)" }}
-            />
-          }
+          fallback={<div className="cinematic-dither-bg" style={{ background: "rgb(40,5,2)" }} />}
         >
           <div className="cinematic-dither-bg">
             <Dither
@@ -187,10 +190,9 @@ export default function Hero() {
       <div className="cinematic-vignette" aria-hidden="true" />
 
       <div className="cinematic-title-block">
-
         <div
           className="sponsor-row hero-entry"
-          style={{ '--hero-y': '-12px', '--hero-dur': '0.7s', '--hero-delay': '0.1s' }}
+          style={{ "--hero-y": "-12px", "--hero-dur": "0.7s", "--hero-delay": "0.1s" }}
         >
           {isMobile ? (
             <>
@@ -201,8 +203,8 @@ export default function Hero() {
                 width={90}
                 height={32}
                 className="sponsor-trae-static"
-                onClick={() => window.open('https://www.trae.ai', '_blank', 'noopener,noreferrer')}
-                style={{ cursor: 'pointer' }}
+                onClick={() => window.open("https://www.trae.ai", "_blank", "noopener,noreferrer")}
+                style={{ cursor: "pointer" }}
                 loading="eager"
                 fetchPriority="high"
               />
@@ -217,27 +219,26 @@ export default function Hero() {
           style={{
             cursor: "default",
             willChange: "auto",
-            '--hero-y': '30px',
-            '--hero-dur': '0.8s',
-            '--hero-delay': '0.25s',
+            "--hero-y": "30px",
+            "--hero-dur": "0.8s",
+            "--hero-delay": "0.25s",
           }}
         >
           {chars.map((char, i) =>
             char === " " ? (
-              <span key={i} aria-hidden="true" style={{ display: "inline-block", width: "0.2em" }} />
-            ) : (
-              <CipherLetter
+              <span
                 key={i}
-                finalChar={char}
-                isRevealed={revealed[i]}
-                isMobile={isMobile}
+                aria-hidden="true"
+                style={{ display: "inline-block", width: "0.2em" }}
               />
-            )
+            ) : (
+              <CipherLetter key={i} finalChar={char} isRevealed={revealed[i]} isMobile={isMobile} />
+            ),
           )}
         </h1>
 
         <p
-          className={`cinematic-tagline hero-tagline${allDone ? ' visible' : ''}`}
+          className={`cinematic-tagline hero-tagline${allDone ? " visible" : ""}`}
           style={{ willChange: "auto" }}
         >
           <span className="accent">28–29 March, 2026</span>

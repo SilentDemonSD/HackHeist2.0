@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const MUSIC_SRC = '/music/bella_ciao.mp3'
-const KEY_VOLUME  = 'hh_music_vol'
-const KEY_PLAYING = 'hh_music_playing'
+const MUSIC_SRC = "/music/bella_ciao.mp3";
+const KEY_VOLUME = "hh_music_vol";
+const KEY_PLAYING = "hh_music_playing";
 
-function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)) }
+function clamp(v, lo, hi) {
+  return Math.max(lo, Math.min(hi, v));
+}
 
 function Waveform({ playing }) {
   return (
@@ -15,123 +17,142 @@ function Waveform({ playing }) {
           key={i}
           className="w-[2px] rounded-full bg-current"
           style={{
-            height: playing ? `${h * 3}px` : '3px',
+            height: playing ? `${h * 3}px` : "3px",
             animation: playing
               ? `hh-wave ${0.5 + i * 0.12}s ease-in-out infinite alternate`
-              : 'none',
-            transition: 'height 0.3s',
+              : "none",
+            transition: "height 0.3s",
           }}
         />
       ))}
     </span>
-  )
+  );
 }
 
 function VolIcon({ vol }) {
-  if (vol === 0) return (
-    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <line x1="1" y1="1" x2="23" y2="23" /><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
-      <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23M12 19v3M8 23h8" />
-    </svg>
-  )
-  if (vol < 0.5) return (
-    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M6 9H3a1 1 0 00-1 1v4a1 1 0 001 1h3l4 4V5L6 9zm10.54 0a5 5 0 010 6"/>
-    </svg>
-  )
+  if (vol === 0)
+    return (
+      <svg
+        className="w-3.5 h-3.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <line x1="1" y1="1" x2="23" y2="23" />
+        <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" />
+        <path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23M12 19v3M8 23h8" />
+      </svg>
+    );
+  if (vol < 0.5)
+    return (
+      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M6 9H3a1 1 0 00-1 1v4a1 1 0 001 1h3l4 4V5L6 9zm10.54 0a5 5 0 010 6" />
+      </svg>
+    );
   return (
     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+      <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
     </svg>
-  )
+  );
 }
 
 export default function MusicPlayer() {
-  const audioRef   = useRef(null)
-  const [playing,  setPlaying]  = useState(false)
-  const [volume,   setVolume]   = useState(() => parseFloat(localStorage.getItem(KEY_VOLUME) ?? '0.35'))
-  const [expanded, setExpanded] = useState(false)   // show volume panel
-  const [showHint, setShowHint] = useState(true)   // show "Play BGM" nudge
-  const [visible,  setVisible]  = useState(true)
+  const audioRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+  const [volume, setVolume] = useState(() =>
+    parseFloat(localStorage.getItem(KEY_VOLUME) ?? "0.35"),
+  );
+  const [expanded, setExpanded] = useState(false); // show volume panel
+  const [showHint, setShowHint] = useState(true); // show "Play BGM" nudge
+  const [visible, setVisible] = useState(true);
 
   const initAudio = useCallback(() => {
-    if (audioRef.current) return audioRef.current
-    const savedVol = parseFloat(localStorage.getItem(KEY_VOLUME) ?? '0.35')
-    const audio = new Audio()
-    audio.preload = 'none'
-    audio.loop = true
-    audio.volume = clamp(savedVol, 0, 1)
-    audio.src = MUSIC_SRC  // fetch starts here, on demand
-    audioRef.current = audio
-    return audio
-  }, [])
+    if (audioRef.current) return audioRef.current;
+    const savedVol = parseFloat(localStorage.getItem(KEY_VOLUME) ?? "0.35");
+    const audio = new Audio();
+    audio.preload = "none";
+    audio.loop = true;
+    audio.volume = clamp(savedVol, 0, 1);
+    audio.src = MUSIC_SRC; // fetch starts here, on demand
+    audioRef.current = audio;
+    return audio;
+  }, []);
 
   useEffect(() => {
     return () => {
       if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.src = ''
+        audioRef.current.pause();
+        audioRef.current.src = "";
       }
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = clamp(volume, 0, 1)
-    localStorage.setItem(KEY_VOLUME, String(volume))
-  }, [volume])
+    if (audioRef.current) audioRef.current.volume = clamp(volume, 0, 1);
+    localStorage.setItem(KEY_VOLUME, String(volume));
+  }, [volume]);
 
   const toggle = useCallback(() => {
-    setShowHint(false)
+    setShowHint(false);
 
     if (playing) {
-      const audio = audioRef.current
+      const audio = audioRef.current;
       if (audio) {
-        audio.pause()
-        setPlaying(false)
-        localStorage.setItem(KEY_PLAYING, 'false')
+        audio.pause();
+        setPlaying(false);
+        localStorage.setItem(KEY_PLAYING, "false");
       }
     } else {
-      const audio = initAudio()
-      audio.play().then(() => {
-        setPlaying(true)
-        localStorage.setItem(KEY_PLAYING, 'true')
-      }).catch(() => {})
+      const audio = initAudio();
+      audio
+        .play()
+        .then(() => {
+          setPlaying(true);
+          localStorage.setItem(KEY_PLAYING, "true");
+        })
+        .catch(() => {});
     }
-  }, [playing, initAudio])
+  }, [playing, initAudio]);
 
-  const handleVolume = useCallback((e) => {
-    const v = parseFloat(e.target.value)
-    setVolume(v)
-    if (audioRef.current) {
-      audioRef.current.volume = v
-      if (v > 0 && !playing) toggle()
-    }
-  }, [playing, toggle])
+  const handleVolume = useCallback(
+    (e) => {
+      const v = parseFloat(e.target.value);
+      setVolume(v);
+      if (audioRef.current) {
+        audioRef.current.volume = v;
+        if (v > 0 && !playing) toggle();
+      }
+    },
+    [playing, toggle],
+  );
 
   useEffect(() => {
-    if (playing) return
-    const t = setTimeout(() => setVisible(false), 14000)
-    return () => clearTimeout(t)
-  }, [playing])
+    if (playing) return;
+    const t = setTimeout(() => setVisible(false), 14000);
+    return () => clearTimeout(t);
+  }, [playing]);
 
   useEffect(() => {
-    const show = () => setVisible(true)
-    window.addEventListener('mousemove', show, { passive: true })
-    window.addEventListener('touchstart', show, { passive: true })
+    const show = () => setVisible(true);
+    window.addEventListener("mousemove", show, { passive: true });
+    window.addEventListener("touchstart", show, { passive: true });
     return () => {
-      window.removeEventListener('mousemove', show)
-      window.removeEventListener('touchstart', show)
-    }
-  }, [])
+      window.removeEventListener("mousemove", show);
+      window.removeEventListener("touchstart", show);
+    };
+  }, []);
 
   useEffect(() => {
-    if (!expanded) return
+    if (!expanded) return;
     const close = (e) => {
-      if (!e.target.closest('[data-music-player]')) setExpanded(false)
-    }
-    document.addEventListener('pointerdown', close, { passive: true })
-    return () => document.removeEventListener('pointerdown', close)
-  }, [expanded])
+      if (!e.target.closest("[data-music-player]")) setExpanded(false);
+    };
+    document.addEventListener("pointerdown", close, { passive: true });
+    return () => document.removeEventListener("pointerdown", close);
+  }, [expanded]);
 
   return (
     <>
@@ -214,15 +235,19 @@ export default function MusicPlayer() {
                   exit={{ opacity: 0, y: 8, scale: 0.95 }}
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                   className="px-4 py-3.5 rounded-2xl backdrop-blur-xl border border-white/[0.08]"
-                  style={{ background: 'rgba(8,8,8,0.88)', minWidth: 180 }}
+                  style={{ background: "rgba(8,8,8,0.88)", minWidth: 180 }}
                 >
                   <div className="mb-3">
-                    <p className="text-[0.6rem] uppercase tracking-[0.25em] text-red-500/70 mb-0.5"
-                       style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                    <p
+                      className="text-[0.6rem] uppercase tracking-[0.25em] text-red-500/70 mb-0.5"
+                      style={{ fontFamily: "'Montserrat', sans-serif" }}
+                    >
                       Now Playing
                     </p>
-                    <p className="text-[0.78rem] font-semibold text-white/90 flex items-center gap-1.5"
-                       style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                    <p
+                      className="text-[0.78rem] font-semibold text-white/90 flex items-center gap-1.5"
+                      style={{ fontFamily: "'Montserrat', sans-serif" }}
+                    >
                       <span>Bella Ciao</span>
                       {playing && <Waveform playing />}
                     </p>
@@ -239,7 +264,9 @@ export default function MusicPlayer() {
                       />
                       <input
                         type="range"
-                        min={0} max={1} step={0.01}
+                        min={0}
+                        max={1}
+                        step={0.01}
                         value={volume}
                         onChange={handleVolume}
                         className="hh-slider relative z-10"
@@ -260,14 +287,14 @@ export default function MusicPlayer() {
             <div className="flex items-center gap-1.5">
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={() => setExpanded(v => !v)}
+                onClick={() => setExpanded((v) => !v)}
                 aria-label="Toggle volume panel"
                 className="flex h-9 w-9 items-center justify-center rounded-full
                            border backdrop-blur-md transition-all duration-300"
                 style={{
-                  background: 'rgba(0,0,0,0.72)',
-                  borderColor: expanded ? 'rgba(220,38,38,0.4)' : 'rgba(255,255,255,0.1)',
-                  color: expanded ? '#ef4444' : 'rgba(255,255,255,0.4)',
+                  background: "rgba(0,0,0,0.72)",
+                  borderColor: expanded ? "rgba(220,38,38,0.4)" : "rgba(255,255,255,0.1)",
+                  color: expanded ? "#ef4444" : "rgba(255,255,255,0.4)",
                 }}
               >
                 <VolIcon vol={volume} />
@@ -276,31 +303,40 @@ export default function MusicPlayer() {
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={toggle}
-                aria-label={playing ? 'Pause background music' : 'Play background music'}
+                aria-label={playing ? "Pause background music" : "Play background music"}
                 className="flex items-center gap-2 px-3.5 py-2.5 rounded-full
                            backdrop-blur-md border transition-all duration-300 select-none group"
                 style={{
-                  background: 'rgba(0,0,0,0.72)',
-                  borderColor: playing ? 'rgba(220,38,38,0.45)' : 'rgba(255,255,255,0.1)',
+                  background: "rgba(0,0,0,0.72)",
+                  borderColor: playing ? "rgba(220,38,38,0.45)" : "rgba(255,255,255,0.1)",
                   boxShadow: playing
-                    ? '0 0 22px rgba(220,38,38,0.22), inset 0 0 12px rgba(220,38,38,0.04)'
-                    : 'none',
-                  color: playing ? '#ef4444' : 'rgba(255,255,255,0.45)',
+                    ? "0 0 22px rgba(220,38,38,0.22), inset 0 0 12px rgba(220,38,38,0.04)"
+                    : "none",
+                  color: playing ? "#ef4444" : "rgba(255,255,255,0.45)",
                 }}
               >
-                <span className="text-xs font-mono" aria-hidden>{playing ? '❚❚' : '▶'}</span>
-                {playing
-                  ? <Waveform playing />
-                  : <span className="text-[0.6rem] uppercase tracking-[0.18em] font-semibold"
-                          style={{ fontFamily: "'Montserrat', sans-serif" }}>BGM</span>
-                }
-                <span className="absolute bottom-full right-0 mb-2 px-2.5 py-1 rounded-lg
+                <span className="text-xs font-mono" aria-hidden>
+                  {playing ? "❚❚" : "▶"}
+                </span>
+                {playing ? (
+                  <Waveform playing />
+                ) : (
+                  <span
+                    className="text-[0.6rem] uppercase tracking-[0.18em] font-semibold"
+                    style={{ fontFamily: "'Montserrat', sans-serif" }}
+                  >
+                    BGM
+                  </span>
+                )}
+                <span
+                  className="absolute bottom-full right-0 mb-2 px-2.5 py-1 rounded-lg
                                  text-[0.6rem] font-medium uppercase tracking-widest
                                  bg-black/90 text-white/70 whitespace-nowrap
                                  opacity-0 group-hover:opacity-100 transition-opacity duration-200
                                  pointer-events-none"
-                      style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                  {playing ? 'Pause music' : 'Play Bella Ciao'}
+                  style={{ fontFamily: "'Montserrat', sans-serif" }}
+                >
+                  {playing ? "Pause music" : "Play Bella Ciao"}
                 </span>
               </motion.button>
             </div>
@@ -308,6 +344,5 @@ export default function MusicPlayer() {
         )}
       </AnimatePresence>
     </>
-  )
+  );
 }
-
