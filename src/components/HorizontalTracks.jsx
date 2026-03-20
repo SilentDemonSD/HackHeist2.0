@@ -175,46 +175,62 @@ const CARD_W = 500; // px — card width on desktop (also used in scroll math)
 const CARD_GAP = 40; // px — gap between cards
 const N = 6; // total number of tracks
 
-const DWELL = 0.07; // 7% of scroll per card pause
-const TRANSIT = (1 - N * DWELL) / (N - 1); // ~0.116 per transition
+const DWELL   = 0.12;                              // 12% of scroll per card pause
+const TRANSIT = (1 - N * DWELL) / (N - 1);         // transition between dwells
 const CARD_STEP = CARD_W + CARD_GAP;
 
 const getCardDwellStart = (i) => i * (TRANSIT + DWELL);
 const getCardDwellEnd = (i) => i * (TRANSIT + DWELL) + DWELL;
 
-// x keyframes: flat during each dwell, linear ramp between dwells
+// Smooth ease function for interpolation (cubic ease-in-out)
+const easeInOut = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+// x keyframes: flat during each dwell, eased ramp between dwells
+// Add midpoints at 25%, 50%, 75% of each transition for smooth easing
 const X_INPUT = [];
 const X_OUTPUT = [];
 for (let i = 0; i < N; i++) {
-  X_INPUT.push(getCardDwellStart(i), getCardDwellEnd(i));
+  const ds = getCardDwellStart(i);
+  const de = getCardDwellEnd(i);
+  X_INPUT.push(ds, de);
   X_OUTPUT.push(-i * CARD_STEP, -i * CARD_STEP);
-}
 
-function TrackCard({ track, index, scrollYProgress }) {
+  // Add eased midpoints between this card and the next
+  if (i < N - 1) {
+    const nextDs = getCardDwellStart(i + 1);
+    const transitLen = nextDs - de;
+    const startX = -i * CARD_STEP;
+    const endX = -(i + 1) * CARD_STEP;
+    const deltaX = endX - startX;
+    // 4 intermediate points for a smooth curve
+    for (const frac of [0.2, 0.4, 0.6, 0.8]) {
+      X_INPUT.push(de + transitLen * frac);
+      X_OUTPUT.push(startX + deltaX * easeInOut(frac));
+    }
+  }
+}
+// Sort keyframes by input value (they were pushed interleaved)
+const sortedPairs = X_INPUT.map((v, i) => [v, X_OUTPUT[i]]).sort((a, b) => a[0] - b[0]);
+const X_INPUT_SORTED = sortedPairs.map(p => p[0]);
+const X_OUTPUT_SORTED = sortedPairs.map(p => p[1]);
+
+const TrackCard = React.memo(({ track, index, scrollYProgress }) => {
   const dwellStart = getCardDwellStart(index);
   const dwellEnd = getCardDwellEnd(index);
 
   // Transition radius: card ramps in during the transit *before* its dwell
   // and ramps out during the transit *after* its dwell
-  const rampIn = dwellStart - TRANSIT * 0.55;
-  const rampOut = dwellEnd + TRANSIT * 0.55;
+  const rampIn  = dwellStart - TRANSIT * 0.6;
+  const rampOut = dwellEnd   + TRANSIT * 0.6;
 
-  const scale = useTransform(
-    scrollYProgress,
+  // Removed blurVal and filter for better performance
+  // Gentler scale/opacity for smoother focus transitions
+  const scale   = useTransform(scrollYProgress,
     [rampIn, dwellStart, dwellEnd, rampOut],
-    [0.85, 1, 1, 0.85],
-  );
-  const opacity = useTransform(
-    scrollYProgress,
+    [0.92,   1,          1,        0.92]);
+  const opacity = useTransform(scrollYProgress,
     [rampIn, dwellStart, dwellEnd, rampOut],
-    [0.06, 1, 1, 0.06],
-  );
-  const blurVal = useTransform(
-    scrollYProgress,
-    [rampIn, dwellStart, dwellEnd, rampOut],
-    [8, 0, 0, 8],
-  );
-  const filter = useTransform(blurVal, (v) => `blur(${v}px)`);
+    [0.15,   1,          1,        0.15]);
 
   return (
     <motion.div
@@ -224,8 +240,7 @@ function TrackCard({ track, index, scrollYProgress }) {
         maxWidth: "min(500px, 85vw)",
         scale,
         opacity,
-        filter,
-        willChange: "transform, opacity, filter",
+        willChange: 'transform, opacity',
       }}
     >
       <div
@@ -245,9 +260,9 @@ function TrackCard({ track, index, scrollYProgress }) {
         />
 
         <div
-          className="absolute -top-20 -right-20 w-48 h-48 rounded-full opacity-[0.04] group-hover:opacity-[0.08]
+          className="absolute -top-20 -right-20 w-48 h-48 rounded-full opacity-[0.03] group-hover:opacity-[0.06]
                      transition-opacity duration-700 pointer-events-none"
-          style={{ background: track.accent, filter: "blur(60px)" }}
+          style={{ background: `radial-gradient(circle, ${track.accent} 0%, transparent 70%)` }}
         />
 
         <div className="relative p-7 lg:p-8 flex flex-col gap-5">
@@ -320,7 +335,7 @@ function TrackCard({ track, index, scrollYProgress }) {
       </div>
     </motion.div>
   );
-}
+});
 
 function SectionHeader({ className = "" }) {
   const [headRef, headInView] = useInView({ margin: "-40px" });
@@ -371,7 +386,7 @@ const HorizontalTracks = () => {
   });
 
   // Staircase x: flat during each card's dwell, linear ramp between
-  const x = useTransform(scrollYProgress, X_INPUT, X_OUTPUT);
+  const x = useTransform(scrollYProgress, X_INPUT_SORTED, X_OUTPUT_SORTED);
 
   const halfCard = CARD_W / 2; // 250
 
@@ -379,7 +394,7 @@ const HorizontalTracks = () => {
     <section
       ref={containerRef}
       className="relative bg-[#050505] hidden md:block"
-      style={{ height: "450vh" }}
+      style={{ height: '700vh' }}
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col">
         <div className="pt-16 lg:pt-20 pb-6 px-4 z-10">
